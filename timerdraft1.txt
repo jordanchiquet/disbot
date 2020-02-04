@@ -1,0 +1,468 @@
+#TIMERSTART
+@tasks.loop(seconds=5.0)
+async def timercheck():
+    print("Timer check starting...")
+    now = datetime.now()
+    print(now)
+    timerdata1 = open("/home/disbotren/test/discordtimers.csv", "rt")
+    newtimerdata1 = open("/home/disbotren/test/discordtimers2.csv", "a", newline='')
+    timereader = csv.reader(timerdata1, delimiter=",")
+    timewriter = csv.writer(newtimerdata1)
+    print("Opening CSV.")
+    for row in timereader:
+        channel = bot.get_channel(int(row[10]))
+        print("Row read!")
+        if now >= datetime.strptime(row[9], '%Y-%m-%d %H:%M:%S.%f'):
+            print("Timer pop! Attempting to send channel a message!")
+            if row[3] == "ph":
+                await channel.send("<@" + row[1] + "> " + row[2] + " (set on " + row[4] + ") | Timer ID: " + row[0])
+                return
+            else:
+                await channel.send("<@!" + row[1] + "> " + row[2] + " (" + row[3] + " " + row[4] + " " + row[5] + " " +
+                                row[6] + " ago) | Timer ID: " + row[0])
+        if now < datetime.strptime(row[9], '%Y-%m-%d %H:%M:%S.%f'):
+            timewriter.writerow(row)
+    timerdata1.close()
+    newtimerdata1.close()
+    os.system('rm /home/disbotren/test/discordtimers.csv')
+    os.system('mv /home/disbotren/test/discordtimers2.csv /home/disbotren/test/discordtimers.csv')
+    print("Timer check closing.")
+
+
+async def timewriter(user, timernote, timeval1raw, unit1, timeval2raw, unit2, timeorig, timeval, timepop, channel):
+    with open("/home/disbotren/test/discordtimers.csv", "r") as f:
+        timercsv = f.readlines()
+        oldid = timercsv[-1].split(',')[0]
+        timerid = (int(oldid) + 1)
+        fields = [timerid, user, timernote, timeval1raw, unit1, timeval2raw, unit2, timeorig,
+                    timeval, timepop, channel]
+        with open("/home/disbotren/test/discordtimers.csv", "a", newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(fields)
+    f.close()
+    return
+
+
+async def timeparser(ctx, msgcontent, timeparse, d: str = None):
+    if ":" in timeparse:
+        if len(timeparse) > 5:
+            await ctx.send("Invalid time.")
+            return
+        else:
+            timeparse = timeparse.replace(":", "")
+    if timeparse.isdigit():
+        if len(d) == 1:
+            if d.lower() == "a" or d.lower() == "b":
+                timeofday = d.lower()
+        if len(d) == 2:
+            if d.lower() == "am" or d.lower == "pm":
+                timeofday = d.lower()
+        if len(d) > 2 and len(d) < 5:
+            if d.lower().startswith("a") and ".m" in d.lower():
+                timeofday = d.lower()
+            if d.lower().startswith("p") and ".m" in d.lower():
+                timeofday = d.lower()
+        if len(d) > 4:
+            timeofday = None
+            timernote = msgcontent.split(timeparse)[1]
+        if d is None:
+            timeofday = None
+        if len(timeparse) == 1:
+            if timeofday is None:
+                await ctx.send("Specify AM or PM or use military time.")
+            if timeofday.startswith("a"):
+                timedigit = " 0" + timeparse + ":00"
+            if timeofday.startswith("p"):
+                timedigit = (" " + str(int(timeparse) + 12) + ":00")
+        if len(timeparse) == 2:
+            if timeofday is None:
+                if not timeparse.startswith("0"):
+                    if int(timeparse) > 23:
+                        await ctx.send("Invalid time.")
+                        return
+                    if int(timeparse) < 24:
+                        timedigit = " " + timeparse + ":00"
+                else:
+                    timedigit = " " + timeparse + ":00"
+            if timeofday.startswith("a"):
+                if not timeparse.startswith("0"):
+                    if int(timeparse) > 12:
+                        await ctx.send("Invalid time.")
+                        return
+                    if int(timeparse) == 12:
+                        timedigit = " " + timeparse + ":00"
+                if timeparse.startswith("0"):
+                    timedigit = " " + timeparse + ":00"
+            if timeofday.startswith("p"):
+                if timeparse.startswith("0"):
+                    timedigit = " " + (int(timeparse[1]) + 12) +":00"
+                else:
+                    if int(timeparse) > 24:
+                        await ctx.send("Invalid time.")
+                    else:
+                        timedigit = " " + timeparse + ":00"
+        if len(timeparse) == 3:
+            hourdig = timeparse[0]
+            mindig = timeparse[1:]
+            if int(mindig) > 59:
+                await ctx.send("Invalid time.")
+                return
+            if timeofday is None:
+                await ctx.send("Specify AM or PM or use military time.")
+            if timeofday.startswith("a"):
+                timedigit = " 0" + hourdig + ":" + timeparse[1:]
+            if timeofday.startswith("p"):
+                timedigit = " " + str(int(hourdig) + 12) + ":" + timeparse[1:]
+        if len(timeparse) == 4:
+            hourdig = timeparse[0:2]
+            mindig = timeparse[2:]
+            if int(mindig) > 59:
+                await ctx.send("Invalid time.")
+                return
+            if not hourdig.startswith("0"):
+                if int(hourdig) > 23:
+                    await ctx.send("Invalid time.")
+                    return
+                else:
+                    timedigit = " " + hourdig + ":" + mindig
+            if hourdig.startswith("0"):
+                if timeofday is None or timeofday.startswith("a"):
+                    timedigit = " " + hourdig + ":" + mindig
+                if timeofday.startswith("p"):
+                    timedigit = " " + str(int(hourdig[1]) + 12) + ":" + mindig
+    else: 
+        await ctx.send("Timeparser error: Timeparse variable was not returned as digit.")
+
+
+@bot.command()
+async def timer(ctx, a: str = None, b: str = None, c: str = None, d: str = None):
+    alower = a.lower()
+    channel = ctx.channel.id
+    msgcontent = ctx.message.content
+    timeorig = ctx.message.created_at - timedelta(hours=6)
+    user = ctx.message.author.id
+    if a == "del" or a == "delete":
+        delid = b
+        if delid == "1":
+            await ctx.send ("Timer 1 is a permanent timer to simplify programmatic looping. You can ask Jordan if you want to know more.")
+            return
+        else:
+            timerdata = open("/home/disbotren/test/discordtimers.csv", "rt")
+            newtimerdata = open("/home/disbotren/test/discordtimers1.csv", "a", newline='')
+            reader = csv.reader(timerdata, delimiter=",")
+            writer = csv.writer(newtimerdata)
+            for row in reader:
+                if delid != row[0]:
+                    writer.writerow(row)
+            timerdata.close()
+            newtimerdata.close()
+            os.system('rm /home/disbotren/test/discordtimers.csv')
+            os.system('mv /home/disbotren/test/discordtimers1.csv /home/disbotren/test/discordtimers.csv')
+            await ctx.send("Timer #" + delid + " deleted.")
+            return
+
+    if a == "list":
+        await ctx.send(file=File("/home/disbotren/test/discordtimers.csv"))
+        return
+
+    if "/" in a:
+        timeval1raw = "ph"
+        unit1 = "ph"
+        timeval2raw = "ph"
+        unit2 = "ph"
+        timepop = ""
+        month = a.split("/")[0]
+        print(month)
+        if not month.isdigit() or len(month) > 2:
+            await ctx.send("Invalid month.")
+            return
+        if month.isdigit(): 
+            print("isdigit")
+            if not month.startswith("0"):
+                if int(month) > 12:
+                    await ctx.send("Invalid month.")
+                    return
+                if len(month) == 1:
+                    month = "0" + month
+        nowmonth = str(datetime.now().month)
+        if nowmonth != "10":
+            nowmonthint = int((nowmonth).replace("0", ""))
+        if nowmonth == "10":
+            nowmonthint = 10
+        print(nowmonthint)
+      
+        if a.split("/")[2] is not None:
+            possibleyear = a.split("/")[2]
+            if len(possibleyear) == 1 or len(possibleyear) == 3 or len(possibleyear) >= 5 or not possibleyear.isdigit():
+                await ctx.send("Invalid year.")
+                return
+            if len(possibleyear) == 2:
+                popyear = (datetime.now().year)[:2]
+            if len(possibleyear) == 4:
+                popyear = possibleyear
+
+        if popyear is None:
+            if int(month) < (nowmonthint):
+                popyear = (datetime.now().year + 1)
+            if int(month) >= nowmonthint:
+                popyear = datetime.now().year       
+              
+        date = a.split("/")[1]
+        if not date.isdigit() or len(date) > 2:
+            await ctx.send("Invalid date.")
+            return
+        if date.isdigit():
+            if not date.startswith("0"):
+                if int(date) > 31: 
+                    await ctx.send("Invalid date.")
+                    return
+                if (month == "04" or
+                    month == "06" or
+                    month == "09" or
+                    month == "11"):
+                    if int(date) == 31:
+                        await ctx.send("That month only has 30 days.")
+                        return
+                        #I am here
+                if month == "02":
+                    if int(date) > 29:
+                        await ctx.send("Invalid date.")
+                        return
+                    if int(date) == 29:
+                        if (popyear == "2021" or
+                            popyear == "2022" or
+                            popyear == "2023" or
+                            popyear == "2025" or
+                            popyear == "2026" or
+                            popyear == "2027" or
+                            popyear == "2029" or
+                            popyear == "2030" or
+                            popyear == "2031" or
+                            popyear == "2033" or
+                            popyear == "2034" or
+                            popyear == "2035" or
+                            popyear == "2037" or
+                            popyear == "2038" or
+                            popyear == "2039"):
+                            await ctx.send("Year specified is not a leap year and only has 28 days for February.")
+                            return
+                        if int(popyear) > 2040:
+                            await ctx.send("That year is outside of Jordan's short leap year library, " +
+                                            "setting the event reminder for February 29th at your own risk.")
+            if len(date) == 1:
+                date = "0" + date
+        if b is None:
+            timernote = ""
+            timedigit = " 06:00"
+        if b is not None:
+            if ":" in b:
+                bnocolon = b.replace(":","") 
+            if bnocolon.isdigit():
+                timeparse = bnocolon
+                if c is None:
+                    timernote = ""
+                else:
+                    d = c
+            if not bnocolon.isdigit():
+                timernote = msgcontent.split(a)[1]
+                timedigit = " 06:00"
+        if month == "00" or date == "00":
+            await ctx.send("Setting a timer for this date will open a portal to the deepest sanctum of Hell...")
+        if timedigit is None:
+            await timeparser(ctx, msgcontent, timeparse, d)
+        timepop = str(popyear) + "-" + month + "-" + date + timedigit + ":00.000000"
+        await timewriter(user, timernote, timeval1raw, unit1, timeval2raw, unit2, timeorig, timeval, timepop, channel)
+
+    if (alower.startswith("jan") or
+    alower.startswith("feb") or
+    alower.startswith("mar") or
+    alower.startswith("apr") or
+    alower.startswith("may") or
+    alower.startswith("jun") or
+    alower.startswith("jul") or
+    alower.startswith("aug") or
+    alower.startswith("sep") or
+    alower.startswith("oct") or
+    alower.startswith("nov") or
+    alower.startswith("dec")):
+        timeval1raw = "ph"
+        unit1 = "ph"
+        timeval2raw = "ph"
+        unit2 = "ph"
+        timepop = ""
+
+        if alower.startswith("jan"):
+            month = "01"
+        if alower.startswith("feb"):
+            month = "02"
+        if alower.startswith("mar"):
+            month = "03"
+        if alower.startswith("apr"):
+            month = "04"
+        if alower.startswith("may"):
+            month = "05"
+        if alower.startswith("jun"):
+            month = "06"
+        if alower.startswith("jul"):
+            month = "07"
+        if alower.startswith("aug"):
+            month = "08"
+        if alower.startswith("sep"):
+            month = "09"
+        if alower.startswith("oct"):
+            month = "10"
+        if alower.startswith("nov"):
+            month = "11"
+        if alower.startswith("dec"):
+            month = "12"
+        
+        nowmonthint = datetime.now().month.replace("0", "")
+        if int(month) < nowmonthint:
+            popyear = (datetime.now().year + 1)
+        if int(month) >= nowmonthint:
+            popyear = datetime.now().year
+        
+        if b is None:
+            await ctx.send("Please provide a date.")
+            return
+        
+        date = b
+        if not date.isdigit() or len(date) > 2:
+            await ctx.send("Invalid date.")
+            return
+        if date.isdigit():
+            if not date.startswith("0"):
+                if int(date) > 31: 
+                    await ctx.send("Invalid date.")
+                    return
+                if (month == "04" or
+                    month == "06" or
+                    month == "09" or
+                    month == "11"):
+                    if int(date) == 31:
+                        await ctx.send("That month only has 30 days.")
+                        return
+                if month == "02":
+                    if int(date) > 29:
+                        await ctx.send("Invalid date.")
+                        return
+                    if int(date) == 29:
+                        if (popyear == "2021" or
+                            popyear == "2022" or
+                            popyear == "2023" or
+                            popyear == "2025" or
+                            popyear == "2026" or
+                            popyear == "2027" or
+                            popyear == "2029" or
+                            popyear == "2030" or
+                            popyear == "2031" or
+                            popyear == "2033" or
+                            popyear == "2034" or
+                            popyear == "2035" or
+                            popyear == "2037" or
+                            popyear == "2038" or
+                            popyear == "2039"):
+                            await ctx.send("Year specified is not a leap year and only has 28 days for February.")
+                            return
+                        if int(popyear) > 2040:
+                            await ctx.send("That year is outside of Jordan's short leap year library, " +
+                                            "setting the event reminder for February 29th at your own risk.")
+            if len(date) == 1:
+                date = "0" + date
+            if date == "00":
+                await ctx.send("Setting a timer for that date will destroy the fabric of reality.")
+                return
+            if c is None:
+                timernote = ""
+                timedigit = " 06:00"
+            cnocolon = c.replace(":", "")
+            if cnocolon.isdigit():
+                timeparse = cnocolon
+                if d is None:
+                    timernote = ""
+                else:
+                    timernote = msgcontent.split(c)[1]
+            if not cnocolon.isdigit():
+                timernote = msgcontent.split(b)[1]
+                timedigit = " 06:00"
+        if timedigit is None:
+            await timeparser(ctx, msgcontent, timeparse, d)
+        timepop = str(popyear) + "-" + month + "-" + date + timedigit + ":00.000000"
+        await timewriter(user, timernote, timeval1raw, unit1, timeval2raw, unit2, timeorig, timeval, timepop, channel)
+
+
+    else:
+        timeval1raw = int(a)
+        unit1 = b.lower()
+
+        if unit1.startswith("m"):
+            timeval1 = timeval1raw
+        if unit1.startswith("h"):
+            timeval1 = timeval1raw * 60
+        if unit1.startswith("d"):
+            timeval1 = timeval1raw * 1440
+        if unit1.startswith("w"):
+            timeval1 = timeval1raw * 10080
+        if unit1.startswith("y"):
+            timeval1 = timeval1raw * 525600
+
+        if c is not None:
+            if c.isdigit():
+                timeval2raw = int(c)
+                unit2 = d.lower()
+                timernote = msgcontent.split(d)[1]
+                if unit2.startswith("m"):
+                    timeval2 = timeval2raw
+                if unit2.startswith("h"):
+                    timeval2 = timeval2raw * 60
+                if unit2.startswith("d"):
+                    timeval2 = timeval2raw * 1440
+                if unit2.startswith("w"):
+                    timeval2 = timeval2raw * 10080
+                if unit2.startswith("y"):
+                    timeval2 = timeval2raw * 525600
+
+            if not c.isdigit():
+                timeval2 = 0
+                timeval2raw = ""
+                unit2 = ""
+                timernote = msgcontent.split(b)[1]
+
+        if c is None:
+            timeval2 = 0
+            timeval2raw = ""
+            unit2 = ""
+            timernote = ""
+
+        timeval = timeval1 + timeval2
+        timepop = timeorig + timedelta(minutes=timeval)
+
+        with open("/home/disbotren/test/discordtimers.csv", "r") as f:
+            timercsv = f.readlines()
+            oldid = timercsv[-1].split(',')[0]
+            timerid = (int(oldid) + 1)
+            fields = [timerid, user, timernote, timeval1raw, unit1, timeval2raw, unit2, timeorig,
+                      timeval, timepop, channel]
+            with open("/home/disbotren/test/discordtimers.csv", "a", newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow(fields)
+        f.close()
+
+        await ctx.send("Timer set! | ID: " + str(timerid))
+        if timeval1raw > 60:
+            await ctx.send("btw do you think it's funny to use these big stupid fucking numbers?")
+
+
+@bot.command()
+async def t(ctx):
+    await timer.invoke(ctx)
+
+
+@bot.command()
+async def reminder(ctx):
+    await timer.invoke(ctx)
+
+
+@bot.command()
+async def remind(ctx):
+    await timer.invoke(ctx)
