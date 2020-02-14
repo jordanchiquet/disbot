@@ -36,7 +36,9 @@ from urlextract import URLExtract
 from uszipcode import SearchEngine
 
 
-import modules.timeparser
+from modules.timeparser import timeparser
+from modules.dateslashparser import dateslashparser
+from modules.timermonthpass import timermonthpass
 
 nltk.download('brown')
 
@@ -414,12 +416,20 @@ async def timer(ctx, a: str = None, b: str = None, c: str = None, d: str = None)
     alower = a.lower()
     channel = ctx.channel.id
     msgcontent = ctx.message.content
+    cmdmsgcontent = msgcontent[7:]
     timeorig = (ctx.message.created_at - timedelta(hours=6))
     user = ctx.message.author.id
     nowmonth = str(datetime.now().month)
     nowdate = str(datetime.now().day)
     timedigit = ''
+    ampminnote = False
+    aslash = False
+    timepopestablished = False
+    timedatafrommonthpass = False
+
+
     print(str(timeorig) + ": timer invoked by user " + str(user) + " in channel " + str(channel))
+
     if a == "del" or a == "delete":
         print("user passed timer delete argument")
         delid = b
@@ -454,339 +464,193 @@ async def timer(ctx, a: str = None, b: str = None, c: str = None, d: str = None)
         print("user requested the timer list")
         await ctx.send(file=File("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv"))
         return
+    
+    elif "/" in a:
+        print("/ in a, sending to dateparse")
+        dateparse = a
+        timeornote = b
+        aslash = True
 
-    if "/" in a:
-        timeval1raw = "ph"
-        unit1 = "ph"
-        timeval2raw = "ph"
-        unit2 = "ph"
-        timepop = ""
-        month = a.split("/")[0]
-        print("initial received month: " + month)
-        if not month.isdigit() or len(month) > 2:
-            print("user used slashes but not a month number, or the month number was more than two digits, returning invalid")
-            await ctx.send("Invalid month.")
-            return
-        if month.isdigit(): 
-            print("Month is digit")
-            if not month.startswith("0"):
-                if int(month) > 12:
-                    print("Month was greater than 12, sending error message to channel")
-                    await ctx.send("Invalid month.")
-                    return
-                if len(month) == 1:
-                    print("Month is one digit: " + month)
-                    month = "0" + month
-                    print("Appending 0 to month: " + month)
-                else:
-                    print("month was found valid... remaining unchanged: " + month)
-        print("nowmonth found to be: " + nowmonth)
-
-        date = a.split("/")[1]
-        print("initial received date: " + date)
-        if not date.isdigit() or len(date) > 2:
-            print("date was too many digits or wasn't numbers... returning invalid")
-            await ctx.send("Invalid date.")
-            return
-        if date.isdigit():
-            print("date was numbers :)")
-            if not date.startswith("0"):
-                print("date did not start with zero")
-                # here
-                if int(date) > 31: 
-                    print("date was over 31, returning invalid")
-                    await ctx.send("Invalid date.")
-                    return
-                if (month == "04" or
-                    month == "06" or
-                    month == "09" or
-                    month == "11"):
-                    print("month was a 30 month")
-                    if int(date) == 31:
-                        print("date was 31 for a 30 day month, returning invalid")
-                        await ctx.send("That month only has 30 days.")
-                        return
-                if month == "02":
-                    print("month was feb")
-                    if int(date) > 29:
-                        print("date was over 29 for February, returning invalid before checking leap year")
-                        await ctx.send("Invalid date.")
-                        return
-            if len(date) == 1:
-                print("date was one digit, adding 0 to the beginning")
-                date = "0" + date
-                print("new date with 0: " + date)
-        if month == "00" or date == "00":
-            print("month or date was 00, returning invalid")
-            await ctx.send("Setting a timer for this date will open a portal to the deepest sanctum of Hell...")
-            return
-        # Parsing user input for year     
-        if len(a.split("/")) > 2:
-            print("user provided some value where the year goes...")
-            possibleyear = a.split("/")[2]
-            print("initial received year: " + possibleyear)
-            if len(possibleyear) == 1 or len(possibleyear) == 3 or len(possibleyear) >= 5 or not possibleyear.isdigit():
-                print("year was 1 digit, or was 3 digits, or was 5 or more digits, or was not actually numbers, returning invalid")
-                await ctx.send("Invalid year.")
-                return
-            if len(possibleyear) == 2:
-                print("year was two digits, attempting to append two more")
-                popyear = "20" + possibleyear
-                print("fixed year: " + popyear)
-            if len(possibleyear) == 4:
-                print("year was 4 digits, leaving it be at user's risk...")
-                popyear = possibleyear
-                if int(popyear) > 2080:
-                    # add more fun special cases
-                    print("special case 2080")
-                    await ctx.send("Very optimistic timer :)")        
-        # Determining year if user did not provide one 
-        if len(a.split("/")) < 3:
-            print("user did not provide a year")
-            print("removing 0 from beginning of month for math comparison... (if applicable)")
-            if month == "10":
-                print("month was October, keeping the zero and doing nothing")
-            if month != "10":
-                print("month was not October, replacing any zeros that might exist")
-                mathmonth = month.replace("0", "")
-            if int(mathmonth) < int(nowmonth):
-                print("month in timer was less than current month, timer defaulting to next year")
-                popyear = (datetime.now().year + 1)
-                print("popyear: " + str(popyear))
-            if int(mathmonth) > int(nowmonth):
-                print("month in timer was greater than current month, timer defaulting to this year")
-                popyear = datetime.now().year
-                print("popyear: " + str(popyear))
-            if int(mathmonth) == int(nowmonth):
-                print("month in timer is THIS month :O ... we have to check the date... checking for zeroes first... starting date value: " + date)
-                if date == "10" or date == "20" or date == "30":
-                    print("date was 10 or 20 or 30... removing no zeroes, date unchanged")
-                if date != "10" and date != "20" and date != "30":
-                    print("date was not 10 or 20 or 30, removing any zeroes")
-                    date = date.replace("0", "")
-                if int(nowdate) >= int(date):
-                    print("user provided date was before or equal to today, default popyear to next year")
-                    popyear = (datetime.now().year + 1)
-                if int(nowdate) < int(date):
-                    print("user provided date was after today, default popyear to this year")
-                    popyear = str(datetime.now().year)
-                print("popyear: " + popyear)
-        
-        # Determining if timer year is a leap year:
-        if month == "02": 
-            print("month is February, checking for leap year")
-            if date == "29":
-                if (int(popyear) % 4) != 0 and (int(popyear) % 400) != 0:
-                    print("user used 29 for February non-leap year, returning invalid")
-                    await ctx.send("Year specified is not a leap year and only has 28 days for February.")
-                    return
-                else:
-                    print("user used 29 for February in a leap year, continuing")
-
-        if b is None:
-            print("user provided no note or specific time. setting to defaults. (blank note and 6 AM for time)")
-            timernote = ""
-            timedigit = " 06:00"
-        if b is not None:
-            bnocolon = b.replace(":","") 
-            print("user provided some value for b, either a note or a time, checking now (all colons will be removed)")
-            if bnocolon.isdigit():
-                print("bnocolon is digit, timeparse set to: " + bnocolon)
-                timeparse = bnocolon
-                if c is None:
-                    print("bnocolon was digit and C is none... setting note to blank")
-                    timernote = ""
-                else:
-                    print("user provided some fucking dumbass value after the timeparse, defaulting it as timernote")
-                    timernote = msgcontent.split(b)[1]
-            if not bnocolon.isdigit():
-                print("bnocolon NOT isdigit()... setting note, defaulting time to 6")
+    elif a != "del" and a!= "delete" and a != "list" and aslash == False:
+        print("starting timermonthpass")
+        monthpassinit = timermonthpass(cmdmsgcontent)
+        monthpass = monthpassinit.monthpass()
+        print("monthpassescape")
+        print("monthpass: " + monthpass)
+        if monthpass != "nomonth":
+            print("monthpass found month, setting dateparse")
+            dateparse = monthpass.split("|")[0]
+            monthpassnote = monthpass.split("|")[1]
+            monthpasstime = monthpass.split("|")[2]
+            print("dateparse: " + dateparse)
+            print("monthpassnote: " + monthpassnote)
+            print("monthpasstime: " + monthpasstime)
+            timedatafrommonthpass = True
+            if monthpasstime == 'blank':
+                print("monthpasstime was blank")
+                timedigit = "06:00"
+            if monthpasstime != 'blank':
+                print("monthpasstime not blank, setting timeparse")
+                timeparse = monthpasstime
+            if monthpassnote == 'blank':
+                print("monthpassnote blank")
+                timernote = ''
+            elif monthpassnote == 'notestartsatb':
+                print("note was startsatb")
                 timernote = msgcontent.split(a)[1]
-                timedigit = " 06:00"
-        print("escaped here")
-        print("timedigit: [" + timedigit + "]")
-        if timedigit == '':
-            print("no timedigit, running timeparser with timeparse: [" + timeparse + "] and timernote: [" + timernote + "]")
-            timeparseinit = timeparser(timeparse, timernote)
-            timedigit = timeparseinit.gettime()
-            print("timeparse class return: " + timedigit)
-        timepop = str(popyear) + "-" + month + "-" + date + timedigit + ":00.000000"
-        print("timepop: [" + timepop + "]")
-        # await timewriter(user, timernote, timeval1raw, unit1, timeval2raw, unit2, timeorig, timeval, timepop, channel)
-
-    if (alower.startswith("jan") or
-    alower.startswith("feb") or
-    alower.startswith("mar") or
-    alower.startswith("apr") or
-    alower.startswith("may") or
-    alower.startswith("jun") or
-    alower.startswith("jul") or
-    alower.startswith("aug") or
-    alower.startswith("sep") or
-    alower.startswith("oct") or
-    alower.startswith("nov") or
-    alower.startswith("dec")):
-        if b is None:
-            await ctx.send("Please provide a date.")
-            return
-        date = b
-        timeval1raw = "ph"
-        unit1 = "ph"
-        timeval2raw = "ph"
-        unit2 = "ph"
-        timepop = ""
-
-        if alower.startswith("jan"):
-            month = "01"
-        if alower.startswith("feb"):
-            month = "02"
-        if alower.startswith("mar"):
-            month = "03"
-        if alower.startswith("apr"):
-            month = "04"
-        if alower.startswith("may"):
-            month = "05"
-        if alower.startswith("jun"):
-            month = "06"
-        if alower.startswith("jul"):
-            month = "07"
-        if alower.startswith("aug"):
-            month = "08"
-        if alower.startswith("sep"):
-            month = "09"
-        if alower.startswith("oct"):
-            month = "10"
-        if alower.startswith("nov"):
-            month = "11"
-        if alower.startswith("dec"):
-            month = "12"
-        
-        date = b
-        if not date.isdigit() or len(date) > 2:
-            await ctx.send("Invalid date.")
-            return
-        if date.isdigit():
-            if not date.startswith("0"):
-                if int(date) > 31: 
-                    await ctx.send("Invalid date.")
-                    return
-                if (month == "04" or
-                    month == "06" or
-                    month == "09" or
-                    month == "11"):
-                    if int(date) == 31:
-                        await ctx.send("That month only has 30 days.")
-                        return
-                if month == "02":
-                    if int(date) > 29:
-                        await ctx.send("Invalid date.")
-                        return
-            if len(date) == 1:
-                date = "0" + date
-            if date == "00":
-                await ctx.send("Setting a timer for that date will destroy the fabric of reality.")
-                return
-
-        # Determining year if user did not provide one 
-        if popyear is None:
-            if int(month) < nowmonth:
-                popyear = (datetime.now().year + 1)
-            if int(month) > nowmonth:
-                popyear = datetime.now().year
-            if int(month) == nowmonth:
-                if datetime.now().date <= int(date):
-                    popyear = (datetime.now().year + 1)
-                else:
-                    popyear = datetime.now().year
-        
-        # Determining if timer year is a leap year:
-        if month == "02": 
-            if date == "29":
-                if (int(popyear) % 4) != 0 and (int(popyear) % 400) != 0:
-                    await ctx.send("Year specified is not a leap year and only has 28 days for February.")
-                    return
-        
-        # Determining specific time for timer:
-        if c is None:
-            timernote = ""
-            timedigit = " 06:00"
-            cnocolon = c.replace(":", "")
-        if cnocolon.isdigit():
-            timeparse = cnocolon
-            if d is None:
-                timernote = ""
-            else:
+                print("timernote grabbed from monthpass: " + timernote)
+            elif monthpassnote == 'notestartsatc':
+                print("note was startsatc")
+                timernote = msgcontent.split(b)[1]
+                print("timernote grabbed from monthpass: " + timernote)
+            elif monthpassnote == 'notestartsatd':
+                print("note was startsatd")
                 timernote = msgcontent.split(c)[1]
-        if not cnocolon.isdigit():
-            timernote = msgcontent.split(b)[1]
-            timedigit = " 06:00"
-        if timedigit is None:
-            await timeparser(ctx, msgcontent, timeparse, d)
-        # timepop and writer should be combined to the timeparser function and just make one timehandler
-        timepop = str(popyear) + "-" + month + "-" + date + timedigit + ":00.000000"
-        await timewriter(user, timernote, timeval1raw, unit1, timeval2raw, unit2, timeorig, timeval, timepop, channel)
-
-
-    else:
-        timeval1raw = int(a)
-        unit1 = b.lower()
-
-        if unit1.startswith("m"):
-            timeval1 = timeval1raw
-        if unit1.startswith("h"):
-            timeval1 = timeval1raw * 60
-        if unit1.startswith("d"):
-            timeval1 = timeval1raw * 1440
-        if unit1.startswith("w"):
-            timeval1 = timeval1raw * 10080
-        if unit1.startswith("y"):
-            timeval1 = timeval1raw * 525600
-
-        if c is not None:
-            if c.isdigit():
-                timeval2raw = int(c)
-                unit2 = d.lower()
+                print("timernote grabbed from monthpass: " + timernote)
+            elif monthpassnote == 'notestartsatd':
+                print("note was startsate")
                 timernote = msgcontent.split(d)[1]
-                if unit2.startswith("m"):
-                    timeval2 = timeval2raw
-                if unit2.startswith("h"):
-                    timeval2 = timeval2raw * 60
-                if unit2.startswith("d"):
-                    timeval2 = timeval2raw * 1440
-                if unit2.startswith("w"):
-                    timeval2 = timeval2raw * 10080
-                if unit2.startswith("y"):
-                    timeval2 = timeval2raw * 525600
+                print("timernote grabbed from monthpass: " + timernote)
 
-            if not c.isdigit():
+        else:
+            anocolon = a.replace(":", "")
+            if not anocolon.isdigit():
+                print("user tried standard timer but did not use digit and used random value")
+                print("value used: " + a)
+                await ctx.send("either that's invalid or the bot is broken :(")
+                return
+            timeval1raw = int(a)
+            unit1 = b.lower()
+            if unit1.startswith("m"):
+                timeval1 = timeval1raw
+            if unit1.startswith("h"):
+                timeval1 = timeval1raw * 60
+            if unit1.startswith("d"):
+                timeval1 = timeval1raw * 1440
+            if unit1.startswith("w"):
+                timeval1 = timeval1raw * 10080
+            if unit1.startswith("y"):
+                timeval1 = timeval1raw * 525600
+            if c is not None:
+                if c.isdigit():
+                    timeval2raw = int(c)
+                    unit2 = d.lower()
+                    timernote = msgcontent.split(d)[1]
+                    if unit2.startswith("m"):
+                        timeval2 = timeval2raw
+                    if unit2.startswith("h"):
+                        timeval2 = timeval2raw * 60
+                    if unit2.startswith("d"):
+                        timeval2 = timeval2raw * 1440
+                    if unit2.startswith("w"):
+                        timeval2 = timeval2raw * 10080
+                    if unit2.startswith("y"):
+                        timeval2 = timeval2raw * 525600
+                if not c.isdigit():
+                    timeval2 = 0
+                    timeval2raw = ""
+                    unit2 = ""
+                    timernote = msgcontent.split(b)[1]
+            if c is None:
                 timeval2 = 0
                 timeval2raw = ""
                 unit2 = ""
-                timernote = msgcontent.split(b)[1]
+                timernote = ""
+            timeval = timeval1 + timeval2
+            timepop = timeorig + timedelta(minutes=timeval)
+            timepopestablished = True
 
-        if c is None:
-            timeval2 = 0
-            timeval2raw = ""
-            unit2 = ""
-            timernote = ""
+    print("escapedhere")
+    if timedatafrommonthpass == False:
+        if timeornote == '' or timeornote is None:
+                print("user provided no note or specific time. setting to defaults. (blank note and 6 AM for time)")
+                timernote = " "
+                timedigit = "06:00"
+        if timeornote != '' and timeornote is not None:
+            print(timeornote)
+            print("timeornote exists")
+            notenocolon = (str(timeornote)).replace(":","") 
+            print("user provided some value after date, either a note or a time, checking now (all colons will be removed)")
+            if notenocolon.isdigit():
+                print("notenocolon is digit, timeparse set to: " + notenocolon)
+                timeparse = notenocolon
+                splitpoint = msgcontent.split(timeornote)[1]
+                splitpointsplit = splitpoint.split(" ")
+                if splitpointsplit is None:
+                    print("notenocolon was digit and split is none... setting note to blank")
+                    timernote = ""
+                else:
+                    print("user provided some fucking dumbass value after the timeparse, defaulting it as timernote")
+                    timernote = splitpoint
+            if not notenocolon.isdigit():
+                print("notenocolon NOT isdigit()... setting note, defaulting time to 6")
+                timernote = timeornote
+                timedigit = "06:00"
+        print("timedigit: [" + timedigit + "]")
+        if timernote.startswith(" ") and len(timernote) > 1:
+            print("removing space from beginning of note")
+            timernote = timernote[1:]
+            print("new note: " + timernote)
+    if timedigit == '' or timedigit is None:
+        print("no timedigit, running timeparser with timeparse: [" + timeparse + "] and timernote: [" + timernote + "]")
+        timeparseinit = timeparser(timeparse, timernote)
+        timedigit = timeparseinit.gettime()
+        print("timeparse class return: " + timedigit)
+        if timeparseinit.getmornnight() != "am.s":
+            print("note started am or pm ")
+            timernotesplit = timernote.split(" ")
+            timernotesplit1 = (timernotesplit[2:])
+            timernote = " ".join(timernotesplit1)
+            print("timernote: [" + timernote + "]")
+        if timedigit == 'inv':
+            print("time invalid... maybe user didn't mean a time")
+            await ctx.send("the bot thinks you entered an invalid time, message me if it's wrong")
+    if timepopestablished == False:
+        print("building timepop")
+        dateparseinit = dateslashparser(dateparse)
+        datestr = dateparseinit.getdatewithslashes()
+        if datestr == 'date inv':
+            print('date invalid, closing timer')
+            await ctx.send("Invalid date my doogie")
+            return
+        elif datestr == 'month inv':
+            print('month invalid, closing timer')
+            await ctx.send("Invalid month, my melon")
+            return
+            # add fun m words here?
+        elif datestr == 'date inv 31':
+            print('31 for 30 month, closing timer')
+            await ctx.send("That month only has 30 days my friend")
+            return
+        elif datestr == 'date inv too many feb':
+            print('too many days for february')
+            await ctx.send("February don't have that many days my ")
+            return
+        elif datestr == 'year inv':
+            print("year invalid")
+            await ctx.send("Invalid year my yuengling")
+            return
+        elif datestr == 'inv leap':
+            print("user used 02/29 for nonleap year")
+            await ctx.send("You used Feb 29 for a non-leap year my friend... day is none")
+            return
+        else:
+            timepop = datestr + " " + timedigit + ":00.000000"
+    print("timepop: [" + timepop + "]")
+    with open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv", "r") as f:
+        timercsv = f.readlines()
+        oldid = timercsv[-1].split(',')[0]
+        timerid = (int(oldid) + 1)
+        fields = [timerid, user, timernote, timeorig, timepop, channel]
+        with open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv", "a", newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(fields)
+    f.close()
+    await ctx.send("Timer set for " + timepop[:-10] + "! | ID: " + str(timerid))
+    if timeval1raw > 60:
+        await ctx.send("btw do you think it's funny to use these big stupid fucking numbers?")
+    return
 
-        timeval = timeval1 + timeval2
-        timepop = timeorig + timedelta(minutes=timeval)
-
-        with open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv", "r") as f:
-            timercsv = f.readlines()
-            oldid = timercsv[-1].split(',')[0]
-            timerid = (int(oldid) + 1)
-            fields = [timerid, user, timernote, timeval1raw, unit1, timeval2raw, unit2, timeorig,
-                      timeval, timepop, channel]
-            with open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv", "a", newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow(fields)
-        f.close()
-
-        await ctx.send("Timer set! | ID: " + str(timerid))
-        if timeval1raw > 60:
-            await ctx.send("btw do you think it's funny to use these big stupid fucking numbers?")
 
 
 # @timer.error
