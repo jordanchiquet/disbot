@@ -22,13 +22,13 @@ class renardusers:
             return(x)
     
     def userexists(self):
-        if userinit() == "None":
+        if self.userinit() == "None":
             return False
         else:
             return True
 
     def userreg(self):
-        if userexists() == False:
+        if self.userexists() == False:
             print("user passed userexists redundancy test... registering user")
             mydb = mysql.connector.connect(
             host='18.216.39.250',
@@ -37,7 +37,7 @@ class renardusers:
             mycursor = mydb.cursor()
             sql = "INSERT INTO renarddb.users (user) VALUES (%s)"
             val = [self.userid]
-            mycursor.execute(sql)
+            mycursor.execute(sql, val)
             mydb.commit()
             print("user " + self.userid + " registered.")
             return("user " + self.userid + " registered.")
@@ -48,7 +48,7 @@ class renardusers:
 # UPDATE `renarddb`.`users` SET `name` = 'sfsf' WHERE (`id` = '1');
 
     def userread(self):
-        if userexists() == True:
+        if self.userexists() == True:
             mydb = mysql.connector.connect(
             host='18.216.39.250',
             user='dbuser',
@@ -56,9 +56,23 @@ class renardusers:
             mycursor = mydb.cursor()
             sql = "SELECT (%s) FROM renarddb.users WHERE userid LIKE (%s)"
             val = [self.field, self.userid]
-            mycursor.execute(sql)
+            mycursor.execute(sql, val)
             for x in mycursor:
                 return(x)
+        else: 
+            print("user failed user exists redundancy check")
+            return("not registered")
+    
+    def userwrite(self):
+        if self.userexists() == True:
+            mydb = mysql.connector.connect(
+            host='18.216.39.250',
+            user='dbuser',
+            passwd='e4miqtng')          
+            mycursor = mydb.cursor()
+        else:
+            print("user failed user exists redundancy check")
+            return("not registered")
 
 
     def sqltest(self, user):

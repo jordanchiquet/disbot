@@ -77,11 +77,11 @@ class timeparser:
                     print("workingtime is one digit 0, returning 12 am")
                     return("00:00")
                 else:
-                    if self.getmornnight() == "am" or self.getmornnight == "am.s":
-                        print("getmornnight returned am, keeping time")
+                    if self.getmornnight() == "am" or self.getmornnight() == "am.s":
+                        print("getmornnight() returned am, keeping time")
                         return("0" + workingtime + ":00")
                     else:
-                        print("getmornnight returned pm, adding 12 to time")
+                        print("getmornnight() returned pm, adding 12 to time")
                         newtime = str(int(workingtime) + 12)
                         return(newtime + ":00")
             if len(workingtime) == 2:
@@ -94,7 +94,7 @@ class timeparser:
                     return("00:00")
                 if workingtime == "12":
                     print("working time is 12, checking getmornnight")
-                    if self.getmornnight() == "am" or self.getmornnight == "am.s":
+                    if self.getmornnight() == "am" or self.getmornnight() == "am.s":
                         print("returned am, setting midnight")
                         return("00:00")
                     if self.getmornnight() == "pm":
@@ -109,7 +109,7 @@ class timeparser:
                         print("working time greater than 12, assuming PM military time")
                         return(workingtime + ":00")
                     print("workingtime is valid, wasn't automatically midnight or military time, and wasn't 12, checking getmornnight")
-                    if self.getmornnight() == "am" or self.getmornnight == "am.s":
+                    if self.getmornnight() == "am" or self.getmornnight() == "am.s":
                         print("got am, keeping the same")
                         return(workingtime + ":00")
                     if self.getmornnight() == "pm":
@@ -128,7 +128,7 @@ class timeparser:
                     return("00:" + workingminutes)
                 else:
                     print("workinghour is valid and not 0, checking getmornnight")
-                    if self.getmornnight() == "am" or self.getmornnight == "am.s":
+                    if self.getmornnight() == "am" or self.getmornnight() == "am.s":
                         print("returned am")
                         return("0" + workinghour + ":" + workingminutes)
                     if self.getmornnight() == "pm":
@@ -149,7 +149,7 @@ class timeparser:
                     return("00:" + workingminutes)
                 elif workinghour == "12":
                     print("working hour is 12, checking getmornnight")
-                    if self.getmornnight() == "am" or self.getmornnight == "am.s":
+                    if self.getmornnight() == "am" or self.getmornnight() == "am.s":
                         print("returned am, setting midnight")
                         return("00:00")
                     if self.getmornnight() == "pm":
@@ -165,7 +165,7 @@ class timeparser:
                         print("workinghour greater than 12, assuming PM military time")
                         return(workinghour + ":" + workingminutes)
                     print("workinghour is valid, wasn't automatically midnight or military time, and wasn't 12, checking getmornnight")
-                    if self.getmornnight() == "am" or self.getmornnight == "am.s":
+                    if self.getmornnight() == "am" or self.getmornnight() == "am.s":
                         print("got am, keeping the same")
                         return(workinghour + ":" + workingminutes)
                     if self.getmornnight() == "pm":
