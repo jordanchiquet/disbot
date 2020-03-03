@@ -3,6 +3,7 @@ from modules.timermod.dateslashparser import dateslashparser
 from modules.timermod.timermonthpass import timermonthpass
 from modules.timermod.ogtimer import ogtimer
 from modules.timermod.timeparser import timeparser
+from modules.users.renardusers import renardusers
 # from test.modules.timer.dateslashparser import dateslashparser
 # from test.modules.timer.timermonthpass import timermonthpass
 # from test.modules.timer.ogtimer import ogtimer
@@ -28,8 +29,8 @@ class timercl:
         b = self.b
         c = self.c
         d = self.d
-        alower = a.lower()
-        anocolon = a.replace(":", "")
+        # alower = a.lower()
+        # anocolon = a.replace(":", "")
         channel = self.channel
         msgcontent = self.msgcontent
         cmdmsgcontent = msgcontent[7:]
@@ -37,13 +38,13 @@ class timercl:
         nowdate = str(datetime.now().day)
         nowhour = str(datetime.now().hour)
         nowminute = str(datetime.now().minute)
-        nowmonth = str(datetime.now().month)
+        # nowmonth = str(datetime.now().month)
         timedigit = ''
         timeorig = self.timeorig
         user = self.user
-        ampminnote = False
+        # ampminnote = False
         aslash = False
-        donotoverridetime = False
+        # donotoverridetime = False
         needdate = False
         timedigitestablished = False
         timepopestablished = False
@@ -105,7 +106,13 @@ class timercl:
                 timedigitestablished = True
                 if monthpasstime == 'blank':
                     print("monthpasstime was blank")
-                    timedigit = "06:00"
+                    if self.timerdefaultcheck() == None:
+                        print("user has no default time, setting to 6")
+                        timedigit = "06:00"
+                    else: 
+                        print("user has default time")
+                        timedigit = self.timerdefaultcheck()
+                        print("setting to: [" + timedigit +"]")
                 if monthpasstime != 'blank':
                     print("monthpasstime not blank, setting timeparse")
                     timeparse = monthpasstime
@@ -214,7 +221,13 @@ class timercl:
             if timeornote == '' or timeornote is None:
                     print("user provided no note or specific time. setting to defaults. (blank note and 6 AM for time)")
                     timernote = " "
-                    timedigit = "06:00"
+                    if self.timerdefaultcheck() == None:
+                        print("user has no default time, setting to 6")
+                        timedigit = "06:00"
+                    else: 
+                        print("user has default time")
+                        timedigit = self.timerdefaultcheck()
+                        print("setting to: [" + timedigit +"]")
             if timeornote != '' and timeornote is not None:
                 print(timeornote)
                 print("timeornote exists")
@@ -234,7 +247,13 @@ class timercl:
                 if not notenocolon.isdigit():
                     print("notenocolon NOT isdigit()... setting note, defaulting time to 6")
                     timernote = timeornote
-                    timedigit = "06:00"
+                    if self.timerdefaultcheck() == None:
+                        print("user has no default time, setting to 6")
+                        timedigit = "06:00"
+                    else: 
+                        print("user has default time")
+                        timedigit = self.timerdefaultcheck()
+                        print("setting to: [" + timedigit +"]")
             print("timedigit: [" + timedigit + "]")
             if timernote.startswith(" ") and len(timernote) > 1:
                 print("removing space from beginning of note")
@@ -337,3 +356,18 @@ class timercl:
 
     def printtest(self):
         print("file yanked")
+
+    def timerdefaultcheck(self):
+        usertimeinit = renardusers(self.user, "timerdefault")
+        usertimerdefaultcheck = usertimeinit.userread()
+        if usertimerdefaultcheck == "None": 
+            print("user has no default time, setting to 6")
+            return(None)
+        else:
+            return(usertimerdefaultcheck)
+    
+    def timerdefaultwrite(self): 
+        timerdefaultinit = renardusers(self.user, "timerdefault", self.b)
+        timerdefaultinit.userwrite()
+        return("timer default write complete")
+

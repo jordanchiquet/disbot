@@ -36,7 +36,7 @@ from urlextract import URLExtract
 from uszipcode import SearchEngine
 
 from modules.timermod.timercl import timercl
-# from modules.timermod import timeparser
+from modules.timermod.timeparser import timeparser
 # from modules.timermod.dateslashparser import dateslashparser
 # from modules.timer.timermonthpass import timermonthpass
 # from test.modules.timer.ogtimer import ogtimer
@@ -386,11 +386,22 @@ async def timer(ctx, a: str = None, b: str = None, c: str = None, d: str = None)
     timeorig = (ctx.message.created_at - timedelta(hours=6))
     user = ctx.message.author.id
     timerinit = timercl(msgcontent, user, channel, timeorig, a, b, c, d)
-    response = await timerinit.timerfunc()
-    if response == "user requested list":
-        await ctx.send(file=File("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv"))
+    if a == "default":
+        if b == None:
+            await ctx.send("Use \".timer default 07:00\" to set your default time for calendar reminders")
+        else:
+            print("user attempting to write default time")
+            timeparseinit = timeparser(b, c)
+            if timeparseinit == "inv":
+                await ctx.send("jordan timeparse returned that time invalid")
+            else: 
+                await ctx.send("New default time for your calendar reminders written.")
     else:
-        await ctx.send(response)
+        response = await timerinit.timerfunc()
+        if response == "user requested list":
+            await ctx.send(file=File("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv"))
+        else:
+            await ctx.send(response)
     
 
 # @bot.command()
@@ -726,70 +737,70 @@ async def timer(ctx, a: str = None, b: str = None, c: str = None, d: str = None)
 #        await ctx.send("you fucked that up somehow, format is \".timer 11 min kid cuisine in oven\" ")
 
 
-@bot.command()
-async def todo(ctx, a: str = None, b: str = None):
-    user = str(ctx.message.author.id)
-    task = ctx.message.content[6:]
-    taskwritetime = datetime.now()
-    todolistfile = ('/Users/jordanchiquet/personalandfinance/disbotren/test/todo/' + user + ".csv")
-    if a.lower() == "done":
-        if os.path.isfile(todolistfile):
-            tododata = open(todolistfile, "rt")
-            todolist = tododata.readlines()
-            reader = csv.reader(tododata, delimiter=",")
-            oldid = todolist[-1].split(',')[0]
-            delid = b
-            if delid == oldid and len(todolist) == 1:
-                todoread.close()
-                os.system('rm ' + todolist)
-                await ctx.send("Task checked.")
-                return
-            else:
-                tododata = open(todolistfile, "rt")
-                newtododata = open(todolistfile + "1", "a", newline='')
-                todoreader = csv.reader(tododata, delimiter = ',')
-                writer = csv.writer(newtododata)
-                for row in todoreader:
-                    if delid != row[0]:
-                        writer.writerow(row)
-                tododata.close()
-                newtododata.close()
-                os.system('rm ' + todolistfile)
-                os.system('mv ' + todolistfile + "1 " + todolistfile)
-                await ctx.send("Task checked boooooooooiiiiii")
-                return
-        else:
-            await ctx.send("You don't have a todo list my friend.")
-            return
-    if a is None:
-        with open(todolistfile, "r") as todoread:
-            reader = csv.reader(todoread, delimiter=",")
-            todolistsend = {}
-            for row in reader:
-                todolistsend.update({row[0]:row[1]})
-            await ctx.send(todolistsend)
-            todolistsend.clear()
-            todoread.close()
-    else:
-        if os.path.isfile(todolistfile):
-            with open(todolistfile, "r") as todoread:
-                todolist = todoread.readlines()
-                oldid = todolist[-1].split(',')[0]
-                todoid = (int(oldid) + 1)
-                fields = [todoid, task, taskwritetime]
-                with open(todolist, "a", newline='') as todoappend:
-                    writer = csv.writer(todoappend)
-                    writer.writerow(fields)
-            todoread.close()
-            todoappend.close()
-            await ctx.send("Item added")
-        else:
-            with open(todolistfile, 'wb') as newtodo:
-                fields = ["1", task, taskwritetime]
-                writer = csv.writer(newtodo, delimiter=',')
-                writer.writerow(fields)
-            todolistfile.close()
-            await ctx.send("List created")
+# @bot.command()
+# async def todo(ctx, a: str = None, b: str = None):
+#     user = str(ctx.message.author.id)
+#     task = ctx.message.content[6:]
+#     taskwritetime = datetime.now()
+#     todolistfile = ('/Users/jordanchiquet/personalandfinance/disbotren/test/todo/' + user + ".csv")
+#     if a.lower() == "done":
+#         if os.path.isfile(todolistfile):
+#             tododata = open(todolistfile, "rt")
+#             todolist = tododata.readlines()
+#             reader = csv.reader(tododata, delimiter=",")
+#             oldid = todolist[-1].split(',')[0]
+#             delid = b
+#             if delid == oldid and len(todolist) == 1:
+#                 todoread.close()
+#                 os.system('rm ' + todolist)
+#                 await ctx.send("Task checked.")
+#                 return
+#             else:
+#                 tododata = open(todolistfile, "rt")
+#                 newtododata = open(todolistfile + "1", "a", newline='')
+#                 todoreader = csv.reader(tododata, delimiter = ',')
+#                 writer = csv.writer(newtododata)
+#                 for row in todoreader:
+#                     if delid != row[0]:
+#                         writer.writerow(row)
+#                 tododata.close()
+#                 newtododata.close()
+#                 os.system('rm ' + todolistfile)
+#                 os.system('mv ' + todolistfile + "1 " + todolistfile)
+#                 await ctx.send("Task checked boooooooooiiiiii")
+#                 return
+#         else:
+#             await ctx.send("You don't have a todo list my friend.")
+#             return
+#     if a is None:
+#         with open(todolistfile, "r") as todoread:
+#             reader = csv.reader(todoread, delimiter=",")
+#             todolistsend = {}
+#             for row in reader:
+#                 todolistsend.update({row[0]:row[1]})
+#             await ctx.send(todolistsend)
+#             todolistsend.clear()
+#             todoread.close()
+#     else:
+#         if os.path.isfile(todolistfile):
+#             with open(todolistfile, "r") as todoread:
+#                 todolist = todoread.readlines()
+#                 oldid = todolist[-1].split(',')[0]
+#                 todoid = (int(oldid) + 1)
+#                 fields = [todoid, task, taskwritetime]
+#                 with open(todolist, "a", newline='') as todoappend:
+#                     writer = csv.writer(todoappend)
+#                     writer.writerow(fields)
+#             todoread.close()
+#             todoappend.close()
+#             await ctx.send("Item added")
+#         else:
+#             with open(todolistfile, 'wb') as newtodo:
+#                 fields = ["1", task, taskwritetime]
+#                 writer = csv.writer(newtodo, delimiter=',')
+#                 writer.writerow(fields)
+#             todolistfile.close()
+#             await ctx.send("List created")
 
 
 # ------------------------------------------------ #
@@ -970,7 +981,6 @@ async def quote(ctx, a: str = None, b: str = None):
             qtxt = result[1]
             date = result[2]
             qid = result[3]
-            await idchecker(qid)
             if len(qtxt) > 256:
                 await ctx.send("\"" + qtxt + "\" | " + name + " | " + date + " | ID:" + qid)
                 return

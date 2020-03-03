@@ -1,7 +1,7 @@
 
 
 class timeparser:
-    def __init__(self, timeparse, timernote):
+    def __init__(self, timeparse, timernote : str = None):
         self.timeparse = timeparse
         self.timernote = timernote
 

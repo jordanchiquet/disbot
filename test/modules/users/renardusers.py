@@ -76,7 +76,6 @@ class renardusers:
         print("write successful")
         return("write successful")
 
-
     def sqltest(self, user):
         mydb = mysql.connector.connect(
         host='18.216.39.250',
