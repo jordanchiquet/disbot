@@ -64,15 +64,17 @@ class renardusers:
             return("not registered")
     
     def userwrite(self):
-        if self.userexists() == True:
-            mydb = mysql.connector.connect(
-            host='18.216.39.250',
-            user='dbuser',
-            passwd='e4miqtng')          
-            mycursor = mydb.cursor()
-        else:
-            print("user failed user exists redundancy check")
-            return("not registered")
+        mydb = mysql.connector.connect(
+        host='18.216.39.250',
+        user='dbuser',
+        passwd='e4miqtng')          
+        mycursor = mydb.cursor()
+        sql = "INSERT INTO renarddb.users(user,%s) VALUES (%s,%s) ON DUPLICATE KEY UPDATE %s = %s"
+        val = [self.field, self.userid, self.param, self.field, self.param]
+        mycursor.execute(sql, val) 
+        mydb.commit()
+        print("write successful")
+        return("write successful")
 
 
     def sqltest(self, user):
