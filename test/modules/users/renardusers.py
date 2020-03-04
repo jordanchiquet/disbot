@@ -48,21 +48,19 @@ class renardusers:
 # UPDATE `renarddb`.`users` SET `name` = 'sfsf' WHERE (`id` = '1');
 
     def userread(self):
-        if self.userexists() == True:
-            mydb = mysql.connector.connect(
-            host='18.216.39.250',
-            user='dbuser',
-            passwd='e4miqtng')
-            mycursor = mydb.cursor()
-            sql = "SELECT (%s) FROM renarddb.users WHERE userid LIKE (%s)"
-            val = [self.field, self.userid]
-            mycursor.execute(sql, val)
-            for x in mycursor:
-                return(x)
-        else: 
-            print("user failed user exists redundancy check")
-            return("not registered")
-    
+        print("userread function was reached with parameters: USER: [" + str(self.userid) + "] FIELD: [" + self.field + "]")
+        mydb = mysql.connector.connect(
+        host='18.216.39.250',
+        user='dbuser',
+        passwd='e4miqtng')
+        mycursor = mydb.cursor()
+        sql = "SELECT (%s) FROM renarddb.users WHERE user LIKE (%s)"
+        val = [self.field, self.userid]
+        mycursor.execute(sql, val)
+        for x in mycursor:
+            print("read result: [" + x + "]")
+            return(x)
+  
     def userwrite(self):
         mydb = mysql.connector.connect(
         host='18.216.39.250',
@@ -87,8 +85,6 @@ class renardusers:
         for x in mycursor:
             return(x)
 
-
-    
-testinit = renardusers(1,"fart")
-quicktest = testinit.sqltest("dog")
+testinit = renardusers(191688156427321344,"timerdefault")
+quicktest = testinit.userread()
 print(quicktest)

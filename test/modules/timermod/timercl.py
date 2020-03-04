@@ -10,6 +10,7 @@ from modules.users.renardusers import renardusers
 
 
 import csv
+import mysql.connector
 import os
 
 
@@ -48,7 +49,6 @@ class timercl:
         needdate = False
         timedigitestablished = False
         timepopestablished = False
-
 
         print(str(timeorig) + ": timer invoked by user " + str(user) + " in channel " + str(channel))
 
@@ -106,7 +106,7 @@ class timercl:
                 timedigitestablished = True
                 if monthpasstime == 'blank':
                     print("monthpasstime was blank")
-                    if self.timerdefaultcheck() == None:
+                    if self.timerdefaultcheck() == "None":
                         print("user has no default time, setting to 6")
                         timedigit = "06:00"
                     else: 
@@ -168,6 +168,7 @@ class timercl:
                             print(timedigit)
                     elif dort == 'wasduration':
                         print ("dort wasduration")
+                        timedigit = "ph"
                         if a.isdigit():
                             timeval1raw = int(a)
                             unit1 = b.lower()
@@ -215,156 +216,170 @@ class timercl:
                             timeval = timeval1 + timeval2
                             timepop = timeorig + timedelta(minutes=timeval)
                             timepopestablished = True
-
         print("escapedhere")
-        if timedigitestablished == False:
-            if timeornote == '' or timeornote is None:
-                    print("user provided no note or specific time. setting to defaults. (blank note and 6 AM for time)")
-                    timernote = " "
-                    if self.timerdefaultcheck() == None:
-                        print("user has no default time, setting to 6")
-                        timedigit = "06:00"
-                    else: 
-                        print("user has default time")
-                        timedigit = self.timerdefaultcheck()
-                        print("setting to: [" + timedigit +"]")
-            if timeornote != '' and timeornote is not None:
-                print(timeornote)
-                print("timeornote exists")
-                notenocolon = (str(timeornote)).replace(":","") 
-                print("user provided some value after date, either a note or a time, checking now (all colons will be removed)")
-                if notenocolon.isdigit():
-                    print("notenocolon is digit, timeparse set to: " + notenocolon)
-                    timeparse = notenocolon
-                    splitpoint = msgcontent.split(timeornote)[1]
-                    splitpointsplit = splitpoint.split(" ")
-                    if splitpointsplit is None:
-                        print("notenocolon was digit and split is none... setting note to blank")
-                        timernote = ""
-                    else:
-                        print("user provided some fucking dumbass value after the timeparse, defaulting it as timernote")
-                        timernote = splitpoint
-                if not notenocolon.isdigit():
-                    print("notenocolon NOT isdigit()... setting note, defaulting time to 6")
-                    timernote = timeornote
-                    if self.timerdefaultcheck() == None:
-                        print("user has no default time, setting to 6")
-                        timedigit = "06:00"
-                    else: 
-                        print("user has default time")
-                        timedigit = self.timerdefaultcheck()
-                        print("setting to: [" + timedigit +"]")
-            print("timedigit: [" + timedigit + "]")
-            if timernote.startswith(" ") and len(timernote) > 1:
-                print("removing space from beginning of note")
-                timernote = timernote[1:]
-                print("new note: " + timernote)
-        if timedigit == '' or timedigit is None:
-            print("no timedigit, running timeparser with timeparse: [" + timeparse + "] and timernote: [" + timernote + "]")
-            timeparseinit = timeparser(timeparse, timernote)
-            timedigit = timeparseinit.gettime()
-            print("timeparse class return: " + timedigit)
-        if needdate == True:
-            print("needdate true after timeparse, doing date comparison")
-            nowhournozero = nowhour
-            timerhour = timedigit.split(':')[0]
-            timerhournozero = timerhour
-            if nowhour.startswith("0"):
-                print("nowhour starts with 0, replacing")
-                nowhournozero = nowhour.replace("0", "")
-            if timerhour.startswith("0"):
-                print("timerhour starts with 0, replacing")
-                timerhournozero = timerhour.replace("0", "")
-            if int(nowhournozero) > int(timerhournozero):
-                print("time now is greater than time in timer, setting for tomorrow")
-                date = str((now + timedelta(days=1)).strftime('%Y-%m-%d'))
-            elif int(nowhournozero) < int(timerhournozero):
-                print("time now is less than time in timer, setting for today")
-                date = nowdate
-            elif int(nowhournozero) == int(timerhournozero):
-                print("time is same hour as now, need to check min")
-                nowminutenozero = nowminute
-                timerminute = timedigit.split(':')[1]
-                timerminutenozero = timerminute
-                if nowminute.startswith("0"):
-                    print("nowminute start with zero replacing")
-                    nowminutenozero = nowminute.replace("0","")
-                    print("replacement success")
-                if timerminute.startswith("0"):
-                    print("timerminute start with zero, replacing")
-                    timerminutenozero = timerminute.replace("0","")
-                if int(nowminutenozero) > int(timerminutenozero):
-                    print("nowminute greater than timerminute, setting for tomorrow")
-                    date = str((now + timedelta(days=1)).strftime('%Y-%m-%d'))
-                    print("test: " + date)
-                elif int(nowminutenozero) < int(timerminutenozero):
-                    print("nowminute less than timerminute, setting for today")
-                    date = str(now.strftime('%Y-%m-%d'))
-                elif int(nowminutenozero) == int(timerminutenozero):
-                    print("timerminute is... now. closing timer and messaging channel")
-                    return("Timer set... annnnddd timer expired!")
-            print("building timepop")
-            timepop = date + " " + timedigit + ":00.000000"
-            timepopestablished = True 
-            print("timepop: [" + timepop + "]") 
-            if timeparseinit.getmornnight() != "am.s":
-                print("note started am or pm ")
-                timernotesplit = timernote.split(" ")
-                timernotesplit1 = (timernotesplit[2:])
-                timernote = " ".join(timernotesplit1)
-                print("timernote: [" + timernote + "]")
-            if timedigit == 'inv':
-                print("time invalid... maybe user didn't mean a time")
-                return("the bot thinks you entered an invalid time, message me if it's wrong")
         if timepopestablished == False:
-            print("building timepop")
-            dateparseinit = dateslashparser(dateparse)
-            datestr = dateparseinit.getdatewithslashes()
-            if datestr == 'date inv':
-                print('date invalid, closing timer')
-                return("Invalid date my doogie")
-            elif datestr == 'month inv':
-                print('month invalid, closing timer')
-                return("Invalid month, my melon")
-                # add fun m words here?
-            elif datestr == 'date inv 31':
-                print('31 for 30 month, closing timer')
-                return("That month only has 30 days my friend")
-            elif datestr == 'date inv too many feb':
-                print('too many days for february')
-                return("February don't have that many days my ")
-            elif datestr == 'year inv':
-                print("year invalid")
-                return("Invalid year my yuengling")
-            elif datestr == 'inv leap':
-                print("user used 02/29 for nonleap year")
-                return("You used Feb 29 for a non-leap year my friend... day is none")
-            else:
-                timepop = datestr + " " + timedigit + ":00.000000"
+            if timedigitestablished == False:
+                print("timedigitestablished false")
+                if timeornote == '' or timeornote is None:
+                        print("user provided no note or specific time. setting to defaults. (blank note and 6 AM for time)")
+                        timernote = " "
+                        print(self.timerdefaultcheck())
+                        if self.timerdefaultcheck() == None:
+                            print("user has no default time, setting to 6")
+                            timedigit = "06:00"
+                        else: 
+                            print("user has default time")
+                            timedigit = self.timerdefaultcheck()
+                            print("setting to: [" + timedigit +"]")
+                if timeornote != '' and timeornote is not None:
+                    print(timeornote)
+                    print("timeornote exists")
+                    notenocolon = (str(timeornote)).replace(":","") 
+                    print("user provided some value after date, either a note or a time, checking now (all colons will be removed)")
+                    if notenocolon.isdigit():
+                        print("notenocolon is digit, timeparse set to: " + notenocolon)
+                        timeparse = notenocolon
+                        splitpoint = msgcontent.split(timeornote)[1]
+                        splitpointsplit = splitpoint.split(" ")
+                        if splitpointsplit is None:
+                            print("notenocolon was digit and split is none... setting note to blank")
+                            timernote = ""
+                        else:
+                            print("user provided some fucking dumbass value after the timeparse, defaulting it as timernote")
+                            timernote = splitpoint
+                    if not notenocolon.isdigit():
+                        print("notenocolon NOT isdigit()... setting note, defaulting time to 6")
+                        timernote = timeornote
+                        if self.timerdefaultcheck() == "None":
+                            print("user has no default time, setting to 6")
+                            timedigit = "06:00"
+                        else: 
+                            print("user has default time")
+                            timedigit = self.timerdefaultcheck()
+                            print("setting to: [" + timedigit +"]")
+                print("timedigit: [" + timedigit + "]")
+                if timernote.startswith(" ") and len(timernote) > 1:
+                    print("removing space from beginning of note")
+                    timernote = timernote[1:]
+                    print("new note: " + timernote)
+            if timedigit == '' or timedigit is None:
+                print("no timedigit, running timeparser with timeparse: [" + timeparse + "] and timernote: [" + timernote + "]")
+                timeparseinit = timeparser(timeparse, timernote)
+                timedigit = timeparseinit.gettime()
+                print("timeparse class return: " + timedigit)
+            if needdate == True:
+                print("needdate true after timeparse, doing date comparison")
+                nowhournozero = nowhour
+                timerhour = timedigit.split(':')[0]
+                timerhournozero = timerhour
+                if nowhour.startswith("0"):
+                    print("nowhour starts with 0, replacing")
+                    nowhournozero = nowhour.replace("0", "")
+                if timerhour.startswith("0"):
+                    print("timerhour starts with 0, replacing")
+                    timerhournozero = timerhour.replace("0", "")
+                if int(nowhournozero) > int(timerhournozero):
+                    print("time now is greater than time in timer, setting for tomorrow")
+                    date = str((now + timedelta(days=1)).strftime('%Y-%m-%d'))
+                elif int(nowhournozero) < int(timerhournozero):
+                    print("time now is less than time in timer, setting for today")
+                    date = nowdate
+                elif int(nowhournozero) == int(timerhournozero):
+                    print("time is same hour as now, need to check min")
+                    nowminutenozero = nowminute
+                    timerminute = timedigit.split(':')[1]
+                    timerminutenozero = timerminute
+                    if nowminute.startswith("0"):
+                        print("nowminute start with zero replacing")
+                        nowminutenozero = nowminute.replace("0","")
+                        print("replacement success")
+                    if timerminute.startswith("0"):
+                        print("timerminute start with zero, replacing")
+                        timerminutenozero = timerminute.replace("0","")
+                    if int(nowminutenozero) > int(timerminutenozero):
+                        print("nowminute greater than timerminute, setting for tomorrow")
+                        date = str((now + timedelta(days=1)).strftime('%Y-%m-%d'))
+                        print("test: " + date)
+                    elif int(nowminutenozero) < int(timerminutenozero):
+                        print("nowminute less than timerminute, setting for today")
+                        date = str(now.strftime('%Y-%m-%d'))
+                    elif int(nowminutenozero) == int(timerminutenozero):
+                        print("timerminute is... now. closing timer and messaging channel")
+                        return("Timer set... annnnddd timer expired!")
+                print("building timepop")
+                timepop = date + " " + timedigit + ":00.000000"
+                timepopestablished = True 
+                print("timepop: [" + timepop + "]") 
+                if timeparseinit.getmornnight() != "am.s":
+                    print("note started am or pm ")
+                    timernotesplit = timernote.split(" ")
+                    timernotesplit1 = (timernotesplit[2:])
+                    timernote = " ".join(timernotesplit1)
+                    print("timernote: [" + timernote + "]")
+                if timedigit == 'inv':
+                    print("time invalid... maybe user didn't mean a time")
+                    return("the bot thinks you entered an invalid time, message me if it's wrong")
+            if timepopestablished == False:
+                print("building timepop")
+                dateparseinit = dateslashparser(dateparse)
+                datestr = dateparseinit.getdatewithslashes()
+                if datestr == 'date inv':
+                    print('date invalid, closing timer')
+                    return("Invalid date my doogie")
+                elif datestr == 'month inv':
+                    print('month invalid, closing timer')
+                    return("Invalid month, my melon")
+                    # add fun m words here?
+                elif datestr == 'date inv 31':
+                    print('31 for 30 month, closing timer')
+                    return("That month only has 30 days my friend")
+                elif datestr == 'date inv too many feb':
+                    print('too many days for february')
+                    return("February don't have that many days my ")
+                elif datestr == 'year inv':
+                    print("year invalid")
+                    return("Invalid year my yuengling")
+                elif datestr == 'inv leap':
+                    print("user used 02/29 for nonleap year")
+                    return("You used Feb 29 for a non-leap year my friend... day is none")
+                else:
+                    timepop = datestr + " " + timedigit + ":00.000000"
         print("timepop: [" + timepop + "]")
-        with open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv", "r") as f:
-            print("csv open")
-            timercsv = f.readlines()
-            oldid = timercsv[-1].split(',')[0]
-            timerid = (int(oldid) + 1)
-            fields = [timerid, user, timernote, timeorig, timepop, channel]
-            with open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv", "a", newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow(fields)
-        f.close()
-        return("Timer set for " + timepop[:-10] + "! | ID: " + str(timerid))
+        mydb = mysql.connector.connect(
+            host='18.216.39.250',
+            user='dbuser',
+            passwd='e4miqtng')
+        mycursor = mydb.cursor()
+        sql = "INSERT INTO renarddb.timers(user,timernote,timeorig,timepop,channel) VALUES(%s,%s,%s,%s,%s)"
+        val = [user, timernote, timeorig, timepop, channel]
+        mycursor.execute(sql, val)
+        mydb.commit()
+        # with open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv", "r") as f:
+        #     print("csv open")
+        #     timercsv = f.readlines()
+        #     oldid = timercsv[-1].split(',')[0]
+        #     timerid = (int(oldid) + 1)
+        #     fields = [timerid, user, timernote, timeorig, timepop, channel]
+        #     with open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv", "a", newline='') as f:
+        #         writer = csv.writer(f)
+        #         writer.writerow(fields)
+        # f.close()
+        return("Timer set for " + timepop[:-10] + "!")
 
     def printtest(self):
         print("file yanked")
 
     def timerdefaultcheck(self):
+        print("starting sql query for default time")
         usertimeinit = renardusers(self.user, "timerdefault")
+        print("reached users class")
         usertimerdefaultcheck = usertimeinit.userread()
-        if usertimerdefaultcheck == "None": 
-            print("user has no default time, setting to 6")
-            return(None)
+        print("reached userread func")
+        if usertimerdefaultcheck is None:
+            print("result was none")
         else:
-            return(usertimerdefaultcheck)
+            print("sql result: [" + usertimerdefaultcheck + "]")
+        return(usertimerdefaultcheck)
     
     def timerdefaultwrite(self): 
         timerdefaultinit = renardusers(self.user, "timerdefault", self.b)

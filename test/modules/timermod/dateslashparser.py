@@ -160,7 +160,7 @@ class dateslashparser:
                         leapyear = self.checkleapyear(year)
                         if leapyear == False:
                             return("inv leap")
-        print("failed here")
+        print("reached end of dateslashparser successfully")
         return(str(year) + "-" + month + "-" + date)
 
                     
