@@ -54,11 +54,11 @@ class renardusers:
         user='dbuser',
         passwd='e4miqtng')
         mycursor = mydb.cursor()
-        sql = "SELECT (%s) FROM renarddb.users WHERE user LIKE (%s)"
-        val = [self.field, self.userid]
+        sql = "SELECT (" + self.field + ") FROM renarddb.users WHERE user LIKE (%s)"
+        val = [self.userid]
         mycursor.execute(sql, val)
         for x in mycursor:
-            print("read result: [" + x + "]")
+            print("read result: [" + str(x) + "]")
             return(x)
   
     def userwrite(self):
@@ -67,10 +67,11 @@ class renardusers:
         user='dbuser',
         passwd='e4miqtng')          
         mycursor = mydb.cursor()
-        sql = "INSERT INTO renarddb.users(user,%s) VALUES (%s,%s) ON DUPLICATE KEY UPDATE %s = %s"
+        sql = "INSERT INTO renarddb.users(user," + self.field + ") VALUES (" + str(self.userid) + ",\"" + self.param + "\") ON DUPLICATE KEY UPDATE " + self.field + " = \"" + self.param + "\";"
         val = [self.field, self.userid, self.param, self.field, self.param]
-        mycursor.execute(sql, val) 
+        mycursor.execute(sql) 
         mydb.commit()
+
         print("write successful")
         return("write successful")
 
@@ -85,6 +86,7 @@ class renardusers:
         for x in mycursor:
             return(x)
 
-testinit = renardusers(191688156427321344,"timerdefault")
-quicktest = testinit.userread()
-print(quicktest)
+# testinit = renardusers(191688156427321344,"timerdefault","6")
+# quicktest = testinit.userwrite()
+# readtest = testinit.userread()
+# print(readtest)

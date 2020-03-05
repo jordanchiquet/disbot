@@ -282,7 +282,6 @@ class timercl:
         mycursor = mydb.cursor()
         sql = "INSERT INTO renarddb.timers (user, timernote, timepop, channel) VALUES (%s, %s, %s, %s);"
         val = [user, timernote, timepop, channel]
-        print("val: " + str(val))
         mycursor.execute(sql, val)
         mydb.commit()
         # with open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv", "r") as f:
@@ -363,12 +362,16 @@ class timercl:
                 return(timernote + "|" + timedigit + "|notimeparse")
 
     def timerold(self, msgcontent, timeorig, a, b, c: str = None, d: str = None):
+        print("timerold started")
+        print("this is the timeorig we getting [" + timeorig +"]")
         if a.isdigit():
+            print("a is digit, continuing")
             timeval1raw = int(a)
             unit1 = b.lower()
             if unit1.startswith("m"):
                 timeval1 = timeval1raw
             elif unit1.startswith("h"):
+                print("sanity can confirm hour")
                 timeval1 = timeval1raw * 60
             elif unit1.startswith("d"):
                 timeval1 = timeval1raw * 1440
@@ -403,10 +406,12 @@ class timercl:
                     unit2 = ""
                     timernote = msgcontent.split(b)[1]
             if c is None:
+                print("sanity can confirm c is none")
                 timeval2 = 0
                 timeval2raw = ""
                 unit2 = ""
                 timernote = ""
             timeval = timeval1 + timeval2
             timepop = timeorig + timedelta(minutes=timeval)
+            print("made it to timepop at end of original timer: [" + timepop + "]")
             return (timepop + "|" + timernote)                   
