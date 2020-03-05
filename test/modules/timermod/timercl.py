@@ -96,13 +96,14 @@ class timercl:
             print("monthpassescape")
             print("monthpass: " + monthpass)
             if monthpass != "nomonth":
-                getthatsplit = self.timernotnomonth(monthpass)
+                getthatsplit = self.timernotnomonth(msgcontent, monthpass, a, b, c, d)
                 splitted = getthatsplit.split("|")
                 timernote = splitted[0]
                 if splitted[1] == "notimedigit":
                     timeparse = splitted[2]
                 else:
-                    timedigit = splitted[1]    
+                    timedigit = splitted[1]
+                    timedigitestablished = True    
             else:
                 print("this is going to ogtimer: [" + a + "]")
                 ogtimerinit = ogtimer(str(a))
@@ -136,10 +137,11 @@ class timercl:
                     elif dort == 'wasduration':
                         print ("dort wasduration")
                         timedigit = "ph"
-                        originaltimer = self.timerold(a, b, c, d)
+                        originaltimer = self.timerold(msgcontent, timeorig, a, b, c, d)
                         ogtimerstr = str(originaltimer)
                         if ogtimerstr.startswith("timepop"):
-                            timepop = ogtimerstr.split("|")[1]
+                            timepop = ogtimerstr.split("|")[0]
+                            timernote = ogtimerstr.split("|")[1]
                             timepopestablished = True
                         else:
                             return(ogtimerstr)
@@ -278,8 +280,9 @@ class timercl:
             user='dbuser',
             passwd='e4miqtng')
         mycursor = mydb.cursor()
-        sql = "INSERT INTO renarddb.timers(user,timernote,timeorig,timepop,channel) VALUES(%s,%s,%s,%s,%s)"
-        val = [user, timernote, timeorig, timepop, channel]
+        sql = "INSERT INTO renarddb.timers (user, timernote, timepop, channel) VALUES (%s, %s, %s, %s);"
+        val = [user, timernote, timepop, channel]
+        print("val: " + str(val))
         mycursor.execute(sql, val)
         mydb.commit()
         # with open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv", "r") as f:
@@ -314,7 +317,7 @@ class timercl:
         timerdefaultinit.userwrite()
         return("timer default write complete")
     
-    def timernotnomonth(self, monthpass):
+    def timernotnomonth(self, msgcontent, monthpass, a: str = None, b: str = None, c: str = None, d: str = None):
             print("monthpass found month, setting dateparse")
             dateparse = monthpass.split("|")[0]
             monthpassnote = monthpass.split("|")[1]
@@ -322,7 +325,7 @@ class timercl:
             print("dateparse: " + dateparse)
             print("monthpassnote: " + monthpassnote)
             print("monthpasstime: " + monthpasstime)
-            timedigitestablished = True
+            
             if monthpasstime == 'blank':
                 print("monthpasstime was blank")
                 if self.timerdefaultcheck() == "None":
@@ -359,7 +362,7 @@ class timercl:
             else:
                 return(timernote + "|" + timedigit + "|notimeparse")
 
-    def timerold(self, a, b, c: str = None, d: str = None):
+    def timerold(self, msgcontent, timeorig, a, b, c: str = None, d: str = None):
         if a.isdigit():
             timeval1raw = int(a)
             unit1 = b.lower()
@@ -406,4 +409,4 @@ class timercl:
                 timernote = ""
             timeval = timeval1 + timeval2
             timepop = timeorig + timedelta(minutes=timeval)
-            return ("timepop|" + timepop)                    
+            return (timepop + "|" + timernote)                   
