@@ -96,46 +96,13 @@ class timercl:
             print("monthpassescape")
             print("monthpass: " + monthpass)
             if monthpass != "nomonth":
-                print("monthpass found month, setting dateparse")
-                dateparse = monthpass.split("|")[0]
-                monthpassnote = monthpass.split("|")[1]
-                monthpasstime = monthpass.split("|")[2]
-                print("dateparse: " + dateparse)
-                print("monthpassnote: " + monthpassnote)
-                print("monthpasstime: " + monthpasstime)
-                timedigitestablished = True
-                if monthpasstime == 'blank':
-                    print("monthpasstime was blank")
-                    if self.timerdefaultcheck() == "None":
-                        print("user has no default time, setting to 6")
-                        timedigit = "06:00"
-                    else: 
-                        print("user has default time")
-                        timedigit = self.timerdefaultcheck()
-                        print("setting to: [" + timedigit +"]")
-                if monthpasstime != 'blank':
-                    print("monthpasstime not blank, setting timeparse")
-                    timeparse = monthpasstime
-                if monthpassnote == 'blank':
-                    print("monthpassnote blank")
-                    timernote = ''
-                elif monthpassnote == 'notestartsatb':
-                    print("note was startsatb")
-                    timernote = msgcontent.split(a)[1]
-                    print("timernote grabbed from monthpass: " + timernote)
-                elif monthpassnote == 'notestartsatc':
-                    print("note was startsatc")
-                    timernote = msgcontent.split(b)[1]
-                    print("timernote grabbed from monthpass: " + timernote)
-                elif monthpassnote == 'notestartsatd':
-                    print("note was startsatd")
-                    timernote = msgcontent.split(c)[1]
-                    print("timernote grabbed from monthpass: " + timernote)
-                elif monthpassnote == 'notestartsate':
-                    print("note was startsate")
-                    timernote = msgcontent.split(d)[1]
-                    print("timernote grabbed from monthpass: " + timernote)
-
+                getthatsplit = self.timernotnomonth(monthpass)
+                splitted = getthatsplit.split("|")
+                timernote = splitted[0]
+                if splitted[1] == "notimedigit":
+                    timeparse = splitted[2]
+                else:
+                    timedigit = splitted[1]    
             else:
                 print("this is going to ogtimer: [" + a + "]")
                 ogtimerinit = ogtimer(str(a))
@@ -169,53 +136,14 @@ class timercl:
                     elif dort == 'wasduration':
                         print ("dort wasduration")
                         timedigit = "ph"
-                        if a.isdigit():
-                            timeval1raw = int(a)
-                            unit1 = b.lower()
-                            if unit1.startswith("m"):
-                                timeval1 = timeval1raw
-                            elif unit1.startswith("h"):
-                                timeval1 = timeval1raw * 60
-                            elif unit1.startswith("d"):
-                                timeval1 = timeval1raw * 1440
-                            elif unit1.startswith("w"):
-                                timeval1 = timeval1raw * 10080
-                            elif unit1.startswith("y"):
-                                timeval1 = timeval1raw * 525600
-                            else:
-                                print("invalid unit used")
-                                return("Invalid time unit or the bot is broken")
-                            if c is not None:
-                                if c.isdigit():
-                                    timeval2raw = int(c)
-                                    unit2 = d.lower()
-                                    timernote = msgcontent.split(d)[1]
-                                    if unit2.startswith("m"):
-                                        timeval2 = timeval2raw
-                                    elif unit2.startswith("h"):
-                                        timeval2 = timeval2raw * 60
-                                    elif unit2.startswith("d"):
-                                        timeval2 = timeval2raw * 1440
-                                    elif unit2.startswith("w"):
-                                        timeval2 = timeval2raw * 10080
-                                    elif unit2.startswith("y"):
-                                        timeval2 = timeval2raw * 525600
-                                    else:
-                                        print("invalid unit used")
-                                        return("Invalid time unit for second number or the bot is broken.")
-                                if not c.isdigit():
-                                    timeval2 = 0
-                                    timeval2raw = ""
-                                    unit2 = ""
-                                    timernote = msgcontent.split(b)[1]
-                            if c is None:
-                                timeval2 = 0
-                                timeval2raw = ""
-                                unit2 = ""
-                                timernote = ""
-                            timeval = timeval1 + timeval2
-                            timepop = timeorig + timedelta(minutes=timeval)
+                        originaltimer = self.timerold(a, b, c, d)
+                        ogtimerstr = str(originaltimer)
+                        if ogtimerstr.startswith("timepop"):
+                            timepop = ogtimerstr.split("|")[1]
                             timepopestablished = True
+                        else:
+                            return(ogtimerstr)
+
         print("escapedhere")
         if timepopestablished == False:
             if timedigitestablished == False:
@@ -385,4 +313,97 @@ class timercl:
         timerdefaultinit = renardusers(self.user, "timerdefault", self.b)
         timerdefaultinit.userwrite()
         return("timer default write complete")
+    
+    def timernotnomonth(self, monthpass):
+            print("monthpass found month, setting dateparse")
+            dateparse = monthpass.split("|")[0]
+            monthpassnote = monthpass.split("|")[1]
+            monthpasstime = monthpass.split("|")[2]
+            print("dateparse: " + dateparse)
+            print("monthpassnote: " + monthpassnote)
+            print("monthpasstime: " + monthpasstime)
+            timedigitestablished = True
+            if monthpasstime == 'blank':
+                print("monthpasstime was blank")
+                if self.timerdefaultcheck() == "None":
+                    print("user has no default time, setting to 6")
+                    timedigit = "06:00"
+                else: 
+                    print("user has default time")
+                    timedigit = self.timerdefaultcheck()
+                    print("setting to: [" + timedigit +"]")
+            if monthpasstime != 'blank':
+                print("monthpasstime not blank, setting timeparse")
+                timeparse = monthpasstime
+            if monthpassnote == 'blank':
+                print("monthpassnote blank")
+                timernote = ''
+            elif monthpassnote == 'notestartsatb':
+                print("note was startsatb")
+                timernote = msgcontent.split(a)[1]
+                print("timernote grabbed from monthpass: " + timernote)
+            elif monthpassnote == 'notestartsatc':
+                print("note was startsatc")
+                timernote = msgcontent.split(b)[1]
+                print("timernote grabbed from monthpass: " + timernote)
+            elif monthpassnote == 'notestartsatd':
+                print("note was startsatd")
+                timernote = msgcontent.split(c)[1]
+                print("timernote grabbed from monthpass: " + timernote)
+            elif monthpassnote == 'notestartsate':
+                print("note was startsate")
+                timernote = msgcontent.split(d)[1]
+                print("timernote grabbed from monthpass: " + timernote)
+            if timedigit is None:
+                return(timernote + "|notimedigit|" + timeparse)
+            else:
+                return(timernote + "|" + timedigit + "|notimeparse")
 
+    def timerold(self, a, b, c: str = None, d: str = None):
+        if a.isdigit():
+            timeval1raw = int(a)
+            unit1 = b.lower()
+            if unit1.startswith("m"):
+                timeval1 = timeval1raw
+            elif unit1.startswith("h"):
+                timeval1 = timeval1raw * 60
+            elif unit1.startswith("d"):
+                timeval1 = timeval1raw * 1440
+            elif unit1.startswith("w"):
+                timeval1 = timeval1raw * 10080
+            elif unit1.startswith("y"):
+                timeval1 = timeval1raw * 525600
+            else:
+                print("invalid unit used")
+                return("Invalid time unit or the bot is broken")
+            if c is not None:
+                if c.isdigit():
+                    timeval2raw = int(c)
+                    unit2 = d.lower()
+                    timernote = msgcontent.split(d)[1]
+                    if unit2.startswith("m"):
+                        timeval2 = timeval2raw
+                    elif unit2.startswith("h"):
+                        timeval2 = timeval2raw * 60
+                    elif unit2.startswith("d"):
+                        timeval2 = timeval2raw * 1440
+                    elif unit2.startswith("w"):
+                        timeval2 = timeval2raw * 10080
+                    elif unit2.startswith("y"):
+                        timeval2 = timeval2raw * 525600
+                    else:
+                        print("invalid unit used")
+                        return("Invalid time unit for second number or the bot is broken.")
+                if not c.isdigit():
+                    timeval2 = 0
+                    timeval2raw = ""
+                    unit2 = ""
+                    timernote = msgcontent.split(b)[1]
+            if c is None:
+                timeval2 = 0
+                timeval2raw = ""
+                unit2 = ""
+                timernote = ""
+            timeval = timeval1 + timeval2
+            timepop = timeorig + timedelta(minutes=timeval)
+            return ("timepop|" + timepop)                    
