@@ -98,8 +98,14 @@ class timercl:
             if monthpass != "nomonth":
                 getthatsplit = self.timernotnomonth(msgcontent, monthpass, a, b, c, d)
                 splitted = getthatsplit.split("|")
-                timernote = splitted[0]
-                if splitted[1] == "notimedigit":
+                if splitted[0] == "blank":
+                    print("made it out of timernotnomonth")
+                    timernote = ""
+                else:
+                    timernote = splitted[0]
+                print("timernote return: [" + timernote + "]")
+                dateparse = splitted[3]
+                if splitted[1] == "blank":
                     timeparse = splitted[2]
                 else:
                     timedigit = splitted[1]
@@ -137,11 +143,11 @@ class timercl:
                     elif dort == 'wasduration':
                         print ("dort wasduration")
                         timedigit = "ph"
-                        originaltimer = self.timerold(msgcontent, timeorig, a, b, c, d)
+                        originaltimer = self.timerold(msgcontent, str(timeorig), a, b, c, d)
                         ogtimerstr = str(originaltimer)
                         if ogtimerstr.startswith("timepop"):
-                            timepop = ogtimerstr.split("|")[0]
-                            timernote = ogtimerstr.split("|")[1]
+                            timepop = ogtimerstr.split("|")[1]
+                            timernote = ogtimerstr.split("|")[2]
                             timepopestablished = True
                         else:
                             return(ogtimerstr)
@@ -176,11 +182,15 @@ class timercl:
                             timernote = ""
                         else:
                             print("user provided some fucking dumbass value after the timeparse, defaulting it as timernote")
-                            timernote = splitpoint
+                            timernotesplit = msgcontent.split(timeornote)[1:]
+                            print("timernotesplit: [" + str(timernotesplit) + "]")
+                            timernote = " ".join(timernotesplit)
                     if not notenocolon.isdigit():
                         print("notenocolon NOT isdigit()... setting note, defaulting time to 6")
-                        timernote = timeornote
-                        if self.timerdefaultcheck() == "None":
+                        timernotesplit = msgcontent.split(timeornote)[1:]
+                        timernotesplit1 = " ".join(timernotesplit)
+                        timernote = timeornote + timernotesplit1
+                        if self.timerdefaultcheck() == None:
                             print("user has no default time, setting to 6")
                             timedigit = "06:00"
                         else: 
@@ -196,7 +206,15 @@ class timercl:
                 print("no timedigit, running timeparser with timeparse: [" + timeparse + "] and timernote: [" + timernote + "]")
                 timeparseinit = timeparser(timeparse, timernote)
                 timedigit = timeparseinit.gettime()
+                if timedigit == "inv":
+                    return("my blockchain techniligies cannot read that time")
                 print("timeparse class return: " + timedigit)
+                if timeparseinit.getmornnight() != "am.s":
+                    print("note started am or pm ")
+                    timernotesplit = timernote.split(" ")
+                    timernotesplit1 = (timernotesplit[1:])
+                    timernote = " ".join(timernotesplit1)
+                    print("timernote: [" + timernote + "]")
             if needdate == True:
                 print("needdate true after timeparse, doing date comparison")
                 nowhournozero = nowhour
@@ -236,7 +254,7 @@ class timercl:
                     elif int(nowminutenozero) == int(timerminutenozero):
                         print("timerminute is... now. closing timer and messaging channel")
                         return("Timer set... annnnddd timer expired!")
-                print("building timepop")
+                print("building timepop (a)")
                 timepop = date + " " + timedigit + ":00.000000"
                 timepopestablished = True 
                 print("timepop: [" + timepop + "]") 
@@ -250,7 +268,8 @@ class timercl:
                     print("time invalid... maybe user didn't mean a time")
                     return("the bot thinks you entered an invalid time, message me if it's wrong")
             if timepopestablished == False:
-                print("building timepop")
+                print("building timepop (b)")
+                print("starting dateparseinit with dateparse: [" + str(dateparse) +"]")
                 dateparseinit = dateslashparser(dateparse)
                 datestr = dateparseinit.getdatewithslashes()
                 if datestr == 'date inv':
@@ -327,7 +346,7 @@ class timercl:
             
             if monthpasstime == 'blank':
                 print("monthpasstime was blank")
-                if self.timerdefaultcheck() == "None":
+                if self.timerdefaultcheck() == None:
                     print("user has no default time, setting to 6")
                     timedigit = "06:00"
                 else: 
@@ -339,7 +358,7 @@ class timercl:
                 timeparse = monthpasstime
             if monthpassnote == 'blank':
                 print("monthpassnote blank")
-                timernote = ''
+                timernote = 'blank'
             elif monthpassnote == 'notestartsatb':
                 print("note was startsatb")
                 timernote = msgcontent.split(a)[1]
@@ -352,14 +371,14 @@ class timercl:
                 print("note was startsatd")
                 timernote = msgcontent.split(c)[1]
                 print("timernote grabbed from monthpass: " + timernote)
-            elif monthpassnote == 'notestartsate':
+            else:
                 print("note was startsate")
                 timernote = msgcontent.split(d)[1]
                 print("timernote grabbed from monthpass: " + timernote)
             if timedigit is None:
-                return(timernote + "|notimedigit|" + timeparse)
+                return(timernote + "|notimedigit|" + timeparse + "|" + dateparse)
             else:
-                return(timernote + "|" + timedigit + "|notimeparse")
+                return(timernote + "|" + timedigit + "|notimeparse|" + dateparse)
 
     def timerold(self, msgcontent, timeorig, a, b, c: str = None, d: str = None):
         print("timerold started")
@@ -381,7 +400,7 @@ class timercl:
                 timeval1 = timeval1raw * 525600
             else:
                 print("invalid unit used")
-                return("Invalid time unit or the bot is broken")
+                return("Invalid duration unit OR you tried to name a specific time without using a colon.")
             if c is not None:
                 if c.isdigit():
                     timeval2raw = int(c)
@@ -399,7 +418,7 @@ class timercl:
                         timeval2 = timeval2raw * 525600
                     else:
                         print("invalid unit used")
-                        return("Invalid time unit for second number or the bot is broken.")
+                        return("Invalid duration unit OR you tried to name a specific time without using a colon.")
                 if not c.isdigit():
                     timeval2 = 0
                     timeval2raw = ""
@@ -412,6 +431,8 @@ class timercl:
                 unit2 = ""
                 timernote = ""
             timeval = timeval1 + timeval2
+            timeorig = datetime.strptime(timeorig, '%Y-%m-%d %H:%M:%S.%f')
+            print(timeorig)
             timepop = timeorig + timedelta(minutes=timeval)
-            print("made it to timepop at end of original timer: [" + timepop + "]")
-            return (timepop + "|" + timernote)                   
+            print("made it to timepop at end of original timer: [" + str(timepop) + "]")
+            return ("timepop|" + str(timepop) + "|" + timernote)                   

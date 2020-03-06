@@ -35,7 +35,7 @@ class timeparser:
 
     def getmornnight(self):
         print("starting getmornnight")
-        note = self.timernote
+        note = (self.timernote).split(" ")[0]
         if note.startswith(" "):
             print("note started with space, removing for parse")
             note = note[1:]
