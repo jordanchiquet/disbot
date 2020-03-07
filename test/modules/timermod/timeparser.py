@@ -50,7 +50,7 @@ class timeparser:
             workingnote = (note.lower())
             if not workingnote.startswith("a") and not workingnote.startswith("p"):
                 print("timernote did not start with a or p, defaulting am")
-                return("am")
+                return("am.s")
             else:
                 workingnote = workingnote.replace(".", "")
                 if workingnote == "am":

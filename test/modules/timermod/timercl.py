@@ -105,8 +105,10 @@ class timercl:
                     timernote = splitted[0]
                 print("timernote return: [" + timernote + "]")
                 dateparse = splitted[3]
-                if splitted[1] == "blank":
-                    timeparse = splitted[2]
+                if splitted[1] == "notimedigit":
+                    print("notimedigit from notnomonth")
+                    timeornote = splitted[2]
+                    timedigit = ""
                 else:
                     timedigit = splitted[1]
                     timedigitestablished = True    
@@ -356,6 +358,7 @@ class timercl:
             if monthpasstime != 'blank':
                 print("monthpasstime not blank, setting timeparse")
                 timeparse = monthpasstime
+                timedigit = ''
             if monthpassnote == 'blank':
                 print("monthpassnote blank")
                 timernote = 'blank'
@@ -375,9 +378,11 @@ class timercl:
                 print("note was startsate")
                 timernote = msgcontent.split(d)[1]
                 print("timernote grabbed from monthpass: " + timernote)
-            if timedigit is None:
+            if timedigit == '':
+                print("timedigit none from notnomonth")
                 return(timernote + "|notimedigit|" + timeparse + "|" + dateparse)
             else:
+                print("timedigt not none from notnomonth")
                 return(timernote + "|" + timedigit + "|notimeparse|" + dateparse)
 
     def timerold(self, msgcontent, timeorig, a, b, c: str = None, d: str = None):
@@ -406,6 +411,7 @@ class timercl:
                     timeval2raw = int(c)
                     unit2 = d.lower()
                     timernote = msgcontent.split(d)[1]
+                    timernote = timernote[1:]
                     if unit2.startswith("m"):
                         timeval2 = timeval2raw
                     elif unit2.startswith("h"):
@@ -424,6 +430,7 @@ class timercl:
                     timeval2raw = ""
                     unit2 = ""
                     timernote = msgcontent.split(b)[1]
+                    timernote = timernote[1:]
             if c is None:
                 print("sanity can confirm c is none")
                 timeval2 = 0
