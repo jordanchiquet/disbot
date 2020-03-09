@@ -12,6 +12,7 @@ import discord
 import json
 import logging
 import os
+import mysql.connector
 import nltk
 import random
 import re
@@ -187,16 +188,20 @@ async def on_reaction_add(reaction, user):
         message = reaction.message
         channel = reaction.message.channel
         ts = message.created_at
-        with open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordquote.csv", "r") as f:
-            quotecvs = f.readlines()
-            quoteid = quotecvs[-1].split(',')[0]
-            newid = (int(quoteid) + 1)
-            fields = [newid, ts, message.author, message.content]
-            with open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordquote.csv", "a") as f:
-                quotewriter = csv.writer(f)
-                quotewriter.writerow(fields)
-        await channel.send('{} added quote '.format(user.name) + str(newid))
-        f.close()
+        user = message.author
+        quote = message.content
+        mydb = mysql.connector.connect(
+        host='18.216.39.250',
+        user='dbuser',
+        passwd='e4miqtng')
+        mycursor = mydb.cursor(buffered=True)
+        sql = "INSERT INTO renarddb.quotes (user, quote, timestamp) VALUES (\"" + str(user) + "\", \"" + str(quote) + "\", \"" + str(ts) + "\");"
+        mycursor.execute(sql)
+        mydb.commit()
+        idquery = "SELECT id FROM renarddb.quotes WHERE timestamp = \"" + str(ts) + "\""
+        mycursor.execute(idquery)
+        for x in mycursor:
+            await channel.send ("Quote " + str(x[0]) + " added by " + str(user) + ".")
 
 
 @bot.event
@@ -547,83 +552,61 @@ async def qp(ctx):
 
 @bot.command()
 async def quote(ctx, a: str = None, b: str = None):
-    col = 3
-    qlist = []
-    # async def idchecker(qtxt):
-    #     if "<@191688156427321344>" in qtxt:
-    #         qtxt = qtxt.replace("<@191688156427321344>", "Jordan")
+    mydb = mysql.connector.connect(
+    host='18.216.39.250',
+    user='dbuser',
+    passwd='e4miqtng')
+    mycursor = mydb.cursor(buffered=True)
     if a is None:
-        with open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordquote.csv", "r") as f:
-            quotereader = csv.reader(f)
-            data = [(row[col-1], row[col], row[col-2], row[col-3]) for row in quotereader]
-            result = (random.choice(data))
-            name = result[0]
-            qtxt = result[1]
-            date = result[2]
-            qid = result[3]
-            if len(qtxt) > 256:
-                await ctx.send("\"" + qtxt + "\" | " + name + " | " + date + " | ID:" + qid)
-                return
-            else:
-                embed = discord.Embed(title=qtxt, description=("Quote #" + qid + " by " + name + " - " + date[:4]), color=0x800080)
-                await ctx.send(embed=embed)
-    if a.isdigit():
-        with open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordquote.csv", "rt") as f:
-            quotereader = csv.reader(f, delimiter=",")
-            found = False
-            for row in quotereader:
-                if a == row[0]:
-                    found = True
-                    if len(str(row[3])) > 256:
-                        await ctx.send("\"" + row[3] + "\" | " + row[2] + " | " + row[1] + " | ID:" + row[0])
-                        return
-                    else:
-                        await idchecker(row[3])
-                        embed = discord.Embed(title=qid, description=("Quote #" + row[0] + " by " + row[2] + " - " + row[1]),
-                                              color=0x800080)
-                        await ctx.send(embed=embed)
-            if not found:
-                await ctx.send("Quote not found dog")
-    if a == "del":
-        with open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordquote.csv", "rt") as f, open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordquote1.csv", "a", newline='') as out:
-            quotereader = csv.reader(f, delimiter=",")
-            quotewriter = csv.writer(out)
-            found = False
-            for row in quotereader:
-                if b == row[0]:
-                    found = True
-                if b != row[0]:
-                    quotewriter.writerow(row)
-        os.system('rm /Users/jordanchiquet/personalandfinance/disbotren/test/discordquote.csv')
-        os.system('mv /Users/jordanchiquet/personalandfinance/disbotren/test/discordquote1.csv /Users/jordanchiquet/personalandfinance/disbotren/test/discordquote.csv')
-        if found:
-            await ctx.send("Quote removed.")
-        if not found:
-            await ctx.send("How can you delete that which is... dead?")
-    if a == "list":
-        await ctx.send(file=File("/Users/jordanchiquet/personalandfinance/disbotren/test/discordquote.csv"))
-    if a is not None and not a.isdigit() and a != "del" and a != "list" :
         qlist = []
-        with open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordquote.csv", "rt") as f:
-            quotereader = csv.reader(f, delimiter=",")
-            found = False
-            for row in quotereader:
-                if a in row:
-                    found = True
-                    qlist.append(row)
-            if not found:
-                await ctx.send("No results, make sure you include the whole account with identifier. Search is case sensitive.")
-        qran = random.choice(qlist)
-        if len(str(qran[3])) > 256:
-            await ctx.send("\"" + qran[3] + "\" | " + qran[2] + " | " + qran[1] + " | ID:" + qran[0])
+        sql = "SELECT * FROM renarddb.quotes"
+        mycursor.execute(sql)
+        for x in mycursor:
+            qlist.append(x)
+        quoteunparsed = random.choice(qlist)
+        print("made randome choice: [" + str(quoteunparsed) + "]")
+        qid = quoteunparsed[0]
+        name = quoteunparsed[1]
+        qtxt = quoteunparsed[2]
+        date = quoteunparsed[3]
+        if len(qtxt) > 256:
+            await ctx.send("\"" + qtxt + "\" | " + name + " | " + date + " | ID:" + str(qid))
             return
         else:
-            embed = discord.Embed(title=qran[3], description=("Quote #" + qran[0] + " by " + qran[2] + " - " +
-                                                              qran[1]),color=0x800080)
+            embed = discord.Embed(title=qtxt, description=("Quote #" + str(qid) + " by " + name + " - " + date[:4]), color=0x800080)
             await ctx.send(embed=embed)
         qlist.clear()
-        
-    f.close()
+    
+    if a.isdigit():
+        print("a was digit")
+        sql = "SELECT id, user, quote, timestamp FROM renarddb.quotes WHERE id LIKE " + a
+        mycursor.execute(sql)
+        for x in mycursor:
+            result = x
+            qid = result[0]
+            name = result[1]
+            qtxt = result[2]
+            date = result[3]
+            if len(qtxt) > 256:
+                await ctx.send("\"" + qtxt + "\" | " + name + " | " + date + " | ID:" + str(qid))
+                return
+            else:
+                embed = discord.Embed(title=qtxt, description=("Quote #" + str(qid) + " by " + name + " - " + date[:4]), color=0x800080)
+                await ctx.send(embed=embed)
+        else:
+            await ctx.send("quote not found dog")
+    
+    if a == "del":
+        print("user wants to delete a quote: [" + a + "]")
+        sql = "SELECT * FROM renarddb.quotes WHERE id LIKE " + a
+        mycursor.execute(sql)
+        for x in mycursor:
+            delsql = "DELETE FROM renarddb.timers WHERE id LIKE " + a 
+            mycursor.execute(delsql)
+            mydb.commit()
+            await ctx.send("Quote " + a + "erased from the archive memory :).")
+        else:
+            await ctx.send("WTF i can't FUCKING find that one!?!?!?!?!")
 
 
 @bot.command()

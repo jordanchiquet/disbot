@@ -1,36 +1,50 @@
 #!/usr/bin/env python3
 
 
+testroot = "Users/jordanchiquet/personalandfinance/disbotren/test"
+
+
 import asyncio
 import codecs
 import csv
+import datetime
 import discord
 import json
+import logging
 import os
-import os.path
+import mysql.connector
 import nltk
-nltk.download('brown')
 import random
 import re
 import requests
+import ssl
 import sys
 import threading
 import urllib.parse
 import urllib.request
-import wikipediaapi
+import wikipediaapi #wikipedia-api
 from bs4 import BeautifulSoup
-from darksky.api import DarkSky, DarkSkyAsync
+from darksky.api import DarkSky, DarkSkyAsync #darksky_weather
 from darksky.types import languages, units, weather
 from datetime import datetime, timedelta
 from discord import File
 from discord.ext import commands, tasks
-from googleapiclient.discovery import build
+from googleapiclient.discovery import build #google-api-python-client
 from google_images_download import google_images_download
-from googlesearch import search
+from googlesearch import search #google
 from nltk.corpus import brown
 from urlextract import URLExtract
 from uszipcode import SearchEngine
 
+from modules.timermod.timercl import timercl
+from modules.timermod.timeparser import timeparser
+# from modules.timermod.dateslashparser import dateslashparser
+# from modules.timer.timermonthpass import timermonthpass
+# from test.modules.timer.ogtimer import ogtimer
+# from test.modules.timer.timer import timercl
+
+
+nltk.download('brown')
 
 client = discord.Client()
 
@@ -40,34 +54,10 @@ bot = commands.Bot(command_prefix='.', case_insensitive=True, description='super
 
 bot.remove_command('help')
 
+bot.remove_command('close')
+
 
 deletelog = {}
-
-
-@tasks.loop(seconds=5.0)
-async def timercheck():
-    print("Timer check starting...")
-    now = datetime.now()
-    print(now)
-    timerdata1 = open("/home/disbotren/discordtimers.csv", "rt")
-    newtimerdata1 = open("/home/disbotren/discordtimers2.csv", "a", newline='')
-    timereader = csv.reader(timerdata1, delimiter=",")
-    timewriter = csv.writer(newtimerdata1)
-    print("Opening CSV.")
-    for row in timereader:
-        channel = bot.get_channel(int(row[10]))
-        print("Row read!")
-        if now >= datetime.strptime(row[9], '%Y-%m-%d %H:%M:%S.%f'):
-            print("Timer pop! Attempting to send channel a message!")
-            await channel.send("<@!" + row[1] + "> " + row[2] + " (" + row[3] + " " + row[4] + " " + row[5] + " " +
-                               row[6] + " ago) | Timer ID: " + row[0])
-        if now < datetime.strptime(row[9], '%Y-%m-%d %H:%M:%S.%f'):
-            timewriter.writerow(row)
-    timerdata1.close()
-    newtimerdata1.close()
-    os.system('rm /home/disbotren/discordtimers.csv')
-    os.system('mv /home/disbotren/discordtimers2.csv /home/disbotren/discordtimers.csv')
-    print("Timer check closing.")
 
 
 @bot.event
@@ -197,16 +187,20 @@ async def on_reaction_add(reaction, user):
         message = reaction.message
         channel = reaction.message.channel
         ts = message.created_at
-        with open("/home/disbotren/discordquote.csv", "r") as f:
-            quotecvs = f.readlines()
-            quoteid = quotecvs[-1].split(',')[0]
-            newid = (int(quoteid) + 1)
-            fields = [newid, ts, message.author, message.content]
-            with open("/home/disbotren/discordquote.csv", "a") as f:
-                quotewriter = csv.writer(f)
-                quotewriter.writerow(fields)
-        await channel.send('{} added quote '.format(user.name) + str(newid))
-        f.close()
+        user = message.author
+        quote = message.content
+        mydb = mysql.connector.connect(
+        host='18.216.39.250',
+        user='dbuser',
+        passwd='e4miqtng')
+        mycursor = mydb.cursor(buffered=True)
+        sql = "INSERT INTO renarddb.quotes (user, quote, timestamp) VALUES (\"" + str(user) + "\", \"" + str(quote) + "\", \"" + str(ts) + "\");"
+        mycursor.execute(sql)
+        mydb.commit()
+        idquery = "SELECT id FROM renarddb.quotes WHERE timestamp = \"" + str(ts) + "\""
+        mycursor.execute(idquery)
+        for x in mycursor:
+            await channel.send ("Quote " + str(x[0]) + " added by " + str(user) + ".")
 
 
 @bot.event
@@ -232,6 +226,13 @@ async def chanid(ctx):
 
 
 @bot.command()
+async def datetest(ctx):
+    await ctx.send("datetime.now(): " + datetime.now() + "\n" + 
+                    "datetime.now().date: " + datetime.now().date + "\n" +
+                    "datetime.now().date(): " + datetime.now().date())
+
+
+@bot.command()
 async def fb(ctx):
     fdbackmsg = ctx.message.content[3:]
     admin = ctx.message.guild.owner
@@ -251,29 +252,23 @@ async def ping(ctx):
 
 
 @bot.command()
+async def strcheck(ctx):
+    print("strcheck: " + ctx.message.content[10:])
+    await ctx.send("```" + ctx.message.content[10:] + "```")
+
+
+@bot.command()
 async def timerdebug(ctx):
-    print("Timer check starting...")
-    now = datetime.now()
-    print(now)
-    timerdata1 = open("/home/disbotren/discordtimers.csv", "rt")
-    newtimerdata1 = open("/home/disbotren/discordtimers2.csv", "a", newline='')
-    timereader = csv.reader(timerdata1, delimiter=",")
-    timewriter = csv.writer(newtimerdata1)
-    print("Opening CSV.")
-    for row in timereader:
-        print("Found a row!")
-        channel = row[10]
-        if now >= datetime.strptime(row[9], '%Y-%m-%d %H:%M:%S.%f'):
-            print("Timer pop! Attempting to send channel a message!")
-            await channel.send("<@!" + row[1] + "> " + row[2] + " (" + row[3] + " " + row[4] + " " + row[5] + " " +
-                               row[6] + " ago) | Timer ID: " + row[0])
-        if now < datetime.strptime(row[9], '%Y-%m-%d %H:%M:%S.%f'):
-            timewriter.writerow(row)
-    timerdata1.close()
-    newtimerdata1.close()
-    os.system('rm /home/disbotren/discordtimers.csv')
-    os.system('mv /home/disbotren/discordtimers2.csv /home/disbotren/discordtimers.csv')
-    print("Timer check closing.")
+    timercheckinit = timercl("msgcontent", "user", "channel", "timeorig")
+    response = timercheckinit.timercheck()
+    if response == "no timepops":
+        return
+    else:
+        channel = bot.get_channel(int(response[3]))
+        if response[2] == "":
+            await channel.send("<@!" + response[1] + "> Ringa ling dong, the time " + (response[4])[:-3] + " has finally come!")
+        else:
+            await channel.send("<@!" + response[1] + "> Sir you must remember: \"" + response[2] + "\" | " + (response[4])[:-3])
 
 
 @bot.command()
@@ -290,14 +285,37 @@ async def close_error(ctx, error):
     if isinstance(error, commands.CheckFailure):
         username = ctx.message.author.display_name
         userid = ctx.message.author.id
-        variable = [
+        response = [
             "You do not have the clearance for that command... are you retarded?",
             "You aren't a server admin... this is why she left you dude.",
             "Try that shit again and see who gets terminated bitch ;)",
             "It seems like there's a lot you don't know about terminating this bot",
         ]
-        await ctx.send(random.choice(variable))
+        await ctx.send(random.choice(response))
         print("insufficient perms to terminate " + username + " " + str(userid))
+
+# @bot.command()
+# @commands.has_role("High Council of Emoji")
+# async def close(ctx):
+#     await ctx.send("Personal PC Computer plugging off online mode shut down - COMPUTER OFF")
+#     print("terminate request received")
+#     await client.close()
+#     await sys.exit()
+
+
+# @close.error
+# async def close_error(ctx, error):
+#     if isinstance(error, commands.CheckFailure):
+#         username = ctx.message.author.display_name
+#         userid = ctx.message.author.id
+#         variable = [
+#             "You do not have the clearance for that command... are you retarded?",
+#             "You aren't a server admin... this is why she left you dude.",
+#             "Try that shit again and see who gets terminated bitch ;)",
+#             "It seems like there's a lot you don't know about terminating this bot",
+#         ]
+#         await ctx.send(random.choice(variable))
+#         print("insufficient perms to terminate " + username + " " + str(userid))
 
 
 @bot.command()
@@ -343,211 +361,54 @@ async def help(ctx):
 
 @bot.command()
 async def vers(ctx):
-    embed = discord.Embed(title="ROBORENARD MK I", description="Gaming forever in paradise", color=0xee657)
-    embed.add_field(name="Version", value="0.81111cum")
+    embed = discord.Embed(title="ROBORENARD MK II", description="Gaming forever in paradise", color=0xee657)
+    embed.add_field(name="Version", value="0.123456789")
     await ctx.send(embed=embed)
 
 
 # ------------------------------------------- #
 # practical functions
+
+@tasks.loop(seconds=5.0)
+async def timercheck():
+    timercheckinit = timercl("msgcontent", "user", "channel", "timeorig")
+    response = timercheckinit.timercheck()
+    if response is None:
+        return
+    else:
+        print("made it to timercheck else")
+        print(response[3])
+        channel = bot.get_channel(int(response[3]))
+        if response[2] == "":
+            await channel.send("<@!" + response[1] + "> Ringa ling dong, the time " + (response[4])[:19] + " has finally come!")
+        else:
+            await channel.send("<@!" + response[1] + "> Sir you must remember: \"" + response[2] + "\" | " + (response[4])[:-3])
+
+
 @bot.command()
 async def timer(ctx, a: str = None, b: str = None, c: str = None, d: str = None):
-    alower = a.lower()
     channel = ctx.channel.id
-    timeorig = ctx.message.created_at - timedelta(hours=6)
+    msgcontent = ctx.message.content
+    # timeorig = (ctx.message.created_at - timedelta(hours=5))
+    timeorig = (datetime.now())
     user = ctx.message.author.id
-    if a == "del" or a == "delete":
-        delid = b
-        if delid == "1":
-            await ctx.send ("Timer 1 is a permanent timer to simplify programmatic looping. You can ask Jordan if you want to know more.")
-            return
+    timerinit = timercl(msgcontent, user, channel, timeorig, a, b, c, d)
+    if a == "default":
+        if b == None:
+            await ctx.send("Use \".timer default 07:00\" to set your default time for calendar reminders")
         else:
-            timerdata = open("/home/disbotren/discordtimers.csv", "rt")
-            newtimerdata = open("/home/disbotren/discordtimers1.csv", "a", newline='')
-            reader = csv.reader(timerdata, delimiter=",")
-            writer = csv.writer(newtimerdata)
-            for row in reader:
-                if delid != row[0]:
-                    writer.writerow(row)
-            timerdata.close()
-            newtimerdata.close()
-            os.system('rm /home/disbotren/discordtimers.csv')
-            os.system('mv /home/disbotren/discordtimers1.csv /home/disbotren/discordtimers.csv')
-            await ctx.send("Timer #" + delid + " deleted.")
-            return
-    if a == "list":
-        await ctx.send(file=File("/home/disbotren/discordtimers.csv"))
-        return
-    if (alower.startswith("jan") or
-    alower.startswith("feb") or
-    alower.startswith("mar") or
-    alower.startswith("apr") or
-    alower.startswith("may") or
-    alower.startswith("jun") or
-    alower.startswith("jul") or
-    alower.startswith("aug") or
-    alower.startswith("sep") or
-    alower.startswith("oct") or
-    alower.startswith("nov") or
-    alower.startswith("dec")):
-
-        if alower.startswith("jan"):
-            month = "01"
-        if alower.startswith("feb"):
-            month = "02"
-        if alower.startswith("mar"):
-            month = "03"
-        if alower.startswith("apr"):
-            month = "04"
-        if alower.startswith("may"):
-            month = "05"
-        if alower.startswith("jun"):
-            month = "06"
-        if alower.startswith("jul"):
-            month = "07"
-        if alower.startswith("aug"):
-            month = "08"
-        if alower.startswith("sep"):
-            month = "09"
-        if alower.startswith("oct"):
-            month = "10"
-        if alower.startswith("nov"):
-            month = "11"
-        if alower.startswith("dec"):
-            month = "12"
-        
-        print(month)
-        print(datetime.now().month)
-        print(":oooooo:")
-        testdate = (datetime.now().year + 1)
-        print(testdate)
-
-        
-        
-
-        if len(b) < 2:
-            b = "0" + b
-            print(b)
-        if c is None:
-            c = ""
-            print("C was none")
-        if int(month) < datetime.now().month:
-            print("month should be next year")
-            popyear = (datetime.now().year + 1)
-            print(popyear)
-        if int(month) >= datetime.now().month:
-            print("month is this year")
-            popyear = datetime.now().year
-            print(popyear)
-        
-        timepop = str(popyear) + "-" + month + "-" + b + " 10:20:00.000000"
-        print("-----\n" + timepop + "\n-----")
-
-        with open("/home/disbotren/discordtimers.csv", "r") as f:        
-            timercsv = f.readlines()
-            oldid = timercsv[-1].split(',')[0]
-            timerid = (int(oldid) + 1)
-            timeval1raw = "ph"
-            unit1 = datetime.now().date
-            timeval2raw = "ph"
-            unit2 = "ph"
-            timeval = "ph"
-            print("i made it this far")
-            fields = [timerid, user, c, timeval1raw, datetime.now().date, timeval2raw, unit2,
-                     timeorig, timeval, timepop, channel]
-            print("fields was concatenatedsedes")
-            with open("/home/disbotren/discordtimers.csv", "a", newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow(fields)
-            print("line was written with date timer reminder timer reminding time :)")
-        f.close()
+            print("user attempting to write default time")
+            timeparseinit = timeparser(b, c)
+            if timeparseinit == "inv":
+                await ctx.send("jordan timeparse returned that time invalid")
+            else: 
+                await ctx.send("New default time for your calendar reminders written.")
     else:
-        timeval1raw = int(a)
-        unit1 = b.lower()
-        msgcontent = ctx.message.content
-
-        if unit1.startswith("m"):
-            timeval1 = timeval1raw
-        if unit1.startswith("h"):
-            timeval1 = timeval1raw * 60
-        if unit1.startswith("d"):
-            timeval1 = timeval1raw * 1440
-        if unit1.startswith("w"):
-            timeval1 = timeval1raw * 10080
-        if unit1.startswith("y"):
-            timeval1 = timeval1raw * 525600
-
-        if c is not None:
-            if c.isdigit():
-                timeval2raw = int(c)
-                unit2 = d.lower()
-                timernote = msgcontent.split(d)[1]
-                if unit2.startswith("m"):
-                    timeval2 = timeval2raw
-                if unit2.startswith("h"):
-                    timeval2 = timeval2raw * 60
-                if unit2.startswith("d"):
-                    timeval2 = timeval2raw * 1440
-                if unit2.startswith("w"):
-                    timeval2 = timeval2raw * 10080
-                if unit2.startswith("y"):
-                    timeval2 = timeval2raw * 525600
-
-            if not c.isdigit():
-                timeval2 = 0
-                timeval2raw = ""
-                unit2 = ""
-                timernote = msgcontent.split(b)[1]
-
-        if c is None:
-            timeval2 = 0
-            timeval2raw = ""
-            unit2 = ""
-            timernote = ""
-
-        timeval = timeval1 + timeval2
-
- ` `
-
-        await ctx.send("Timer set! | ID: " + str(timerid))
-        if timeval1raw > 60:
-            await ctx.send("btw do you think it's funny to use these big stupid fucking numbers?")
-
-
-@bot.command()
-async def reminder(ctx):
-    await timer.invoke(ctx)
-
-
-# @timer.error
-# async def timer_error(ctx, error):
-#    if isinstance(error, commands.CommandInvokeError):
-#        await ctx.send("you fucked that up somehow, format is \".timer 11 min kid cuisine in oven\" ")
-
-
-@bot.command()
-async def todo(ctx):
-    user = str(ctx.message.author.id)
-    task = ctx.message.content[6:]
-    taskwritetime = datetime.now()
-    todolistfile = ('/home/disbotren/todo/' + user + ".csv")
-    if os.path.isfile(todolistfile):
-        with open(todolistfile, "r") as todoread:
-            todolist = todoread.readlines()
-            oldid = todolist[-1].split(',')[0]
-            todoid = (int(oldid) + 1)
-            fields = [todoid, task, taskwritetime]
-            with open(todolist, "a", newline='') as todoappend:
-                writer = csv.writer(todoappend)
-                writer.writerow(fields)
-        todoread.close()
-        todoappend.close()
-    else:
-        with open(todolistfile, 'wb') as newtodo:
-            fields = ["1", task, taskwritetime]
-            writer = csv.writer(newtodo, delimiter=',')
-            writer.writerow(fields)
-        todolistfile.close()
+        response = await timerinit.timerfunc()
+        if response == "user requested list":
+            await ctx.send(file=File("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv"))
+        else:
+            await ctx.send(response)
 
 
 # ------------------------------------------------ #
@@ -677,6 +538,7 @@ async def eat(ctx):
         "Curbside",
         "Curry N Kabob",
         "Duang Tuan",
+        "Dang's"
         "El Rancho",
         "Elsie's",
         "Fat Cow",
@@ -715,79 +577,61 @@ async def qp(ctx):
 
 @bot.command()
 async def quote(ctx, a: str = None, b: str = None):
-    col = 3
-    qlist = []
+    mydb = mysql.connector.connect(
+    host='18.216.39.250',
+    user='dbuser',
+    passwd='e4miqtng')
+    mycursor = mydb.cursor(buffered=True)
     if a is None:
-        with open("/home/disbotren/discordquote.csv", "r") as f:
-            quotereader = csv.reader(f)
-            data = [(row[col-1], row[col], row[col-2], row[col-3]) for row in quotereader]
-            result = (random.choice(data))
-            name = result[0]
-            qtxt = result[1]
-            date = result[2]
-            qid = result[3]
-            if len(qtxt) > 256:
-                await ctx.send("\"" + qtxt + "\" | " + name + " | " + date + " | ID:" + qid)
-                return
-            else:
-                embed = discord.Embed(title=qtxt, description=("Quote #" + qid + " by " + name + " - " + date), color=0x800080)
-                await ctx.send(embed=embed)
-    if a.isdigit():
-        with open("/home/disbotren/discordquote.csv", "rt") as f:
-            quotereader = csv.reader(f, delimiter=",")
-            found = False
-            for row in quotereader:
-                if a == row[0]:
-                    found = True
-                    if len(str(row[3])) > 256:
-                        await ctx.send("\"" + row[3] + "\" | " + row[2] + " | " + row[1] + " | ID:" + row[0])
-                        return
-                    else:
-                        embed = discord.Embed(title=row[3], description=("Quote #" + row[0] + " by " + row[2] + " - " + row[1]),
-                                              color=0x800080)
-                        await ctx.send(embed=embed)
-            if not found:
-                await ctx.send("Quote not found dog")
-    if a == "del":
-        with open("/home/disbotren/discordquote.csv", "rt") as f, open("/home/disbotren/discordquote1.csv", "a", newline='') as out:
-            quotereader = csv.reader(f, delimiter=",")
-            quotewriter = csv.writer(out)
-            found = False
-            for row in quotereader:
-                if b == row[0]:
-                    found = True
-                if b != row[0]:
-                    quotewriter.writerow(row)
-        os.system('rm /home/disbotren/discordquote.csv')
-        os.system('mv /home/disbotren/discordquote1.csv /home/disbotren/discordquote.csv')
-        if found:
-            await ctx.send("Quote removed.")
-        if not found:
-            await ctx.send("How can you delete that which is... dead?")
-    if a == "list":
-        await ctx.send(file=File("/home/disbotren/discordquote.csv"))
-    if a is not None and not a.isdigit() and a != "del" and a != "list" :
         qlist = []
-        with open("/home/disbotren/discordquote.csv", "rt") as f:
-            quotereader = csv.reader(f, delimiter=",")
-            found = False
-            for row in quotereader:
-                if a in row:
-                    found = True
-                    qlist.append(row)
-            if not found:
-                await ctx.send("No results, make sure you include the whole account with identifier. Search is case sensitive.")
-        qran = random.choice(qlist)
-        if len(str(qran[3])) > 256:
-            await ctx.send("\"" + qran[3] + "\" | " + qran[2] + " | " + qran[1] + " | ID:" + qran[0])
+        sql = "SELECT * FROM renarddb.quotes"
+        mycursor.execute(sql)
+        for x in mycursor:
+            qlist.append(x)
+        quoteunparsed = random.choice(qlist)
+        print("made randome choice: [" + str(quoteunparsed) + "]")
+        qid = quoteunparsed[0]
+        name = quoteunparsed[1]
+        qtxt = quoteunparsed[2]
+        date = quoteunparsed[3]
+        if len(qtxt) > 256:
+            await ctx.send("\"" + qtxt + "\" | " + name + " | " + date + " | ID:" + str(qid))
             return
         else:
-            embed = discord.Embed(title=qran[3], description=("Quote #" + qran[0] + " by " + qran[2] + " - " +
-                                                              qran[1]),color=0x800080)
+            embed = discord.Embed(title=qtxt, description=("Quote #" + str(qid) + " by " + name + " - " + date[:4]), color=0x800080)
             await ctx.send(embed=embed)
         qlist.clear()
-        
-    f.close()
+    
+    if a.isdigit():
+        print("a was digit")
+        sql = "SELECT id, user, quote, timestamp FROM renarddb.quotes WHERE id LIKE " + a
+        mycursor.execute(sql)
+        for x in mycursor:
+            result = x
+            qid = result[0]
+            name = result[1]
+            qtxt = result[2]
+            date = result[3]
+            if len(qtxt) > 256:
+                await ctx.send("\"" + qtxt + "\" | " + name + " | " + date + " | ID:" + str(qid))
+                return
+            else:
+                embed = discord.Embed(title=qtxt, description=("Quote #" + str(qid) + " by " + name + " - " + date[:4]), color=0x800080)
+                await ctx.send(embed=embed)
+        else:
+            await ctx.send("quote not found dog")
+    
+    if a == "del":
+        print("user wants to delete a quote: [" + a + "]")
+        sql = "SELECT * FROM renarddb.quotes WHERE id LIKE " + a
+        mycursor.execute(sql)
+        for x in mycursor:
+            delsql = "DELETE FROM renarddb.timers WHERE id LIKE " + a 
+            mycursor.execute(delsql)
+            mydb.commit()
+            await ctx.send("Quote " + a + "erased from the archive memory :).")
+        else:
+            await ctx.send("WTF i can't FUCKING find that one!?!?!?!?!")
 
 
 @bot.command()
@@ -849,22 +693,17 @@ async def g(ctx):
 
 @bot.command()
 async def gif(ctx):
-    imgquery = ctx.message.content[5:]
-    response = google_images_download.googleimagesdownload()
-    arguments = {"keywords":imgquery,"limit":1,"no_download":True,"format":"gif"}
-    imgresult = response.download(arguments)
-    if "[]" in str(imgresult):
-        delcmd = await ctx.send("Sorry player... gif is none")
+    rawresult = gsource.list(q=(ctx.message.content[5:] + "gif"), searchType='image',
+                             cx='016515025707600383118:gqogcmpp7ka').execute()
+    try:
+        firstresult = rawresult['items'][0]
+        imgresult = firstresult['link']
+        delcmd = await ctx.send(imgresult)
         deletelog[ctx.message.id] = delcmd
-    extractor = URLExtract()
-    for url in extractor.gen_urls(str(imgresult)):
-        if "fbsbx" in url:
-            delcmd = await ctx.send(url)
-            deletelog[ctx.message.id] = delcmd
-        else:
-            embeddableurl = url.split("?")[0]
-            delcmd = await ctx.send(embeddableurl)
-            deletelog[ctx.message.id] = delcmd
+    except KeyError:
+        delcmd = await ctx.send("how you say? not any image find for that image")
+        deletelog[ctx.message.id] = delcmd
+
 
 
 @bot.command()
@@ -880,19 +719,6 @@ async def img(ctx):
         delcmd = await ctx.send("how you say? not any image find for that image")
         deletelog[ctx.message.id] = delcmd
 
-
-@bot.command()
-async def imgtwo(ctx):
-    rawresult = gsource.list(q=ctx.message.content[8:], searchType='image',
-                            cx='016515025707600383118:gqogcmpp7ka').execute()
-    try:
-        firstresult = rawresult['items'][1]
-        imgresult = firstresult['link']
-        delcmd = await ctx.send(imgresult)
-        deletelog[ctx.message.id] = delcmd
-    except KeyError:
-        delcmd = await ctx.send("how you say? not any image find for that image")
-        deletelog[ctx.message.id] = delcmd
 
 @bot.command()
 async def imgold(ctx):
