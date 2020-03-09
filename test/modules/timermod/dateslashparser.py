@@ -123,6 +123,7 @@ class dateslashparser:
         print("this is our working date: [" + workingdate + "]")
         date = workingdate.split("/")[1]
         print("initial received date: " + date)
+        # date = date.replace(" ","")
         if not date.isdigit() or len(date) > 2 or date == "00" or date == "0":
             print("date was too many digits or wasn't numbers or was zero... returning invalid")
             return("date inv")

@@ -103,6 +103,7 @@ class timercl:
                     timernote = ""
                 else:
                     timernote = splitted[0]
+                    timernote = timernote[1:]
                 print("timernote return: [" + timernote + "]")
                 dateparse = splitted[3]
                 if splitted[1] == "notimedigit":
@@ -443,3 +444,40 @@ class timercl:
             timepop = timeorig + timedelta(minutes=timeval)
             print("made it to timepop at end of original timer: [" + str(timepop) + "]")
             return ("timepop|" + str(timepop) + "|" + timernote)                   
+
+    def timercheck(self):
+        checknow = datetime.now()
+        print("Timer check starting... [" + str(checknow) + "]")
+        mydb = mysql.connector.connect(
+            host='18.216.39.250',
+            user='dbuser',
+            passwd='e4miqtng')
+        mycursor = mydb.cursor(buffered=True)
+        sql = "SELECT timepop FROM renarddb.timers"
+        mycursor.execute(sql)
+        for x in mycursor:
+            if len(x[0]) < 20:
+                timepopval = x[0] + ".000000"
+            else: 
+                timepopval = x[0]
+            # print("timepopval: [" + timepopval + "]")
+            if checknow <= datetime.strptime(timepopval, '%Y-%m-%d %H:%M:%S.%f'):
+                continue
+            else:
+                print("Time pop for [" + timepopval + "]! Removing record and messaging channel.")
+                infosql = "SELECT id, user, timernote, channel FROM renarddb.timers WHERE timepop = \"" + x[0] + "\""
+                mycursor.execute(infosql)
+                for y in mycursor:
+                    y = y + (x[0],)
+                    print(y)
+                    print((y[4])[:-3])
+                    removesql = "DELETE FROM renarddb.timers WHERE timepop = \"" + x[0] + "\";"
+                    mycursor.execute(removesql)
+                    mydb.commit()
+                    return(y)
+
+
+timercheckinit = timercl("msgcontent", "user", "channel", "timeorig")
+print(timercheckinit.timercheck())
+
+

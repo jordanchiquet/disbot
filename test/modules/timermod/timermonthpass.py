@@ -136,7 +136,7 @@ class timermonthpass:
                 else:
                     print("value where year goes not timer looking for... setting it as note instead")      
                     note = 'notestartsatc'
-                    return(month + "/" + date + " | " + note + "|" + timeparse)
+                    return(month + "/" + date + "|" + note + "|" + timeparse)
     
         else:
             return("nomonth")

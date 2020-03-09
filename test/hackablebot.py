@@ -55,7 +55,7 @@ deletelog = {}
 
 @bot.event
 async def on_ready():
-    # timercheck.start()
+    timercheck.start()
     print("logged in as")
     print(bot.user.name)
     print(bot.user.id)
@@ -255,29 +255,16 @@ async def strcheck(ctx):
 
 @bot.command()
 async def timerdebug(ctx):
-    print("Timer check starting...")
-    now = datetime.now()
-    print(now)
-    timerdata1 = open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv", "rt")
-    newtimerdata1 = open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers2.csv", "a", newline='')
-    timereader = csv.reader(timerdata1, delimiter=",")
-    timewriter = csv.writer(newtimerdata1)
-    print("Opening CSV.")
-    for row in timereader:
-        print("Found a row!")
-        channel = row[10]
-        if now >= datetime.strptime(row[9], '%Y-%m-%d %H:%M:%S.%f'):
-            print("Timer pop! Attempting to send channel a message!")
-            await channel.send("<@!" + row[1] + "> " + row[2] + " (" + row[3] + " " + row[4] + " " + row[5] + " " +
-                               row[6] + " ago) | Timer ID: " + row[0])
-        if now < datetime.strptime(row[9], '%Y-%m-%d %H:%M:%S.%f'):
-            timewriter.writerow(row)
-    timerdata1.close()
-    newtimerdata1.close()
-    os.system('rm /Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv')
-    os.system('mv /Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers2.csv /Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv')
-    print("Timer check closing.")
-
+    timercheckinit = timercl("msgcontent", "user", "channel", "timeorig")
+    response = timercheckinit.timercheck()
+    if response == "no timepops":
+        return
+    else:
+        channel = bot.get_channel(int(response[3]))
+        if response[2] == "":
+            await channel.send("<@!" + response[1] + "> Ringa ling dong, the time " + (response[4])[:-3] + " has finally come!")
+        else:
+            await channel.send("<@!" + response[1] + "> Sir you must remember: \"" + response[2] + "\" | " + (response[4])[:-3])
 
 @bot.command()
 @commands.has_role("High Council of Emoji")
@@ -356,34 +343,26 @@ async def vers(ctx):
 
 @tasks.loop(seconds=5.0)
 async def timercheck():
-    print("Timer check starting...")
-    now = datetime.now()
-    print(now)
-    timerdata1 = open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv", "rt")
-    newtimerdata1 = open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers2.csv", "a", newline='')
-    timereader = csv.reader(timerdata1, delimiter=",")
-    timewriter = csv.writer(newtimerdata1)
-    print("Opening CSV.")
-    for row in timereader:
-        channel = bot.get_channel(int(row[5]))
-        print("Row read!")
-        if now >= datetime.strptime(row[4], '%Y-%m-%d %H:%M:%S.%f'):
-            print("Timer pop! Attempting to send channel a message!")
-            await channel.send("<@!" + row[1] + "> " + row[2] + " (set on " + (row[3])[:-10] + ") | Timer ID: " + row[0])
-        if now < datetime.strptime(row[4], '%Y-%m-%d %H:%M:%S.%f'):
-            timewriter.writerow(row)
-    timerdata1.close()
-    newtimerdata1.close()
-    os.system('rm /Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv')
-    os.system('mv /Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers2.csv /Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv')
-    print("Timer check closing.")
+    timercheckinit = timercl("msgcontent", "user", "channel", "timeorig")
+    response = timercheckinit.timercheck()
+    if response is None:
+        return
+    else:
+        print("made it to timercheck else")
+        print(response[3])
+        channel = bot.get_channel(int(response[3]))
+        if response[2] == "":
+            await channel.send("<@!" + response[1] + "> Ringa ling dong, the time " + (response[4])[:19] + " has finally come!")
+        else:
+            await channel.send("<@!" + response[1] + "> Sir you must remember: \"" + response[2] + "\" | " + (response[4])[:-3])
 
 
 @bot.command()
 async def timer(ctx, a: str = None, b: str = None, c: str = None, d: str = None):
     channel = ctx.channel.id
     msgcontent = ctx.message.content
-    timeorig = (ctx.message.created_at - timedelta(hours=6))
+    # timeorig = (ctx.message.created_at - timedelta(hours=5))
+    timeorig = (datetime.now())
     user = ctx.message.author.id
     timerinit = timercl(msgcontent, user, channel, timeorig, a, b, c, d)
     if a == "default":
@@ -395,7 +374,7 @@ async def timer(ctx, a: str = None, b: str = None, c: str = None, d: str = None)
             if timeparseinit == "inv":
                 await ctx.send("jordan timeparse returned that time invalid")
             else: 
-                await ctx.send("New default time for your cale ndar reminders written.")
+                await ctx.send("New default time for your calendar reminders written.")
     else:
         response = await timerinit.timerfunc()
         if response == "user requested list":
