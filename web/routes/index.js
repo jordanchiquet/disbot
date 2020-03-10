@@ -12,7 +12,7 @@ var pool		= mysql.createPool({
 });
 
 
-function queryWhiteListApps (sql, callback) {
+function queryQuotes (sql, callback) {
 	pool.getConnection(function(err, connection) {
 		connection.query(sql, function(err, result) {
 			connection.release();
@@ -26,7 +26,7 @@ function queryWhiteListApps (sql, callback) {
 /* GET home page. */
 router.get('/', function(req, res, next) {
   var sql = "SELECT id, quote, user, timestamp FROM renarddb.quotes";
-	queryWhiteListApps(sql, function(result) {
+	queryQuotes(sql, function(result) {
     console.log(result[0])
     res.render('index', { data: result });
 	});
