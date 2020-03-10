@@ -1,0 +1,38 @@
+extends layout
+
+block content
+  center
+    form#queryInput(action='/search', method='get')
+      input#paramID(type='checkbox', name='paramID', checked=idOn) 
+      |  ID     
+      input#paramUser(type='checkbox', name='paramUser', checked=userOn)
+      |  User     
+      input#paramQuote(type='checkbox', name='paramQuote', checked=quoteOn)
+      |  Message Content     
+      input#paramInput(type='text', name='paramInput', placeholder='Search...', title='Choose your destiny...')
+      input(type='submit', value='Go')
+  //- script.
+  //-   function msg(x) {
+  //-   var query = (document.getElementById('whitelistSearch').value)
+  //-   var paramName = (document.getElementById('paramName').checked)
+  //-   var paramOS = (document.getElementById('paramOS').checked)
+  //-   var paramAvailableOnAbm = (document.getElementById('paramAvailableOnAbm').checked)
+  //-   var param = [paramName, paramOS, paramAvailableOnAbm]
+  //-   alert(param)
+  //-   ;
+  //-   }
+  table#quoteTable.table.table-striped
+    thead
+    tr
+      th(scope='col') ID 
+      th(scope='col') Quote
+      th(scope='col') User
+      th(scope='col') Timestamp
+    tbody
+      each row in data
+        tr
+          td=row.id
+          td=row.quote
+          td=row.user
+          td=row.timestamp
+
