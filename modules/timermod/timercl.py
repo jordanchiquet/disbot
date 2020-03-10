@@ -86,9 +86,15 @@ class timercl:
         elif "/" in a:
             print("/ in a, sending to dateparse")
             dateparse = a
-            timeornote = b
+            if b is not None:
+                timeornote = b
+            else:
+                timeornote = ""
             print("after slash, timeornote is: [" + timeornote +"]")
-            ampm = c
+            if c is not None:
+                ampm = c
+            else:
+                ampm = None
             aslash = True
 
         elif a != "del" and a!= "delete" and a != "list" and aslash == False:
