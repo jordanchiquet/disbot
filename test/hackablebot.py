@@ -640,11 +640,13 @@ async def quote(ctx, a: str = None, b: str = None):
         qlist.clear()
     
     if a.isdigit():
-        print("a was digit")
+        print("a was digit in quote cmd, user looking for specific quote")
         sql = "SELECT id, user, quote, timestamp FROM renarddb.quotes WHERE id LIKE " + a
         mycursor.execute(sql)
+        x = None
         for x in mycursor:
             result = x
+            print("resultstr: [" + str(result) + "]")
             qid = result[0]
             name = result[1]
             qtxt = result[2]
@@ -655,7 +657,7 @@ async def quote(ctx, a: str = None, b: str = None):
             else:
                 embed = discord.Embed(title=qtxt, description=("Quote #" + str(qid) + " by " + name + " - " + date[:4]), color=0x800080)
                 await ctx.send(embed=embed)
-        else:
+        if x is None:
             await ctx.send("quote not found dog")
     
     if a == "del":
@@ -669,6 +671,9 @@ async def quote(ctx, a: str = None, b: str = None):
             await ctx.send("Quote " + a + "erased from the archive memory :).")
         else:
             await ctx.send("WTF i can't FUCKING find that one!?!?!?!?!")
+    
+    if a == "list":
+        await ctx.send("list in development >_<")
 
 
 @bot.command()
