@@ -1,8 +1,9 @@
 
 
 class timeparser:
-    def __init__(self, timeparse, timernote : str = None):
+    def __init__(self, timeparse, ampm : str = None, timernote : str = None):
         self.timeparse = timeparse
+        self.ampm = ampm
         self.timernote = timernote
 
     def timetoobig(self, workingduration, workingunit):
@@ -35,7 +36,14 @@ class timeparser:
 
     def getmornnight(self):
         print("starting getmornnight")
-        note = (self.timernote).split(" ")[0]
+        print("this is ampm: [" + self.ampm + "]")
+        if self.ampm is not None:
+            note = self.ampm
+        else:
+            notesplit = self.timernote.split(" ")
+            note = (self.timernote).split(" ")[0]
+        print("this is getmornnight before split: [" + self.timernote + "]")
+        print("this is the getmornnight value: [" + note + "]")
         if note.startswith(" "):
             print("note started with space, removing for parse")
             note = note[1:]

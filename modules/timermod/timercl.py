@@ -87,6 +87,8 @@ class timercl:
             print("/ in a, sending to dateparse")
             dateparse = a
             timeornote = b
+            print("after slash, timeornote is: [" + timeornote +"]")
+            ampm = c
             aslash = True
 
         elif a != "del" and a!= "delete" and a != "list" and aslash == False:
@@ -96,6 +98,7 @@ class timercl:
             print("monthpassescape")
             print("monthpass: " + monthpass)
             if monthpass != "nomonth":
+                ampm = d
                 getthatsplit = self.timernotnomonth(msgcontent, monthpass, a, b, c, d)
                 splitted = getthatsplit.split("|")
                 if splitted[0] == "blank":
@@ -139,7 +142,7 @@ class timercl:
                             print("timernote from dort dbl check: [" + timernote + "]")
                             needdate = True
                             print("timeparse: [" + timeparse + "]")
-                            timeparseinit = timeparser(timeparse, timernote)
+                            timeparseinit = timeparser(timeparse, ampm, timernote)
                             timedigit = timeparseinit.gettime()
                             print("about ot try to print timedigit")
                             print(timedigit)
@@ -185,6 +188,8 @@ class timercl:
                             timernote = ""
                         else:
                             print("user provided some fucking dumbass value after the timeparse, defaulting it as timernote")
+                            print("timeornote before split: [" + timeornote + "]")
+                            print("after split but before indexing: [" + str(msgcontent.split(timeornote)) + "]")
                             timernotesplit = msgcontent.split(timeornote)[1:]
                             print("timernotesplit: [" + str(timernotesplit) + "]")
                             timernote = " ".join(timernotesplit)
@@ -207,7 +212,7 @@ class timercl:
                     print("new note: " + timernote)
             if timedigit == '' or timedigit is None:
                 print("no timedigit, running timeparser with timeparse: [" + timeparse + "] and timernote: [" + timernote + "]")
-                timeparseinit = timeparser(timeparse, timernote)
+                timeparseinit = timeparser(timeparse, ampm, timernote)
                 timedigit = timeparseinit.gettime()
                 if timedigit == "inv":
                     return("my blockchain techniligies cannot read that time")
