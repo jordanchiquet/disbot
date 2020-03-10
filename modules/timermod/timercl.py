@@ -302,8 +302,8 @@ class timercl:
             user='dbuser',
             passwd='e4miqtng')
         mycursor = mydb.cursor()
-        sql = "INSERT INTO renarddb.timers (user, timernote, timepop, channel) VALUES (%s, %s, %s, %s);"
-        val = [user, timernote, timepop, channel]
+        sql = "INSERT INTO renarddb.timers (user, timernote, timepop, channel, timeorig) VALUES (%s, %s, %s, %s, %s);"
+        val = [user, timernote, timepop, channel, timeorig]
         mycursor.execute(sql, val)
         mydb.commit()
         # with open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv", "r") as f:
@@ -465,19 +465,18 @@ class timercl:
                 continue
             else:
                 print("Time pop for [" + timepopval + "]! Removing record and messaging channel.")
-                infosql = "SELECT id, user, timernote, channel FROM renarddb.timers WHERE timepop = \"" + x[0] + "\""
+                infosql = "SELECT id, user, timernote, channel, extratags FROM renarddb.timers WHERE timepop = \"" + x[0] + "\""
                 mycursor.execute(infosql)
                 for y in mycursor:
                     y = y + (x[0],)
                     print(y)
-                    print((y[4])[:-3])
                     removesql = "DELETE FROM renarddb.timers WHERE timepop = \"" + x[0] + "\";"
                     mycursor.execute(removesql)
                     mydb.commit()
                     return(y)
 
 
-timercheckinit = timercl("msgcontent", "user", "channel", "timeorig")
-print(timercheckinit.timercheck())
+# timercheckinit = timercl("msgcontent", "user", "channel", "timeorig")
+# print(timercheckinit.timercheck())
 
 

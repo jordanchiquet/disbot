@@ -211,11 +211,50 @@ async def on_reaction_add(reaction, user):
         gibsql = "SELECT id FROM renarddb.timers WHERE timeorig = \"" + str(ts) + "\""
         mycursor.execute(gibsql)
         for x in mycursor:
-            addnotifysql = "UPDATE renarddb.timers SET extratags = \"" + str(user.id) + "|\" WHERE id = " + x[0]
-            mycursor.execute(addnotifysql)
-            mydb.commit()
+            print(str(x))
+            checknotifysql = "SELECT extratags FROM renarddb.timers WHERE id = " + str(x[0]) 
+            mycursor.execute(checknotifysql)
+            for y in mycursor:
+                if y[0] is None:
+                    print("y[0] is none")
+                    addnotifysql = "UPDATE renarddb.timers SET extratags = \"" + str(user.id) + "|\" WHERE id = " + str(x[0])
+                    mycursor.execute(addnotifysql)
+                    mydb.commit()
+                    return    
+                else:
+                    addnotifysql = "UPDATE renarddb.timers SET extratags = \"" + y[0] + str(user.id) + "|\" WHERE id = " + str(x[0])
+                    mycursor.execute(addnotifysql)
+                    mydb.commit()
+                    return
         else:
+            print("no timer to add user notify on gib react")
             return
+
+
+@bot.event
+async def on_reaction_remove(reaction, user):
+    mydb = mysql.connector.connect(
+    host='18.216.39.250',
+    user='dbuser',
+    passwd='e4miqtng')
+    mycursor = mydb.cursor(buffered=True)
+    Gib = bot.get_emoji(410972413036331008)
+    if reaction.emoji == '💬' and not user.bot:
+        message = reaction.message
+        channel = reaction.message.channel
+        ts = message.created_at - timedelta(hours=5)
+        print("user wants to delete a quote by removing their reaction")
+        delsql = "DELETE FROM renarddb.quotes WHERE timestamp = \"" + str(ts) + "\""
+        mycursor.execute(delsql)
+        mydb.commit()
+        await channel.send("Quote erased from the archive memory :).")
+    elif reaction.emoji == Gib:
+        message = reaction.message
+        ts = message.created_at - timedelta(hours=5)
+        channel = reaction.message.channel
+        delgibsql = "DELETE FROM renarddb.timers WHERE timeorig = \"" + str(ts) + "\""
+        mycursor.execute(delgibsql)
+        mydb.commit()
 
 
 @bot.event
@@ -370,10 +409,19 @@ async def timercheck():
         print("made it to timercheck else")
         print(response[3])
         channel = bot.get_channel(int(response[3]))
-        if response[2] == "":
-            await channel.send("<@!" + response[1] + "> Ringa ling dong, the time " + (response[4])[:19] + " has finally come!")
+        if response[4] == "":
+            if response[2] == "":
+                await channel.send("<@!" + response[1] + "> Ringa ling dong, the time " + (response[5])[:19] + " has finally come!")
+            else:
+                await channel.send("<@!" + response[1] + "> Sir you must remember: \"" + response[2] + "\" | " + (response[5])[:-3])
         else:
-            await channel.send("<@!" + response[1] + "> Sir you must remember: \"" + response[2] + "\" | " + (response[4])[:-3])
+            notifylist = response[4].split("|")
+            if response[2] == "":
+                await channel.send("<@!" + response[1] + "> Ringa ling dong, the time " + (response[5])[:19] + " has finally come!")
+            else:
+                await channel.send("<@!" + response[1] + "> Sir you must remember: \"" + response[2] + "\" | " + (response[5])[:-3])
+            for x in notifylist[:-1]:
+                await channel.send("<@!" + x + ">,  you too have been notified!")
 
 
 @bot.command()
@@ -397,7 +445,7 @@ async def timer(ctx, a: str = None, b: str = None, c: str = None, d: str = None)
     else:
         response = await timerinit.timerfunc()
         if response == "user requested list":
-            await ctx.send(file=File("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv"))
+            await ctx.send("list in development")
         else:
             await ctx.send(response)
 
@@ -615,7 +663,7 @@ async def quote(ctx, a: str = None, b: str = None):
         sql = "SELECT * FROM renarddb.quotes WHERE id LIKE " + a
         mycursor.execute(sql)
         for x in mycursor:
-            delsql = "DELETE FROM renarddb.timers WHERE id LIKE " + a 
+            delsql = "DELETE FROM renarddb.quotes WHERE id LIKE " + a 
             mycursor.execute(delsql)
             mydb.commit()
             await ctx.send("Quote " + a + "erased from the archive memory :).")
