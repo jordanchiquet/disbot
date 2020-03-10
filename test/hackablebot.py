@@ -409,7 +409,7 @@ async def timercheck():
         print("made it to timercheck else")
         print(response[3])
         channel = bot.get_channel(int(response[3]))
-        if response[4] == "":
+        if response[4] is None:
             if response[2] == "":
                 await channel.send("<@!" + response[1] + "> Ringa ling dong, the time " + (response[5])[:19] + " has finally come!")
             else:
