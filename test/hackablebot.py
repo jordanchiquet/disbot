@@ -184,24 +184,38 @@ async def on_message(message):
 
 @bot.event
 async def on_reaction_add(reaction, user):
+    mydb = mysql.connector.connect(
+    host='18.216.39.250',
+    user='dbuser',
+    passwd='e4miqtng')
+    mycursor = mydb.cursor(buffered=True)
+    Gib = bot.get_emoji(410972413036331008)
     if reaction.emoji == '💬' and not user.bot:
         message = reaction.message
         channel = reaction.message.channel
-        ts = message.created_at
-        user = message.author
+        ts = message.created_at - timedelta(hours=5)
+        messageuser = message.author
         quote = message.content
-        mydb = mysql.connector.connect(
-        host='18.216.39.250',
-        user='dbuser',
-        passwd='e4miqtng')
-        mycursor = mydb.cursor(buffered=True)
-        sql = "INSERT INTO renarddb.quotes (user, quote, timestamp) VALUES (\"" + str(user) + "\", \"" + str(quote) + "\", \"" + str(ts) + "\");"
+        sql = "INSERT INTO renarddb.quotes (user, quote, timestamp) VALUES (\"" + str(messageuser) + "\", \"" + str(quote) + "\", \"" + str(ts) + "\");"
         mycursor.execute(sql)
         mydb.commit()
         idquery = "SELECT id FROM renarddb.quotes WHERE timestamp = \"" + str(ts) + "\""
         mycursor.execute(idquery)
         for x in mycursor:
             await channel.send ("Quote " + str(x[0]) + " added by " + str(user) + ".")
+    elif reaction.emoji == Gib:
+        message = reaction.message
+        ts = message.created_at - timedelta(hours=5)
+        print(str(ts))
+        print(str(user.id))
+        gibsql = "SELECT id FROM renarddb.timers WHERE timeorig = \"" + str(ts) + "\""
+        mycursor.execute(gibsql)
+        for x in mycursor:
+            addnotifysql = "UPDATE renarddb.timers SET extratags = \"" + str(user.id) + "|\" WHERE id = " + x[0]
+            mycursor.execute(addnotifysql)
+            mydb.commit()
+        else:
+            return
 
 
 @bot.event
@@ -366,8 +380,8 @@ async def timercheck():
 async def timer(ctx, a: str = None, b: str = None, c: str = None, d: str = None):
     channel = ctx.channel.id
     msgcontent = ctx.message.content
-    # timeorig = (ctx.message.created_at - timedelta(hours=5))
-    timeorig = (datetime.now())
+    timeorig = (ctx.message.created_at - timedelta(hours=5))
+    # timeorig = (datetime.now())
     user = ctx.message.author.id
     timerinit = timercl(msgcontent, user, channel, timeorig, a, b, c, d)
     if a == "default":

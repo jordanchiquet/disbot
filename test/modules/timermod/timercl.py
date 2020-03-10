@@ -302,8 +302,8 @@ class timercl:
             user='dbuser',
             passwd='e4miqtng')
         mycursor = mydb.cursor()
-        sql = "INSERT INTO renarddb.timers (user, timernote, timepop, channel) VALUES (%s, %s, %s, %s);"
-        val = [user, timernote, timepop, channel]
+        sql = "INSERT INTO renarddb.timers (user, timernote, timepop, channel, timeorig) VALUES (%s, %s, %s, %s, %s);"
+        val = [user, timernote, timepop, channel, timeorig]
         mycursor.execute(sql, val)
         mydb.commit()
         # with open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv", "r") as f:
