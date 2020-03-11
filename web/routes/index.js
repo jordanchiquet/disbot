@@ -46,7 +46,7 @@ router.get('/search', function(req, res){
 	var runQuery = "";
 	var defaultQuery = "SELECT id, quote, user, timestamp FROM renarddb.quotes";
 	if (id == "on") {
-		sql = "name like " + input;
+		sql = "id like " + input;
 		idOn = true;
 	}
 

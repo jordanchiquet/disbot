@@ -698,7 +698,7 @@ async def quote(ctx, a: str = None, b: str = None):
             await ctx.send("WTF i can't FUCKING find that one!?!?!?!?!")
     
     if a == "list":
-        await ctx.send("list in development >_<")
+        await ctx.send("http://18.216.39.250:3000/")
 
 
 @bot.command()
