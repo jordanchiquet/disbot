@@ -36,13 +36,11 @@ class timeparser:
 
     def getmornnight(self):
         print("starting getmornnight")
-        print("this is ampm: [" + self.ampm + "]")
         if self.ampm is not None:
+            print("setting ampm")
             note = self.ampm
         else:
-            notesplit = self.timernote.split(" ")
-            note = (self.timernote).split(" ")[0]
-        print("this is getmornnight before split: [" + self.timernote + "]")
+            note = "am"
         print("this is the getmornnight value: [" + note + "]")
         if note.startswith(" "):
             print("note started with space, removing for parse")

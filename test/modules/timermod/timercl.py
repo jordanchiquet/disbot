@@ -337,12 +337,14 @@ class timercl:
         usertimeinit = renardusers(self.user, "timerdefault")
         print("reached users class")
         usertimerdefaultcheck = usertimeinit.userread()
-        print("reached userread func")
+        print("reached userread func, result: [" + str(usertimerdefaultcheck) + "]")
         if usertimerdefaultcheck is None:
             print("result was none")
+            return(usertimerdefaultcheck)
         else:
-            print("sql result: [" + usertimerdefaultcheck + "]")
-        return(usertimerdefaultcheck)
+            print("made it to concatenate default str")
+            print("sql result: [" + str(usertimerdefaultcheck) + "]")
+        return(usertimerdefaultcheck[0])
     
     def timerdefaultwrite(self): 
         timerdefaultinit = renardusers(self.user, "timerdefault", self.b)
