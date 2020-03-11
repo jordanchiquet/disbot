@@ -141,9 +141,9 @@ async def on_message(message):
     if "print time" == mclower:
         await channel.send(datetime.now())
     if "promotion" in mclower:
-        await channel.send(file=File("/home/disbotren/promotions.jpg"))
+        await channel.send(file=File("/home/disbotren/picfolder/promotions.jpg"))
     if "same sex" in mclower:
-        await channel.send(file=File("/home/disbotren/dmx.png"))
+        await channel.send(file=File("/home/disbotren/picfolder/dmx.png"))
     if "what is your purpose" in mclower:
         await channel.send(
             "My purposes are input, output, processing, and storage.")
@@ -151,12 +151,12 @@ async def on_message(message):
         min = 1
         max = 9
         signfile = random.randint(min, max)
-        await channel.send(file=File("/home/disbotren/byebyefolder/byebye" + str(signfile) + ".png"))
+        await channel.send(file=File("/home/disbotren/picfolder/byebyefolder/byebye" + str(signfile) + ".png"))
     if "your sign" in mclower:
         min = 1
         max = 9
         signfile = random.randint(min, max)
-        await channel.send(file=File("/home/disbotren/heresyoursignfolder/heresyoursign" + str(signfile) + ".png"))
+        await channel.send(file=File("/home/disbotren/picfolder/heresyoursignfolder/heresyoursign" + str(signfile) + ".png"))
     if mclower.endswith("this bitch"):
         word = mclower.split(" ")[-3]
         print(word)
@@ -166,14 +166,14 @@ async def on_message(message):
             min = 1
             max = 32
             bitchfile = random.randint(min, max)
-            await channel.send(file=File("/home/disbotren/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
+            await channel.send(file=File("/home/disbotren/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
     if mclower.endswith("on this bitch"):
-        await channel.send(file=File("/home/disbotren/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
+        await channel.send(file=File("/home/disbotren/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
     if mclower.endswith("this, bitch"):
         min = 1
         max = 32
         bitchfile = random.randint(min, max)
-        await channel.send(file=File("/home/disbotren/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
+        await channel.send(file=File("/home/disbotren/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
     if "what is a" in mclower:
         query = "define:" + mclower.split("what is a ")[1]
         for j in search(query, tld="co.in", num=1, stop=1, pause=2):
