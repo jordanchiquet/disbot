@@ -56,7 +56,7 @@ deletelog = {}
 
 @bot.event
 async def on_ready():
-    timercheck.start()
+    # timercheck.start()
     print("logged in as")
     print(bot.user.name)
     print(bot.user.id)
@@ -438,16 +438,21 @@ async def timer(ctx, a: str = None, b: str = None, c: str = None, d: str = None)
         else:
             print("user attempting to write default time")
             timeparseinit = timeparser(b, c)
-            if timeparseinit == "inv":
+            writetime = timeparseinit.gettime()
+            if writetime == "inv":
                 await ctx.send("jordan timeparse returned that time invalid")
-            else: 
+            else:
+                print("this is writetime after sending from default write: [" + str(writetime) + "]")
+                timerinit = timercl(msgcontent, user, channel, timeorig, a, writetime, c, d)
+                timerinit.timerdefaultwrite()
                 await ctx.send("New default time for your calendar reminders written.")
-    else:
+    else::
         response = await timerinit.timerfunc()
         if response == "user requested list":
             await ctx.send("list in development")
         else:
             await ctx.send(response)
+
 
 
 # ------------------------------------------------ #

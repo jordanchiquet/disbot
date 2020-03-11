@@ -461,9 +461,13 @@ async def timer(ctx, a: str = None, b: str = None, c: str = None, d: str = None)
         else:
             print("user attempting to write default time")
             timeparseinit = timeparser(b, c)
-            if timeparseinit == "inv":
+            writetime = timeparseinit.gettime()
+            if writetime == "inv":
                 await ctx.send("jordan timeparse returned that time invalid")
-            else: 
+            else:
+                print("this is writetime after sending from default write: [" + str(writetime) + "]")
+                timerinit = timercl(msgcontent, user, channel, timeorig, a, writetime, c, d)
+                timerinit.timerdefaultwrite()
                 await ctx.send("New default time for your calendar reminders written.")
     else:
         response = await timerinit.timerfunc()
@@ -471,6 +475,7 @@ async def timer(ctx, a: str = None, b: str = None, c: str = None, d: str = None)
             await ctx.send("list in development")
         else:
             await ctx.send(response)
+
 
 
 # ------------------------------------------------ #
@@ -698,7 +703,7 @@ async def quote(ctx, a: str = None, b: str = None):
             await ctx.send("WTF i can't FUCKING find that one!?!?!?!?!")
     
     if a == "list":
-        await ctx.send("list in development >_<")
+        await ctx.send("http://18.216.39.250:3000/")
 
 
 @bot.command()
