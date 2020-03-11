@@ -446,7 +446,7 @@ async def timer(ctx, a: str = None, b: str = None, c: str = None, d: str = None)
                 timerinit = timercl(msgcontent, user, channel, timeorig, a, writetime, c, d)
                 timerinit.timerdefaultwrite()
                 await ctx.send("New default time for your calendar reminders written.")
-    else::
+    else:
         response = await timerinit.timerfunc()
         if response == "user requested list":
             await ctx.send("list in development")
