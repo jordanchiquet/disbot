@@ -715,6 +715,7 @@ gsource = build("customsearch", 'v1', developerKey=gapi).cse()
 
 @bot.command()
 async def d(ctx):
+    print("d called")
     drequest = ctx.message.content[3:]
     durlfriendly = drequest.replace(" ", "%20")
     dhtml = urllib.request.urlopen("https://www.merriam-webster.com/dictionary/"+durlfriendly)

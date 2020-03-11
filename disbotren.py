@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-testroot = "Users/jordanchiquet/personalandfinance/disbotren/test"
+testroot = "Users/jordanchiquet/personalandfinance/ubuntu/disbot/test"
 
 
 import asyncio
@@ -118,7 +118,7 @@ async def on_message(message):
         min = 1
         max = 5
         icwhatumeanfile = random.randint(min, max)
-        await channel.send(file=File("/home/disbotren/icwhatumeanfolder/icwhatumeanfile" + str(icwhatumeanfile) + ".png"))
+        await channel.send(file=File("/home/ubuntu/disbot/picfolder/icwhatumeanfolder/icwhatumeanfile" + str(icwhatumeanfile) + ".png"))
     if "love" == mclower:
         await channel.send(
             "is suicide")
@@ -141,9 +141,9 @@ async def on_message(message):
     if "print time" == mclower:
         await channel.send(datetime.now())
     if "promotion" in mclower:
-        await channel.send(file=File("/home/disbotren/picfolder/promotions.jpg"))
+        await channel.send(file=File("/home/ubuntu/disbot/picfolder/promotions.jpg"))
     if "same sex" in mclower:
-        await channel.send(file=File("/home/disbotren/picfolder/dmx.png"))
+        await channel.send(file=File("/home/ubuntu/disbot/picfolder/dmx.png"))
     if "what is your purpose" in mclower:
         await channel.send(
             "My purposes are input, output, processing, and storage.")
@@ -151,12 +151,12 @@ async def on_message(message):
         min = 1
         max = 9
         signfile = random.randint(min, max)
-        await channel.send(file=File("/home/disbotren/picfolder/byebyefolder/byebye" + str(signfile) + ".png"))
+        await channel.send(file=File("/home/ubuntu/disbot/picfolder/byebyefolder/byebye" + str(signfile) + ".png"))
     if "your sign" in mclower:
         min = 1
         max = 9
         signfile = random.randint(min, max)
-        await channel.send(file=File("/home/disbotren/picfolder/heresyoursignfolder/heresyoursign" + str(signfile) + ".png"))
+        await channel.send(file=File("/home/ubuntu/disbot/picfolder/heresyoursignfolder/heresyoursign" + str(signfile) + ".png"))
     if mclower.endswith("this bitch"):
         word = mclower.split(" ")[-3]
         print(word)
@@ -166,14 +166,14 @@ async def on_message(message):
             min = 1
             max = 32
             bitchfile = random.randint(min, max)
-            await channel.send(file=File("/home/disbotren/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
+            await channel.send(file=File("/home/ubuntu/disbot/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
     if mclower.endswith("on this bitch"):
-        await channel.send(file=File("/home/disbotren/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
+        await channel.send(file=File("/home/ubuntu/disbot/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
     if mclower.endswith("this, bitch"):
         min = 1
         max = 32
         bitchfile = random.randint(min, max)
-        await channel.send(file=File("/home/disbotren/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
+        await channel.send(file=File("/home/ubuntu/disbot/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
     if "what is a" in mclower:
         query = "define:" + mclower.split("what is a ")[1]
         for j in search(query, tld="co.in", num=1, stop=1, pause=2):
@@ -713,7 +713,7 @@ async def q(ctx):
 
 @bot.command()
 async def xfile(ctx):
-    xfiletxt = "/home/disbotren/xfile.txt"
+    xfiletxt = "/home/ubuntu/disbot/xfile.txt"
     xfileline = open(xfiletxt).read().splitlines()
     xfileres = random.choice(xfileline)
     extractor = URLExtract()
@@ -723,7 +723,7 @@ async def xfile(ctx):
 
 @bot.command()
 async def zoo(ctx):
-    zootxt = "/home/disbotren/zoo.txt"
+    zootxt = "/home/ubuntu/disbot/zoo.txt"
     zooline = open(zootxt).read().splitlines()
     zoores = random.choice(zooline)
     extractor = URLExtract()
@@ -847,7 +847,7 @@ async def ud_error(ctx, error):
 async def w(ctx, a: str = None, b: str = None):
     user = ctx.message.author
     if a == "set":
-        with open("/home/disbotren/weatherloc.csv", 'rt') as f, open("/home/disbotren/weatherloc1.csv", "a", newline='') as out:
+        with open("/home/ubuntu/disbot/weatherloc.csv", 'rt') as f, open("/home/ubuntu/disbot/weatherloc1.csv", "a", newline='') as out:
             reader = csv.reader(f, delimiter=",")
             writer = csv.writer(out)
             for row in reader:
@@ -856,14 +856,14 @@ async def w(ctx, a: str = None, b: str = None):
             zippo = b
             wfields = [user, zippo]
             writer.writerow(wfields)
-        os.system('rm /home/disbotren/weatherloc.csv')
-        os.system('mv /home/disbotren/weatherloc1.csv /home/disbotren/weatherloc.csv')
+        os.system('rm /home/ubuntu/disbot/weatherloc.csv')
+        os.system('mv /home/ubuntu/disbot/weatherloc1.csv /home/ubuntu/disbot/weatherloc.csv')
         await ctx.send("Location set!")
         f.close()
         out.close()
     if a is None:
         try:
-            with open("/home/disbotren/weatherloc.csv", 'rt') as f:
+            with open("/home/ubuntu/disbot/weatherloc.csv", 'rt') as f:
                 for line in f:
                     if str(user) in line:
                         zipparse = line.split(',')
