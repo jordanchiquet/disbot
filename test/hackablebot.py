@@ -454,7 +454,6 @@ async def timer(ctx, a: str = None, b: str = None, c: str = None, d: str = None)
             await ctx.send(response)
 
 
-
 # ------------------------------------------------ #
 # random math
 @bot.command()
