@@ -164,14 +164,14 @@ async def on_message(message):
         checkwordres = checkword.most_common()
         if "VB" in str(checkwordres):
             min = 1
-            max = 32
+            max = 47
             bitchfile = random.randint(min, max)
             await channel.send(file=File("/home/ubuntu/disbot/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
     if mclower.endswith("on this bitch"):
         await channel.send(file=File("/home/ubuntu/disbot/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
     if mclower.endswith("this, bitch"):
         min = 1
-        max = 32
+        max = 47
         bitchfile = random.randint(min, max)
         await channel.send(file=File("/home/ubuntu/disbot/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
     if "what is a" in mclower:
