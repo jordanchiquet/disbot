@@ -11,7 +11,7 @@ import datetime
 import discord
 import json
 import logging
-import os
+import os, os.path
 import mysql.connector
 import nltk
 import random
@@ -116,7 +116,7 @@ async def on_message(message):
         "https://www.youtube.com/watch?v=qjm9QZT06ig")
     if "i see what you mean" in mclower:
         min = 1
-        max = 5
+        max = len
         icwhatumeanfile = random.randint(min, max)
         await channel.send(file=File("/home/ubuntu/disbot/picfolder/icwhatumeanfolder/icwhatumeanfile" + str(icwhatumeanfile) + ".png"))
     if "love" == mclower:
@@ -148,13 +148,15 @@ async def on_message(message):
         await channel.send(
             "My purposes are input, output, processing, and storage.")
     if "bye" in mclower:
+        path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/byebyefolder").__next__()
         min = 1
-        max = 9
+        max = len(files)
         signfile = random.randint(min, max)
         await channel.send(file=File("/home/ubuntu/disbot/picfolder/byebyefolder/byebye" + str(signfile) + ".png"))
     if "your sign" in mclower:
+        path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/heresyoursignfolder").__next__()
         min = 1
-        max = 9
+        max = len(files)
         signfile = random.randint(min, max)
         await channel.send(file=File("/home/ubuntu/disbot/picfolder/heresyoursignfolder/heresyoursign" + str(signfile) + ".png"))
     if mclower.endswith("this bitch"):
@@ -163,15 +165,15 @@ async def on_message(message):
         checkword = nltk.FreqDist(t for w, t in brown.tagged_words() if w.lower() == word)
         checkwordres = checkword.most_common()
         if "VB" in str(checkwordres):
+            path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/bitchfolder").__next__()
             min = 1
-            max = 47
+            max = len(files)
             bitchfile = random.randint(min, max)
             await channel.send(file=File("/home/ubuntu/disbot/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
-    if mclower.endswith("on this bitch"):
-        await channel.send(file=File("/home/ubuntu/disbot/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
-    if mclower.endswith("this, bitch"):
+    if mclower.endswith("this, bitch") or mclower.endswith("on this bitch"):
+        path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/bitchfolder").__next__()
         min = 1
-        max = 47
+        max = len(files)
         bitchfile = random.randint(min, max)
         await channel.send(file=File("/home/ubuntu/disbot/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
     if "what is a" in mclower:
