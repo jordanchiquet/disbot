@@ -151,12 +151,12 @@ async def on_message(message):
         path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/byebyefolder").__next__()
         min = 1
         max = len(files)
-        signfile = random.randint(min, max)
-        if signfile == 10:
+        byefile = random.randint(min, max)
+        if byefile == 10:
             filetype = ".gif"
         else:
             filetype = ".png"
-        await channel.send(file=File("/home/ubuntu/disbot/picfolder/byebyefolder/byebye" + str(signfile) + filetype))
+        await channel.send(file=File("/home/ubuntu/disbot/picfolder/byebyefolder/byebye" + str(byefile) + filetype))
     if "your sign" in mclower:
         path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/heresyoursignfolder").__next__()
         min = 1
