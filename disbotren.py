@@ -157,6 +157,8 @@ async def on_message(message):
         else:
             filetype = ".png"
         await channel.send(file=File("/home/ubuntu/disbot/picfolder/byebyefolder/byebye" + str(byefile) + filetype))
+    if "yay" in mclower:
+        await channel.send(file=File("home/ubuntu/disbot/picfolder/pepocheer.gif"))
     if "your sign" in mclower:
         path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/heresyoursignfolder").__next__()
         min = 1
@@ -641,6 +643,16 @@ async def loon(ctx):
 
 
 @bot.command()
+async def pepocheer(ctx):
+    await ctx.send(file=File("/home/ubuntu/disbot/picfolder/pepocheer.gif"))
+
+
+@bot.command()
+async def cheer(ctx):
+    await pepocheer.invoke(ctx)
+
+
+@bot.command()
 async def qp(ctx):
     msg = ctx.message
     print(msg.content)
@@ -691,7 +703,7 @@ async def quote(ctx, a: str = None, b: str = None):
                 await ctx.send("\"" + qtxt + "\" | " + name + " | " + date[:16] + " | ID:" + str(qid))
                 return
             else:
-                embed = discord.Embed(title=qtxt, description=("Quote #" + str(qid) + " by " + name + " - " + date[:16]), color=0x800080)
+                embed = discord.Embed(title=qtxt, description=("Quote #" + str(qid) + " by " + name + " - " + date[:]), color=0x800080)
                 await ctx.send(embed=embed)
         if x is None:
             await ctx.send("quote not found dog")
@@ -770,17 +782,20 @@ async def g(ctx):
         
 
 @bot.command()
-async def gif(ctx):
-    rawresult = gsource.list(q=(ctx.message.content[5:] + "gif"), searchType='image',
-                             cx='016515025707600383118:gqogcmpp7ka').execute()
-    try:
-        firstresult = rawresult['items'][0]
-        imgresult = firstresult['link']
-        delcmd = await ctx.send(imgresult)
-        deletelog[ctx.message.id] = delcmd
-    except KeyError:
-        delcmd = await ctx.send("how you say? not any image find for that image")
-        deletelog[ctx.message.id] = delcmd
+async def gif(ctx, a):
+    if a.lower() == "pepocheer":
+        await ctx.send(file=File("/home/ubuntu/disbot/picfolder/pepocheer.gif"))
+    else:
+        rawresult = gsource.list(q=(ctx.message.content[5:] + "gif"), searchType='image',
+                                cx='016515025707600383118:gqogcmpp7ka').execute()
+        try:
+            firstresult = rawresult['items'][0]
+            imgresult = firstresult['link']
+            delcmd = await ctx.send(imgresult)
+            deletelog[ctx.message.id] = delcmd
+        except KeyError:
+            delcmd = await ctx.send("how you say? not any image find for that image")
+            deletelog[ctx.message.id] = delcmd
 
 
 
