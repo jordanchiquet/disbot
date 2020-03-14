@@ -644,7 +644,7 @@ async def loon(ctx):
 
 @bot.command()
 async def pepocheer(ctx):
-    await ctx.send(file=File("/home/ubuntu/disbot/picfolder/pepocheer.gif"))
+    await ctx.send(file=File("home/ubuntu/disbot/picfolder/pepocheer.gif"))
 
 
 @bot.command()
@@ -783,7 +783,7 @@ async def g(ctx):
 
 @bot.command()
 async def gif(ctx, a):
-    if a.lower() == "pepocheer":
+    if a.lower() == "pepocheer" or a.lower() == "pepo cheer" or a.lower() == "pepecheer":
         await ctx.send(file=File("/home/ubuntu/disbot/picfolder/pepocheer.gif"))
     else:
         rawresult = gsource.list(q=(ctx.message.content[5:] + "gif"), searchType='image',
