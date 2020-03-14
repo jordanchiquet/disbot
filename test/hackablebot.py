@@ -637,10 +637,10 @@ async def quote(ctx, a: str = None, b: str = None):
         qtxt = quoteunparsed[2]
         date = quoteunparsed[3]
         if len(qtxt) > 256:
-            await ctx.send("\"" + qtxt + "\" | " + name + " | " + date + " | ID:" + str(qid))
+            await ctx.send("\"" + qtxt + "\" | " + name + " | " + date[:16] + " | ID:" + str(qid))
             return
         else:
-            embed = discord.Embed(title=qtxt, description=("Quote #" + str(qid) + " by " + name + " - " + date[:4]), color=0x800080)
+            embed = discord.Embed(title=qtxt, description=("Quote #" + str(qid) + " by " + name + " - " + date[:16]), color=0x800080)
             await ctx.send(embed=embed)
         qlist.clear()
     
@@ -657,10 +657,10 @@ async def quote(ctx, a: str = None, b: str = None):
             qtxt = result[2]
             date = result[3]
             if len(qtxt) > 256:
-                await ctx.send("\"" + qtxt + "\" | " + name + " | " + date + " | ID:" + str(qid))
+                await ctx.send("\"" + qtxt + "\" | " + name + " | " + date[:16] + " | ID:" + str(qid))
                 return
             else:
-                embed = discord.Embed(title=qtxt, description=("Quote #" + str(qid) + " by " + name + " - " + date[:4]), color=0x800080)
+                embed = discord.Embed(title=qtxt, description=("Quote #" + str(qid) + " by " + name + " - " + date[:16]), color=0x800080)
                 await ctx.send(embed=embed)
         if x is None:
             await ctx.send("quote not found dog")
