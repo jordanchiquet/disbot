@@ -38,6 +38,7 @@ from uszipcode import SearchEngine
 
 from modules.timermod.timercl import timercl
 from modules.timermod.timeparser import timeparser
+from modules.users.renardusers import renardusers
 # from modules.timermod.dateslashparser import dateslashparser
 # from modules.timer.timermonthpass import timermonthpass
 # from test.modules.timer.ogtimer import ogtimer
@@ -838,22 +839,10 @@ async def ud_error(ctx, error):
 
 @bot.command()
 async def w(ctx, a: str = None, b: str = None):
-    user = ctx.message.author
-    if a == "set":
-        with open("/Users/jordanchiquet/personalandfinance/disbotren/test/weatherloc.csv", 'rt') as f, open("/Users/jordanchiquet/personalandfinance/disbotren/test/weatherloc1.csv", "a", newline='') as out:
-            reader = csv.reader(f, delimiter=",")
-            writer = csv.writer(out)
-            for row in reader:
-                if str(user) not in row:
-                    writer.writerow(row)
-            zippo = b
-            wfields = [user, zippo]
-            writer.writerow(wfields)
-        os.system('rm /Users/jordanchiquet/personalandfinance/disbotren/test/weatherloc.csv')
-        os.system('mv /Users/jordanchiquet/personalandfinance/disbotren/test/weatherloc1.csv /Users/jordanchiquet/personalandfinance/disbotren/test/weatherloc.csv')
-        await ctx.send("Location set!")
-        f.close()
-        out.close()
+    userid = ctx.message.author.id
+    if a == "set" and b.isdigit():
+        zipwriteinit = renardusers(userid, "zip", str(b))
+
     if a is None:
         try:
             with open("/Users/jordanchiquet/personalandfinance/disbotren/test/weatherloc.csv", 'rt') as f:
