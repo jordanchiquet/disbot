@@ -671,7 +671,7 @@ async def quote(ctx, a: str = None, b: str = None):
             await ctx.send("\"" + qtxt + "\" | " + name + " | " + date + " | ID:" + str(qid))
             return
         else:
-            embed = discord.Embed(title=qtxt, description=("Quote #" + str(qid) + " by " + name + " - " + date[:-4]), color=0x800080)
+            embed = discord.Embed(title=qtxt, description=("Quote #" + str(qid) + " by " + name + " - " + date), color=0x800080)
             await ctx.send(embed=embed)
         qlist.clear()
     
@@ -691,7 +691,7 @@ async def quote(ctx, a: str = None, b: str = None):
                 await ctx.send("\"" + qtxt + "\" | " + name + " | " + date + " | ID:" + str(qid))
                 return
             else:
-                embed = discord.Embed(title=qtxt, description=("Quote #" + str(qid) + " by " + name + " - " + date[:-4]), color=0x800080)
+                embed = discord.Embed(title=qtxt, description=("Quote #" + str(qid) + " by " + name + " - " + date), color=0x800080)
                 await ctx.send(embed=embed)
         if x is None:
             await ctx.send("quote not found dog")
