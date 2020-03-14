@@ -783,7 +783,8 @@ async def g(ctx):
 
 @bot.command()
 async def gif(ctx, a):
-    if a.lower() == "pepocheer" or a.lower() == "pepo cheer" or a.lower() == "pepecheer":
+    messageaftergif = ctx.messagecontent[3:]
+    if a.lower() == "pepocheer" or messageaftergif.lower() == "pepo cheer" or a.lower() == "pepecheer":
         await ctx.send(file=File("/home/ubuntu/disbot/picfolder/pepocheer.gif"))
     else:
         rawresult = gsource.list(q=(ctx.message.content[5:] + "gif"), searchType='image',
