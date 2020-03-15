@@ -459,7 +459,7 @@ class timercl:
             return ("timepop|" + str(timepop) + "|" + timernote)                   
 
     def timercheck(self):
-        checknow = datetime.now()
+        checknow = datetime.now() - timedelta(hours=5)
         print("Timer check starting... [" + str(checknow) + "]")
         mydb = mysql.connector.connect(
             host='18.216.39.250',
