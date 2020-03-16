@@ -572,15 +572,12 @@ async def coin(ctx):
 
 @bot.command()
 async def conch(ctx):
-    conchimg = (
-        "https://i.ytimg.com/vi/WAzGNbuu3LU/maxresdefault.jpg",
-        "https://pbs.twimg.com/profile_images/416370357743144960/xIpWXsBH.jpeg",
-        "http://i.imgur.com/b2IAcwY.jpg",
-        "https://i.ytimg.com/vi/-S6VvSoeeP4/maxresdefault.jpg",
-        "https://i.etsystatic.com/15079744/r/il/e26c07/1255333255/il_794xN.1255333255_epc0.jpg",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSyMXvA_Fxw_YfwtNGDdbP3YzW9TgYIHPQyNTQNaW7OTI3pEl-")
+    path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/conchfolder").__next__()
+    min = 1
+    max = len(files)
+    conchfile = random.randint(min, max)
     destiny = ("Yes", "No")
-    await ctx.send(random.choice(conchimg))
+    await ctx.send(file=File("/home/ubuntu/disbot/picfolder/conchfolder/conch" + str(conchfile) + ".png"))
     await ctx.send(random.choice(destiny))
 
 

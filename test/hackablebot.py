@@ -31,6 +31,7 @@ from discord import File
 from discord.ext import commands, tasks
 from googleapiclient.discovery import build #google-api-python-client
 from google_images_download import google_images_download
+from GoogleScraper import scrape_with_config, GoogleSearchError
 from googlesearch import search #google
 from nltk.corpus import brown
 from urlextract import URLExtract
@@ -761,16 +762,29 @@ async def gif(ctx):
 
 @bot.command()
 async def img(ctx):
-    rawresult = gsource.list(q=ctx.message.content[5:], searchType='image',
-                             cx='016515025707600383118:gqogcmpp7ka').execute()
+    config = {
+        'use_own_ip': True,
+        'keyword': ctx.message.content[5:],
+        'search_engines': ['bing'],
+        'search_type': 'image',
+        'num_pages_for_keyword': 1,
+        'scrape_method': 'selenium',
+        'do_caching': True
+    }
+
     try:
-        firstresult = rawresult['items'][0]
-        imgresult = firstresult['link']
-        delcmd = await ctx.send(imgresult)
-        deletelog[ctx.message.id] = delcmd
-    except KeyError:
-        delcmd = await ctx.send("how you say? not any image find for that image")
-        deletelog[ctx.message.id] = delcmd
+        search = scrape_with_config(config)
+    except GoogleSearchError as e:
+        print(e)
+
+    # let's inspect what we got
+
+    image_urls = []
+
+    for serp in search.serps:
+        image_urls.extend(
+            [link.link for link in serp.links]
+        )
 
 
 @bot.command()
