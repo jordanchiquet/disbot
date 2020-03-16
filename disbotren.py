@@ -31,6 +31,7 @@ from discord import File
 from discord.ext import commands, tasks
 from googleapiclient.discovery import build #google-api-python-client
 from google_images_download import google_images_download
+from GoogleScraper import scrape_with_config, GoogleSearchError
 from googlesearch import search #google
 from nltk.corpus import brown
 from urlextract import URLExtract
@@ -507,30 +508,33 @@ async def mul(ctx, a: int, b: int):
 @bot.command()
 async def roll(ctx, a):
     msg = ctx.message.content
-    mult = int(a[0])
+    mult = a.split("d")[0]
+    if mult.isdigit():
+        print("number of dice passed digit check")
+        mult = int(mult)
+    else:
+        print("number of dice did not pass digit check")
+        await ctx.send("That's not how I roll brother...")
     if "+" in msg:
-        numsplit1 = a.split("+")[0]
-        numsplit2 = a.split("+")[1]
-        d = int(numsplit1[2:])
-        print(numsplit2)
-        print(d)
+        numsplit1 = a.split("d")[1]
+        d = numsplit1.split("+")[0]
+        modifier = numsplit1.split("+")[1]
     if "+" not in msg:
-        d = int(a[2:])
-        numsplit2 = 0
+        d = a.split("d")[1]
+        modifier = 0
     min = 1
-    max = d
+    max = int(d)
     reslist = []
     for x in range(mult):
         res = random.randint(min, max)
         reslist.append(res)
         pass
     rollsum = sum(reslist)
-    addsum = rollsum + int(numsplit2)
-    if numsplit2 == 0:
+    addsum = rollsum + int(modifier)
+    if modifier == 0:
         await ctx.send(str(addsum) + " " + str(reslist))
     else:
-        await ctx.send(str(addsum) + " " + str(reslist) + " + " + numsplit2)
-    reslist.clear()
+        await ctx.send(str(addsum) + " " + str(reslist) + " + " + modifier)
 
 
 @roll.error
