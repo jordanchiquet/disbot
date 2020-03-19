@@ -31,7 +31,7 @@ from discord import File
 from discord.ext import commands, tasks
 from googleapiclient.discovery import build #google-api-python-client
 from google_images_download import google_images_download
-from GoogleScraper import scrape_with_config, GoogleSearchError
+# from GoogleScraper import scrape_with_config, GoogleSearchError
 from googlesearch import search #google
 from nltk.corpus import brown
 from urlextract import URLExtract
@@ -40,6 +40,7 @@ from uszipcode import SearchEngine
 from modules.timermod.timercl import timercl
 from modules.timermod.timeparser import timeparser
 from modules.users.renardusers import renardusers
+# from modules.randomshit.googleimage import get_query_url, get_raw_image
 # from modules.timermod.dateslashparser import dateslashparser
 # from modules.timer.timermonthpass import timermonthpass
 # from test.modules.timer.ogtimer import ogtimer
@@ -760,31 +761,12 @@ async def gif(ctx):
             deletelog[ctx.message.id] = delcmd
 
 
-@bot.command()
-async def img(ctx):
-    config = {
-        'use_own_ip': True,
-        'keyword': ctx.message.content[5:],
-        'search_engines': ['bing'],
-        'search_type': 'image',
-        'num_pages_for_keyword': 1,
-        'scrape_method': 'selenium',
-        'do_caching': True
-    }
-
-    try:
-        search = scrape_with_config(config)
-    except GoogleSearchError as e:
-        print(e)
-
-    # let's inspect what we got
-
-    image_urls = []
-
-    for serp in search.serps:
-        image_urls.extend(
-            [link.link for link in serp.links]
-        )
+# @bot.command()
+# async def img(ctx):
+#     query = ctx.message.content[5:]
+#     url = get_query_url(query)
+#     rawimg = get_raw_image(url)
+#     print("rawimg: [" + rawimg + "]")
 
 
 @bot.command()

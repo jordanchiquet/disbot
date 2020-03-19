@@ -177,7 +177,7 @@ async def on_message(message):
             max = len(files)
             bitchfile = random.randint(min, max)
             await channel.send(file=File("/home/ubuntu/disbot/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
-    if mclower.endswith("this, bitch") or mclower.endswith("on this bitch"):
+    if mclower.endswith("this, bitch") or mclower.endswith("on this bitch") or mclower.endswith("run over this bitch"):
         path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/bitchfolder").__next__()
         min = 1
         max = len(files)
