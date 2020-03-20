@@ -761,12 +761,18 @@ async def gif(ctx):
             deletelog[ctx.message.id] = delcmd
 
 
-# @bot.command()
-# async def img(ctx):
-#     query = ctx.message.content[5:]
-#     url = get_query_url(query)
-#     rawimg = get_raw_image(url)
-#     print("rawimg: [" + rawimg + "]")
+@bot.command()
+async def img(ctx):
+    rawresult = gsource.list(q=ctx.message.content[5:],
+                             cx='016515025707600383118:gqogcmpp7ka').execute()
+    try:
+        firstresult = rawresult['items'][0]
+        imgresult = firstresult['link']
+        delcmd = await ctx.send(imgresult)
+        deletelog[ctx.message.id] = delcmd
+    except KeyError:
+        delcmd = await ctx.send("how you say? not any image find for that image")
+        deletelog[ctx.message.id] = delcmd
 
 
 @bot.command()
@@ -814,6 +820,19 @@ async def rev(ctx):
         await ctx.send("Found this:\n" + url)
  
  
+@bot.command()
+async def spell(ctx):
+    spellresult = gsource.list(q=ctx.message.content[7:],
+                             cx='016515025707600383118:zzbf7g7bqty').execute()
+    try:
+        firstresult = spellresult['items'][0]
+        spellresultfinal = firstresult['link']
+        delcmd = await ctx.send(spellresultfinal)
+        deletelog[ctx.message.id] = delcmd
+    except KeyError:
+        delcmd = await ctx.send("knowledge of that spell is forbidden...")
+        deletelog[ctx.message.id] = delcmd
+
 @bot.command()
 async def ud(ctx):
     udrequest = ctx.message.content[4:]

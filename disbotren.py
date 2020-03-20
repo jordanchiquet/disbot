@@ -846,6 +846,20 @@ async def rev(ctx):
     extractor = URLExtract()
     for url in extractor.gen_urls(str(revresult)):
         await ctx.send("Found this:\n" + url)
+
+
+@bot.command()
+async def spell(ctx):
+    spellresult = gsource.list(q=ctx.message.content[7:],
+                             cx='016515025707600383118:zzbf7g7bqty').execute()
+    try:
+        firstresult = spellresult['items'][0]
+        spellresultfinal = firstresult['link']
+        delcmd = await ctx.send(spellresultfinal)
+        deletelog[ctx.message.id] = delcmd
+    except KeyError:
+        delcmd = await ctx.send("knowledge of that spell is forbidden...")
+        deletelog[ctx.message.id] = delcmd
  
  
 @bot.command()
