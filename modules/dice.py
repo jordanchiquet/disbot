@@ -53,32 +53,31 @@ class dice:
         rollsum = sum(reslist)
         addsum = rollsum + int(modifier)
         if modifier == 0:
-            return(str(addsum) + " " + str(reslist))
+            return(str(addsum) + " " + str(reslist) + "|" + d)
         else:
-            return(str(addsum) + " " + str(reslist) + " + " + modifier)
+            return(str(addsum) + " " + str(reslist) + " + " + modifier + "|" + d)
 
 
     def roller(self):
         advresult = self.advcheck()
         if advresult == "noadv":
-            return(self.roll())
-        val1 = self.roll().split(" ")[0]
-        val2 = self.roll().split(" ")[0]
+            return(self.roll().split("|")[0])
+        val1 = (self.roll().split(" ")[0])
+        val2 = (self.roll().split(" ")[0])
         if advresult == "adv":
+            d = self.roll().split("|")[1]
+            if val1 == d:
+                return(val1 + " - rolled with advantage. (First roll: " + val1 + "! Did not initiate second roll.)")
             if int(val1) > int(val2):
                 return(val1 + " - rolled with advantage. (First roll: " + val1 + ", Second Roll: " + val2 + ")")
             else:
                 return(val2 + " - rolled with advantage. (First roll: " + val1 + ", Second Roll: " + val2 + ")")
         if advresult == "dis":
+            if val1 == "1":
+                return("1 - rolled with disadvantage. (First roll: 1! Did not initiate second roll.)")
             if int(val1) < int(val2):
                 return(val1 + " - rolled with disadvantage. (First roll: " + val1 + ", Second Roll: " + val2 + ")")
             else:
                 return(val2 + " - rolled with disadvantage. (First roll: " + val1 + ", Second Roll: " + val2 + ")")
         else:
             return("That's now how I roll brother...")
-
-
-
-
-rollinit = dice("1d6+1", "dis")
-print(rollinit.roller())
