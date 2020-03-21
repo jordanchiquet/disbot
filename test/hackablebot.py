@@ -40,8 +40,7 @@ from uszipcode import SearchEngine
 from modules.timermod.timercl import timercl
 from modules.timermod.timeparser import timeparser
 from modules.users.renardusers import renardusers
-# from modules.randomshit.googleimage import get_query_url, get_raw_image
-# from modules.timermod.dateslashparser import dateslashparser
+from modules.randomshit.dice import dice
 # from modules.timer.timermonthpass import timermonthpass
 # from test.modules.timer.ogtimer import ogtimer
 # from test.modules.timer.timer import timercl
@@ -475,33 +474,8 @@ async def mul(ctx, a: int, b: int):
 
 
 @bot.command()
-async def roll(ctx, a):
-    # this is dice
-    msg = ctx.message.content
-    mult = int(a[0])
-    if "+" in msg:
-        numsplit1 = a.split("+")[0]
-        numsplit2 = a.split("+")[1]
-        d = int(numsplit1[2:])
-        print(numsplit2)
-        print(d)
-    if "+" not in msg:
-        d = int(a[2:])
-        numsplit2 = 0
-    min = 1
-    max = d
-    reslist = []
-    for x in range(mult):
-        res = random.randint(min, max)
-        reslist.append(res)
-        pass
-    rollsum = sum(reslist)
-    addsum = rollsum + int(numsplit2)
-    if numsplit2 == 0:
-        await ctx.send(str(addsum) + " " + str(reslist))
-    else:
-        await ctx.send(str(addsum) + " " + str(reslist) + " + " + numsplit2)
-    reslist.clear()
+async def roll(ctx, a, b: str = None):
+    rollinit = dice(a, b)
 
 
 @roll.error
