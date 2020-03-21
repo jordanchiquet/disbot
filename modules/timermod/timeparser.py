@@ -178,6 +178,3 @@ class timeparser:
                         print("got pm, need to add 12")
                         newhour = int(addhour) + 12
                         return(str(newhour) + ":" + workingminutes)
-            
-# timeparseinit = timeparser("354", "")
-# print("timeparse class return: " + timeparseinit.gettime())

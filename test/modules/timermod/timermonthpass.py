@@ -140,7 +140,3 @@ class timermonthpass:
     
         else:
             return("nomonth")
-
-monthpassinit = timermonthpass('jan 1 2021 700 pm')
-monthpass = monthpassinit.monthpass()
-print(monthpass)

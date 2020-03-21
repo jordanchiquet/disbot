@@ -25,9 +25,3 @@ class ogtimer:
         else:
             print("input didn't match any ogparse param, invalid or shit is broken: [" + durationortime + "]")
             return('inv')
-
-
-ogtimerinit = ogtimer('7:00')
-dortcheck = ogtimerinit.ogparse()
-print(dortcheck)
-

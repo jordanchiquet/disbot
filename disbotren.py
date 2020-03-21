@@ -39,10 +39,7 @@ from uszipcode import SearchEngine
 
 from modules.timermod.timercl import timercl
 from modules.timermod.timeparser import timeparser
-# from modules.timermod.dateslashparser import dateslashparser
-# from modules.timer.timermonthpass import timermonthpass
-# from test.modules.timer.ogtimer import ogtimer
-# from test.modules.timer.timer import timercl
+from modules.dice import dice
 
 
 nltk.download('brown')
@@ -506,35 +503,9 @@ async def mul(ctx, a: int, b: int):
 
 
 @bot.command()
-async def roll(ctx, a):
-    msg = ctx.message.content
-    mult = a.split("d")[0]
-    if mult.isdigit():
-        print("number of dice passed digit check")
-        mult = int(mult)
-    else:
-        print("number of dice did not pass digit check")
-        await ctx.send("That's not how I roll brother...")
-    if "+" in msg:
-        numsplit1 = a.split("d")[1]
-        d = numsplit1.split("+")[0]
-        modifier = numsplit1.split("+")[1]
-    if "+" not in msg:
-        d = a.split("d")[1]
-        modifier = 0
-    min = 1
-    max = int(d)
-    reslist = []
-    for x in range(mult):
-        res = random.randint(min, max)
-        reslist.append(res)
-        pass
-    rollsum = sum(reslist)
-    addsum = rollsum + int(modifier)
-    if modifier == 0:
-        await ctx.send(str(addsum) + " " + str(reslist))
-    else:
-        await ctx.send(str(addsum) + " " + str(reslist) + " + " + modifier)
+async def roll(ctx, a, b: str = None):
+    rollinit = dice(a, b)
+    await ctx.send(rollinit.roller())
 
 
 @roll.error

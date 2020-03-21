@@ -39,8 +39,8 @@ from uszipcode import SearchEngine
 
 from modules.timermod.timercl import timercl
 from modules.timermod.timeparser import timeparser
-from modules.users.renardusers import renardusers
-from modules.randomshit.dice import dice
+from modules.renardusers import renardusers
+from modules.dice import dice
 # from modules.timer.timermonthpass import timermonthpass
 # from test.modules.timer.ogtimer import ogtimer
 # from test.modules.timer.timer import timercl
@@ -476,6 +476,7 @@ async def mul(ctx, a: int, b: int):
 @bot.command()
 async def roll(ctx, a, b: str = None):
     rollinit = dice(a, b)
+    await ctx.send(rollinit.roller())
 
 
 @roll.error

@@ -163,15 +163,3 @@ class dateslashparser:
                             return("inv leap")
         print("reached end of dateslashparser successfully")
         return(str(year) + "-" + month + "-" + date)
-
-                    
-            
-# dateparseinit = dateslashparser("2/29")
-# usabledateparse = dateparseinit.getdatewithslashes()
-# print(usabledateparse)
-
-
-
-
-
-

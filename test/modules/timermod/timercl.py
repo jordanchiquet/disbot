@@ -3,7 +3,7 @@ from modules.timermod.dateslashparser import dateslashparser
 from modules.timermod.timermonthpass import timermonthpass
 from modules.timermod.ogtimer import ogtimer
 from modules.timermod.timeparser import timeparser
-from modules.users.renardusers import renardusers
+from modules.renardusers import renardusers
 # from test.modules.timer.dateslashparser import dateslashparser
 # from test.modules.timer.timermonthpass import timermonthpass
 # from test.modules.timer.ogtimer import ogtimer
@@ -488,8 +488,5 @@ class timercl:
                     mydb.commit()
                     return(y)
 
-
-# timercheckinit = timercl("msgcontent", "user", "channel", "timeorig")
-# print(timercheckinit.timercheck())
 
 
