@@ -37,6 +37,8 @@ from nltk.corpus import brown
 from urlextract import URLExtract
 from uszipcode import SearchEngine
 
+from modules.dice import dice
+from modules.googleimageapi import imageget
 from modules.timermod.timercl import timercl
 from modules.timermod.timeparser import timeparser
 from modules.dice import dice
@@ -775,16 +777,9 @@ async def gif(ctx, a):
 
 @bot.command()
 async def img(ctx):
-    rawresult = gsource.list(q=ctx.message.content[5:], searchType='image',
-                             cx='016515025707600383118:gqogcmpp7ka').execute()
-    try:
-        firstresult = rawresult['items'][0]
-        imgresult = firstresult['link']
-        delcmd = await ctx.send(imgresult)
-        deletelog[ctx.message.id] = delcmd
-    except KeyError:
-        delcmd = await ctx.send("how you say? not any image find for that image")
-        deletelog[ctx.message.id] = delcmd
+    msg = ctx.message.content
+    delcmd = await ctx.send(await imageget(msg))
+    deletelog[ctx.message.id] = delcmd
 
 
 @bot.command()

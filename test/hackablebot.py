@@ -41,6 +41,8 @@ from modules.timermod.timercl import timercl
 from modules.timermod.timeparser import timeparser
 from modules.renardusers import renardusers
 from modules.dice import dice
+from modules.googleimageapi import imageget
+from modules.heycomputer import heycomputer
 # from modules.timer.timermonthpass import timermonthpass
 # from test.modules.timer.ogtimer import ogtimer
 # from test.modules.timer.timer import timercl
@@ -95,6 +97,24 @@ async def on_message(message):
         return
     channel = message.channel
     mclower = message.content.lower()
+    if mclower.startswith("hey") or mclower.startswith("hi") or mclower.startswith("hello") or mclower.startswith("hola"):
+        mclowersplit = mclower.split(" ")
+        if mclowersplit[1].startswith("computer") or mclowersplit[1].startswith("computadora") or mclowersplit[1].startswith("compadre"):
+            heycomputerinit = heycomputer(mclower)
+            heycomputeresult = heycomputerinit.defineintent()
+            print("defineintentresult: [" + heycomputeresult + "]")
+            if heycomputeresult == "inv":
+                await channel.send("a mistake was made... the computer have processed your message but could not... process")
+            else:
+                heycomputeresultsplit = heycomputeresult.split("|")
+                print("yay")
+                if heycomputeresultsplit[0] == "image":
+                    print("placeholder")
+                
+        else:
+            return
+    if mclower.startswith("computer") or mclower.startswith("computadora") or mclower.startswith("compadre"):
+        print("we go here")
     if "bad bot" in mclower:
         await channel.send(
         "dang...")
@@ -738,16 +758,9 @@ async def gif(ctx):
 
 @bot.command()
 async def img(ctx):
-    rawresult = gsource.list(q=ctx.message.content[5:],
-                             cx='016515025707600383118:gqogcmpp7ka').execute()
-    try:
-        firstresult = rawresult['items'][0]
-        imgresult = firstresult['link']
-        delcmd = await ctx.send(imgresult)
-        deletelog[ctx.message.id] = delcmd
-    except KeyError:
-        delcmd = await ctx.send("how you say? not any image find for that image")
-        deletelog[ctx.message.id] = delcmd
+    msg = ctx.message.content
+    delcmd = await ctx.send(await imageget(msg))
+    deletelog[ctx.message.id] = delcmd
 
 
 @bot.command()
