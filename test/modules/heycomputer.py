@@ -61,7 +61,7 @@ class heycomputer:
         if msgspacesplit[0] == "load" or msgspacesplit[0] == "give":
             print("msgspacesplit[0] was load or give, deleting msgpacesplit [0]")
             msgspacesplit = removefirstindex(msgspacesplit)
-        if msgspacesplit[0] == ("show"):
+        if msgspacesplit[0] == "show" or msgspacesplit[0] == "let":
             print("msgspacesplit[0] was show, deleting msgpacesplit [0] and declaring nocmdimagesearch boolean as true")
             nocmdimagesearch = "True"
             msgspacesplit = removefirstindex(msgspacesplit)
@@ -71,12 +71,16 @@ class heycomputer:
         if msgspacesplit[0] == "me" or msgspacesplit[0] == "us" or msgspacesplit[0] == "we" or msgspacesplit[0] == "i":
             print("msgspacesplit[0] was me or us or we or i, deleting msgspacesplit[0]")
             msgspacesplit = removefirstindex(msgspacesplit)
+            if msgspacesplit[0] == "see":
+                print("msgspacesplit[0] was see, deleting msgspacesplit[0]")
+                msgspacesplit = removefirstindex(msgspacesplit)
         if msgspacesplit[0] == "up":
             print("msgspacesplit[0] was up, deleting msgspacesplit[0]")
             msgspacesplit = removefirstindex(msgspacesplit)
         if msgspacesplit[0] == "a" or msgspacesplit[0] == "an":
             print("msgspacesplit[0] was a or an, deleting msgspacesplit[0]")
             msgspacesplit = removefirstindex(msgspacesplit)
+
         if len(msgspacesplit) < 1:
             return("inv")             
         else:
