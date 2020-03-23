@@ -192,7 +192,6 @@ async def on_message(message):
         signfile = random.randint(min, max)
         await channel.send(file=File("/home/ubuntu/disbot/picfolder/heresyoursignfolder/heresyoursign" + str(signfile) + ".png"))
     if mclower.endswith("this bitch"):
-
         if len(mclower.split(" ")) == 3:
             path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/bitchfolder").__next__()
             min = 1
@@ -806,23 +805,10 @@ async def g(ctx):
         
 
 @bot.command()
-async def gif(ctx, a):
-    messageaftergif = ctx.message.content[5:]
-    print("this is messageaftergif: [" + messageaftergif + "]")
-    if a.lower() == "pepocheer" or messageaftergif.lower() == "pepo cheer" or a.lower() == "pepecheer":
-        await ctx.send(file=File("/home/ubuntu/disbot/picfolder/pepocheer.gif"))
-    else:
-        rawresult = gsource.list(q=(ctx.message.content[5:] + "gif"), searchType='image',
-                                cx='016515025707600383118:gqogcmpp7ka').execute()
-        try:
-            firstresult = rawresult['items'][0]
-            imgresult = firstresult['link']
-            delcmd = await ctx.send(imgresult)
-            deletelog[ctx.message.id] = delcmd
-        except KeyError:
-            delcmd = await ctx.send("how you say? not any image find for that image")
-            deletelog[ctx.message.id] = delcmd
-
+async def gif(ctx):
+    gifquery = ctx.message.content[5:]
+    delcmd = await ctx.send(imageget(gifquery, "gif"))
+    deletelog[ctx.message.id] = delcmd
 
 
 @bot.command()

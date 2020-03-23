@@ -35,6 +35,8 @@ class heycomputer:
             print("command is for defintion")
             definitionresult = self.definitionexecute(intentkeyword)
             return("~" + definitionresult)
+        if intentkeyword == "do":
+            print("doparsegohere")
         else:
             if nocmdimagesearch == "True":
                 imageresult = self.imageexecute(intentindex, "nonspecific", True)
@@ -96,6 +98,8 @@ class heycomputer:
         defintioncommandsplitpoint == "wat" or \
         defintioncommandsplitpoint == "wats":
             print("splitpoint was what... checking for is")
+            if definitionquerylist[0] == "if":
+                print("if parse")
             if definitionquerylist[0] == "is":
                 print("definitionquerylist[0] is is, deleting from defintionquerylist[0]")
                 definitionquerylist = removefirstindex(definitionquerylist)
@@ -107,7 +111,8 @@ class heycomputer:
         return(getdefinition(definitionquery))
 
 
-
+    def doexecute(self, dosplitpoint):
+        
     def imageexecute(self, imagecommandsplitpoint, filetype, genericsearch: bool = False):
         imgqueryorig = self.msgcontent.split(" ")
         imgquerylist = imgqueryorig[imagecommandsplitpoint:]
