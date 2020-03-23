@@ -192,6 +192,12 @@ async def on_message(message):
         signfile = random.randint(min, max)
         await channel.send(file=File("/home/ubuntu/disbot/picfolder/heresyoursignfolder/heresyoursign" + str(signfile) + ".png"))
     if mclower.endswith("this bitch"):
+        if len(mclower.split(" ")) == 3:
+            path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/bitchfolder").__next__()
+            min = 1
+            max = len(files)
+            bitchfile = random.randint(min, max)
+            await channel.send(file=File("/home/ubuntu/disbot/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
         word = mclower.split(" ")[-3]
         print(word)
         checkword = nltk.FreqDist(t for w, t in brown.tagged_words() if w.lower() == word)
