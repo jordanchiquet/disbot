@@ -91,7 +91,10 @@ class heycomputer:
         definitionqueryorig = self.msgcontent.split(defintioncommandsplitpoint)[1]
         definitionquerylist = definitionqueryorig.split(" ")
         definitionquerylist = listemptystring(definitionquerylist)
-        if defintioncommandsplitpoint.startswith("what"):
+        if defintioncommandsplitpoint.startswith("what") or \
+        defintioncommandsplitpoint.startswith("waht") or \
+        defintioncommandsplitpoint == "wat" or \
+        defintioncommandsplitpoint == "wats":
             print("splitpoint was what... checking for is")
             if definitionquerylist[0] == "is":
                 print("definitionquerylist[0] is is, deleting from defintionquerylist[0]")
