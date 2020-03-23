@@ -115,6 +115,16 @@ async def on_message(message):
                 await channel.send(heycomputeresult)
         else:
             return
+    if mclower.startswith("comput") or mclower.startswith("compadre") or mclower.startswith("machine") or mclower.startswith("renard"):
+        heycomputerinit = heycomputer(mclower)
+        heycomputeresult = heycomputerinit.heycomputerexecute()
+        print("heycomputeresult: [" + heycomputeresult + "]")
+        if heycomputeresult == "inv" or heycomputeresult is None:
+            await channel.send("a mistake was made... the computer have processed your message but could not... process")
+        else:
+            if heycomputeresult[0] == "~":
+                heycomputeresult = "```" + heycomputeresult[1:] + "```"
+            await channel.send(heycomputeresult)
     if "bad bot" in mclower:
         await channel.send(
         "dang...")
