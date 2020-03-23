@@ -12,12 +12,14 @@ def getdefinition(defquery):
     dsoup = BeautifulSoup(dhtml.read(), 'html.parser')
     dmetacontentlist = dsoup.findAll("meta")
     dmeaningblock = dmetacontentlist[8]
+    print("dmeaningblock: [" + str(dmeaningblock) + "]")
     dmeaningprefixremove = str(dmeaningblock)[15:]
     if "See the full definition" in dmeaningprefixremove:
         dmeaningprefixremove = dmeaningprefixremove.split("… See the full definition")[0]
+        dmeaningprefixremove = dmeaningprefixremove + "... [definition truncated by Merriam-Webster website]"
     dmeaningcleanup = dmeaningprefixremove.replace(" :", ":")
     if ";" not in dmeaningcleanup:
-        dmeaning = (defquery.upper() + ": " + dmeaning)
+        dmeaning = (defquery.upper() + ": " + dmeaningcleanup)
         return(dmeaning)
     dmeaninglist = dmeaningcleanup.split("; ")
     dmeaningenumerateoutput = []
