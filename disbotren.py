@@ -646,6 +646,15 @@ async def fox(ctx):
 
 
 @bot.command()
+async def gun(ctx):
+    path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/bitchfolder").__next__()
+    min = 1
+    max = len(files)
+    bitchfile = random.randint(min, max)
+    await ctx.send(file=File("/home/ubuntu/disbot/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
+
+
+@bot.command()
 async def loon(ctx):
     await ctx.send("https://youtu.be/asXfA40uudo")
 
