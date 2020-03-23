@@ -42,6 +42,8 @@ from modules.googleimageapi import imageget
 from modules.timermod.timercl import timercl
 from modules.timermod.timeparser import timeparser
 from modules.dice import dice
+from modules.definitionwebscrape import getdefinition
+from modules.heycomputer import heycomputer
 
 
 nltk.download('brown')
@@ -99,6 +101,20 @@ async def on_message(message):
         return
     channel = message.channel
     mclower = message.content.lower()
+    if mclower.startswith("hey") or mclower.startswith("hi") or mclower.startswith("hello") or mclower.startswith("hola"):
+        mclowersplit = mclower.split(" ")
+        if mclowersplit[1].startswith("comput") or mclowersplit[1] == ("compadre") or mclowersplit[1] == "machine" or mclowersplit[1] == "renard":
+            heycomputerinit = heycomputer(mclower)
+            heycomputeresult = heycomputerinit.heycomputerexecute()
+            print("heycomputeresult: [" + heycomputeresult + "]")
+            if heycomputeresult == "inv" or heycomputeresult is None:
+                await channel.send("a mistake was made... the computer have processed your message but could not... process")
+            else:
+                if heycomputeresult[0] == "~":
+                    heycomputeresult = "```" + heycomputeresult[1:] + "```"
+                await channel.send(heycomputeresult)
+        else:
+            return
     if "bad bot" in mclower:
         await channel.send(
         "dang...")
@@ -182,10 +198,6 @@ async def on_message(message):
         max = len(files)
         bitchfile = random.randint(min, max)
         await channel.send(file=File("/home/ubuntu/disbot/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
-    if "what is a" in mclower:
-        query = "define:" + mclower.split("what is a ")[1]
-        for j in search(query, tld="co.in", num=1, stop=1, pause=2):
-            await channel.send(j)
     await bot.process_commands(message)
 
 
@@ -291,6 +303,12 @@ async def datetest(ctx):
     await ctx.send("datetime.now(): " + datetime.now() + "\n" + 
                     "datetime.now().date: " + datetime.now().date + "\n" +
                     "datetime.now().date(): " + datetime.now().date())
+
+
+@bot.command()
+async def ding(ctx):
+    dong = str(bot.latency * 1000)
+    await ctx.send("dong!! " + dong[:2] + " ms")
 
 
 @bot.command()
@@ -732,12 +750,17 @@ gsource = build("customsearch", 'v1', developerKey=gapi).cse()
 
 @bot.command()
 async def d(ctx):
-    drequest = ctx.message.content[3:]
-    durlfriendly = drequest.replace(" ", "%20")
-    dhtml = urllib.request.urlopen("https://www.merriam-webster.com/dictionary/"+durlfriendly)
-    dsoup = BeautifulSoup(dhtml.read(), 'html.parser')
-    dmeaning = dsoup.findAll("meta")
-    delcmd = await ctx.send(dmeaning + "\nhttps://www.merriam-webster.com/dictionary/"+durlfriendly)
+    print("d called")
+    meaning = getdefinition(ctx.message.content[3:])
+    delcmd = await ctx.send("```" + meaning + "```")
+    deletelog[ctx.message.id] = delcmd
+
+
+@bot.command()
+async def define(ctx):
+    print("define called")
+    meaning = getdefinition(ctx.message.content[8:])
+    delcmd = await ctx.send("```" + meaning + "```")
     deletelog[ctx.message.id] = delcmd
 
 
@@ -777,8 +800,8 @@ async def gif(ctx, a):
 
 @bot.command()
 async def img(ctx):
-    msg = ctx.message.content
-    delcmd = await ctx.send(await imageget(msg))
+    imgquery = ctx.message.content[5:]
+    delcmd = await ctx.send(imageget(imgquery))
     deletelog[ctx.message.id] = delcmd
 
 
