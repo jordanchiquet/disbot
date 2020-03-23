@@ -13,7 +13,11 @@ def getdefinition(defquery):
     except:
         return("definition has been erased from the archive memory or Merriam-Webster site just didn't have it")
     dsoup = BeautifulSoup(dhtml.read(), 'html.parser')
+    with open("output2.html", "w") as file:
+        file.write(str(dsoup))
     dmetacontentlist = dsoup.findAll("meta")
+    print("SPERM \n" + str(dsoup) + "\nSPERM")
+    print("dmetacontentlist: [" + str(dmetacontentlist) + "]")
     dmeaningblock = dmetacontentlist[8]
     print("dmeaningblock: [" + str(dmeaningblock) + "]")
     dmeaningprefixremove = str(dmeaningblock)[15:]
