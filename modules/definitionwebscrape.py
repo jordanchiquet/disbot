@@ -8,7 +8,10 @@ from modules.capitalizexindex import capitalizexindex
 def getdefinition(defquery):
     drequest = defquery
     durlfriendly = drequest.replace(" ", "%20")
-    dhtml = urllib.request.urlopen("https://www.merriam-webster.com/dictionary/"+durlfriendly)
+    try:
+        dhtml = urllib.request.urlopen("https://www.merriam-webster.com/dictionary/"+durlfriendly)
+    except:
+        return("definition has been erased from the archive memory or Merriam-Webster site just didn't have it")
     dsoup = BeautifulSoup(dhtml.read(), 'html.parser')
     dmetacontentlist = dsoup.findAll("meta")
     dmeaningblock = dmetacontentlist[8]
