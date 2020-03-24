@@ -36,7 +36,7 @@ class heycomputer:
             definitionresult = self.definitionexecute(intentkeyword)
             return("~" + definitionresult)
         if intentkeyword == "do":
-            print("doparsegohere")
+            doresult = doexecute(intentkeyword)
         else:
             if nocmdimagesearch == "True":
                 imageresult = self.imageexecute(intentindex, "nonspecific", True)
@@ -124,6 +124,7 @@ class heycomputer:
 
 
     def doexecute(self, dosplitpoint):
+        msglist = self.msgcontent.split(" ")
         doqueryorig = self.msgcontent.split(dosplitpoint)[1]
         doquerylist = doqueryorig.split(" ")
         doquerylist = listemptystring(doquerylist)
@@ -131,18 +132,24 @@ class heycomputer:
         if doquerylist[0] == "a" or doqueryorig[0] == "an":
             print("doquerylist[0] was a or an, deleting first index]")
             doquerylist = removefirstindex(doquerylist)
-        if doquerylist[0] == "image":
-            print("doquerylist[0] was image, setting imagesplit as doquerylist[0]")
-            msglist = self.msgcontent.split(" ")
-            intentindex = msglist.index(intentkeyword)
+        parseforimageresult = self.parseforimage(doquerylist[0])
+        if parseforimageresult.split("|")[0] == "True":
+            print("doquerylist[0] was image or filetype, setting imagesplit as doquerylist[0]")
             if doquerylist[0] == "search":
                 print("doquerylist[0] was search, deleting first index]")
                 doquerylist = removefirstindex(doquerylist)
             if doquerylist[0] == "for" or doquerylist[0] == "of":
                 print("doquerylist[0] was search, deleting first index]")
                 doquerylist = removefirstindex(doquerylist)
+            imagefiletype = parseforimageresult.split("|")[1]
             imgquerystart = doquerylist[0]
-            
+            imgqueryindex = msglist.index(imgquerystart)
+            imageresult = self.imageexecute(imgqueryindex, imagefiletype)
+            return(imageresult)
+        if doquerylist[0] == "search":
+            print('generic search execute')
+
+
 
 
         
