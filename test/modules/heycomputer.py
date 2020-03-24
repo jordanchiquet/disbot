@@ -115,9 +115,15 @@ class heycomputer:
         doqueryorig = self.msgcontent.split(dosplitpoint)[1]
         doquerylist = doqueryorig.split(" ")
         doquerylist = listemptystring(doquerylist)
+        isimagesearch = False
         if doquerylist[0] == "a" or doqueryorig[0] == "an":
             print("doquerylist[0] was a or an, deleting first index]")
             doquerylist = removefirstindex(doquerylist)
+        if doquerylist[0] == "image":
+            print("doquerylist[0] was image, setting imagesplit as doquerylist[0]")
+            msglist = self.msgcontent.split(" ")
+            intentindex = msglist.index(intentkeyword)
+
         
     def imageexecute(self, imagecommandsplitpoint, filetype, genericsearch: bool = False):
         imgqueryorig = self.msgcontent.split(" ")
