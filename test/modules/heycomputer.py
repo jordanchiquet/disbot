@@ -60,6 +60,18 @@ class heycomputer:
         if msgspacesplit[0].startswith("comput") or msgspacesplit[0].startswith("compadre") or msgspacesplit[0].startswith("machine") or msgspacesplit[0].startswith("renard"):
             print("msgspacesplit[0] startwith variation of computer or renard name, deleting msgpacesplit [0]")
             msgspacesplit = removefirstindex(msgspacesplit)
+        if msgspacesplit[0] == "go":
+            print("msgspacesplit[0] was go, deleting msgpacesplit [0]")
+            msgspacesplit = removefirstindex(msgspacesplit)
+        if msgspacesplit[0] == "ahead":
+            print("msgspacesplit[0] was ahead, deleting msgpacesplit [0]")
+            msgspacesplit = removefirstindex(msgspacesplit)
+        if msgspacesplit[0] == "and":
+            print("msgspacesplit[0] was and, deleting msgpacesplit [0]")
+            msgspacesplit = removefirstindex(msgspacesplit)
+        if msgspacesplit[0] == "download":
+            print("msgspacesplit[0] was download, deleting msgpacesplit [0]")
+            msgspacesplit = removefirstindex(msgspacesplit)
         if msgspacesplit[0] == "load" or msgspacesplit[0] == "give":
             print("msgspacesplit[0] was load or give, deleting msgpacesplit [0]")
             msgspacesplit = removefirstindex(msgspacesplit)
@@ -123,6 +135,13 @@ class heycomputer:
             print("doquerylist[0] was image, setting imagesplit as doquerylist[0]")
             msglist = self.msgcontent.split(" ")
             intentindex = msglist.index(intentkeyword)
+            if doquerylist[0] == "search":
+                print("doquerylist[0] was search, deleting first index]")
+                doquerylist = removefirstindex(doquerylist)
+            if doquerylist[0] == "for" or doquerylist[0] == "of":
+                print("doquerylist[0] was search, deleting first index]")
+                doquerylist = removefirstindex(doquerylist)
+
 
         
     def imageexecute(self, imagecommandsplitpoint, filetype, genericsearch: bool = False):
