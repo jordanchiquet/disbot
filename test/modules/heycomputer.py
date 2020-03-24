@@ -112,6 +112,12 @@ class heycomputer:
 
 
     def doexecute(self, dosplitpoint):
+        doqueryorig = self.msgcontent.split(dosplitpoint)[1]
+        doquerylist = doqueryorig.split(" ")
+        doquerylist = listemptystring(doquerylist)
+        if doquerylist[0] == "a" or doqueryorig[0] == "an":
+            print("doquerylist[0] was a or an, deleting first index]")
+            doquerylist = removefirstindex(doquerylist)
         
     def imageexecute(self, imagecommandsplitpoint, filetype, genericsearch: bool = False):
         imgqueryorig = self.msgcontent.split(" ")
