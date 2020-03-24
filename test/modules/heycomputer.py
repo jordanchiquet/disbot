@@ -141,6 +141,8 @@ class heycomputer:
             if doquerylist[0] == "for" or doquerylist[0] == "of":
                 print("doquerylist[0] was search, deleting first index]")
                 doquerylist = removefirstindex(doquerylist)
+            imgquerystart = doquerylist[0]
+            
 
 
         
