@@ -56,7 +56,10 @@ class heycomputer:
         msg = (self.msgcontent).lower()
         msgspacesplit = msg.split(" ")
         nocmdimagesearch = "False"
-        if msgspacesplit[0] == "hey" or msgspacesplit[0] == "hello" or msgspacesplit[0] == "hi" or msgspacesplit[0] == "hola":
+        if msgspacesplit[0] == "ay" or msgspacesplit[0] == "ayo":
+            print("msgspacesplit[0] was ay or ayo, deleting msgpacesplit [0]")
+            msgspacesplit = removefirstindex(msgspacesplit)
+        if msgspacesplit[0] == "hey" or msgspacesplit[0] == "hello" or msgspacesplit[0] == "hi" or msgspacesplit[0] == "hola" or msgspacesplit[0] == "yo":
             print("msgspacesplit[0] was hey or hello or hi or hola, deleting msgpacesplit [0]")
             msgspacesplit = removefirstindex(msgspacesplit)
         if msgspacesplit[0].startswith("comput") or msgspacesplit[0].startswith("compadre") or msgspacesplit[0].startswith("machine") or msgspacesplit[0].startswith("renard"):
