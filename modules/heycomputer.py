@@ -165,13 +165,17 @@ class heycomputer:
         imgqueryorig = self.msgcontent.split(" ")
         imgquerylist = imgqueryorig[imagecommandsplitpoint:]
         print("starting imgquerylist: [" + str(imgquerylist) + "]")
-        imgquerylist = listemptystring(imgquerylist)
+        imgquerylist = listemptystring(imgquerylist)    
         for x in imagecmdlistfull:
             if imgquerylist[0] == x:
                 print("imgquerylist[0] in imagecmdlist, removing")
                 imgquerylist = removefirstindex(imgquerylist)
                 continue
-
+        for x in searchcmdlistfull:
+            if imgquerylist[0] == x:
+                print("imgquerylist[0] in searchcmdlist, removing")
+                imgquerylist = removefirstindex(imgquerylist)
+                continue    
         if imgquerylist[0] == "of" or imgquerylist[0] == "from" or imgquerylist[0] == "for":
         #do something special for "from" later... search specific site or location
             print("imgquerylist[0] was of or from or for, deleting imgquerylist[0]")
