@@ -172,9 +172,9 @@ class heycomputer:
                 imgquerylist = removefirstindex(imgquerylist)
                 continue
         if genericsearch == False:
-            if imgquerylist[0] == "of" or imgquerylist[0] == "from":
+            if imgquerylist[0] == "of" or imgquerylist[0] == "from" or imgquerylist[0] == "for":
             #do something special for "from" later... search specific site or location
-                print("imgquerylist[0] was of or from, deleting imgquerylist[0]")
+                print("imgquerylist[0] was of or from or for, deleting imgquerylist[0]")
                 imgquerylist = removefirstindex(imgquerylist)
         if imgquerylist[0] == "a" or imgquerylist == "an":
             print("imgquerylist[0] was a or an, deleting imgquerylist[0]")
