@@ -77,6 +77,9 @@ class heycomputer:
         if msgspacesplit[0] == "load" or msgspacesplit[0] == "give":
             print("msgspacesplit[0] was load or give, deleting msgpacesplit [0]")
             msgspacesplit = removefirstindex(msgspacesplit)
+        if msgspacesplit[0] == "to":
+            print("msgspacesplit[0] was to, deleting msgpacesplit [0]")
+            msgspacesplit = removefirstindex(msgspacesplit)
         if msgspacesplit[0] == "show" or msgspacesplit[0] == "let":
             print("msgspacesplit[0] was show, deleting msgpacesplit [0] and declaring nocmdimagesearch boolean as true")
             nocmdimagesearch = "True"
