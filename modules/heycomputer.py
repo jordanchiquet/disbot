@@ -93,6 +93,9 @@ class heycomputer:
         if msgspacesplit[0] == "up":
             print("msgspacesplit[0] was up, deleting msgspacesplit[0]")
             msgspacesplit = removefirstindex(msgspacesplit)
+        if msgspacesplit[0] == "the":
+            print("msgspacesplit[0] was the, deleting msgspacesplit[0]")
+            msgspacesplit = removefirstindex(msgspacesplit)
         if msgspacesplit[0] == "a" or msgspacesplit[0] == "an":
             print("msgspacesplit[0] was a or an, deleting msgspacesplit[0]")
             msgspacesplit = removefirstindex(msgspacesplit)
