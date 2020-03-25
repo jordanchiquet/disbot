@@ -126,6 +126,9 @@ class heycomputer:
         #     if definitioncommandsplitpoint == "up":
         #         print("definitionquerylist[0] is up, deleting from defintionquerylist[0]")
         #         definitionquerylist = removefirstindex(definitionquerylist)
+        if definitionquerylist[0] == "of":
+            print("definitionquerylist[0] is of")
+            definitionquerylist = removefirstindex(definitionquerylist)
         if definitionquerylist[0] == "a" or definitionquerylist[0] == "an":
             print("definitionquerylist[0] is a or an, deleting from definitionquerlist[0]")
             definitionquerylist = removefirstindex(definitionquerylist)
