@@ -11,8 +11,11 @@ def imageget(query, filetype: str = None):
         rawresult = gsource.list(q=query, searchType='image', fileType=filetype,
                                 cx='016515025707600383118:gqogcmpp7ka').execute()
     try:
+        print("made it to try")
         firstresult = rawresult['items'][0]
+        print("firstresult: [" + str(firstresult) + "]")
         imgresult = firstresult['link']
+        print("result: [" + str(imgresult) + "]")
         return(imgresult)
     except KeyError:
         return("how you say? not any image find for that image")
