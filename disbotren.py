@@ -46,6 +46,7 @@ from modules.dice import dice
 from modules.definitionwebscrape import getdefinition
 from modules.heycomputer import heycomputer
 
+messages = joined = 0
 
 nltk.download('brown')
 
@@ -62,6 +63,10 @@ bot.remove_command('close')
 
 deletelog = {}
 
+
+async def updateserverstats():
+    await client.wait_until_ready()
+    global messages, joined
 
 @bot.event
 async def on_ready():
@@ -95,6 +100,14 @@ async def on_message_edit(before, after):
         delcmd = await edlog.edit(content=("http://youtube.com/watch?v=" + ytresult[0]))
         deletelog[after] = delcmd
 
+
+@bot.event
+async def on_member_join(member):
+    global joined
+    joined += 1
+    channel = bot.get_channel(649528092691529749)
+    await channel.send("user sickomode9000 has joined the chatroom")
+        
 
 @bot.event
 async def on_message(message):
@@ -138,7 +151,7 @@ async def on_message(message):
     if "holy fuck" == mclower:
         await channel.send(
         "Wi Tu Lo")
-    if "i get up" == mclower:
+    if "i get up" in mclower:
         await channel.send(
         "https://www.youtube.com/watch?v=qjm9QZT06ig")
     if "i see what you mean" in mclower:
