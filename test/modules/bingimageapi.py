@@ -1,5 +1,6 @@
 from azure.cognitiveservices.search.imagesearch import ImageSearchClient
 from msrest.authentication import CognitiveServicesCredentials
+from modules.googleimageapi import imageget
 
 def bingimage(query):
     subscription_key = "bb109905a4fc4b728f2c85dd32745cb8"
@@ -17,6 +18,5 @@ def bingimage(query):
             first_image_result.thumbnail_url))
         return(first_image_result.content_url)
     else:
-        return("No image results returned!")
-
-bingimage("placeholder")
+        googletry = imageget(query)
+        return(googletry)
