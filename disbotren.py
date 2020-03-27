@@ -37,6 +37,7 @@ from nltk.corpus import brown
 from urlextract import URLExtract
 from uszipcode import SearchEngine
 
+from modules.bingimageapi import bingimage
 from modules.dice import dice
 from modules.googleimageapi import imageget
 from modules.timermod.timercl import timercl
@@ -415,21 +416,10 @@ async def close_error(ctx, error):
 
 
 @bot.command()
-@commands.has_role("rebooter")
-async def reboot(ctx):
-    embed = discord.Embed(title="Computer Online Mode:", description=" ON [OFF] ", color=0xff0000)
-    await ctx.send(embed=embed)
-    print("terminate request received")
-    os.system ('echo e4miqtng | sudo systemctl restart disbotren.service')
-
-
-@bot.command()
-@commands.has_role("rebooter")
-async def piboot(ctx):
-    embed = discord.Embed(title="Computer Online Mode:", description=" ON [OFF] ", color=0xff0000)
-    await ctx.send(embed=embed)
-    print("terminate request received")
-    os.system ('echo e4miqtng | sudo -S reboot')
+async def logtest(ctx):
+    bingimgquery = ctx.message.content[9:]
+    delcmd = await ctx.send(bingimage(bingimgquery))
+    deletelog[ctx.message.id] = delcmd
 
 
 @reboot.error

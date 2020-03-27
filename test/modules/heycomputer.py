@@ -77,7 +77,7 @@ class heycomputer:
         if msgspacesplit[0] == "download":
             print("msgspacesplit[0] was download, deleting msgpacesplit [0]")
             msgspacesplit = removefirstindex(msgspacesplit)
-        if msgspacesplit[0] == "load" or msgspacesplit[0] == "give":
+        if msgspacesplit[0] == "load" or msgspacesplit[0] == "give" or msgspacesplit[0] == "look" or msgspacesplit[0] == "pull":
             print("msgspacesplit[0] was load or give, deleting msgpacesplit [0]")
             msgspacesplit = removefirstindex(msgspacesplit)
         if msgspacesplit[0] == "to":
@@ -105,9 +105,8 @@ class heycomputer:
         if msgspacesplit[0] == "a" or msgspacesplit[0] == "an":
             print("msgspacesplit[0] was a or an, deleting msgspacesplit[0]")
             msgspacesplit = removefirstindex(msgspacesplit)
-
         if len(msgspacesplit) < 1:
-            return("inv")             
+            return("inv")            
         else:
             return(nocmdimagesearch + "|" + " ".join(msgspacesplit))
 
@@ -138,6 +137,15 @@ class heycomputer:
         if definitionquerylist[0] == "a" or definitionquerylist[0] == "an":
             print("definitionquerylist[0] is a or an, deleting from definitionquerlist[0]")
             definitionquerylist = removefirstindex(definitionquerylist)
+        finalentryindex = len(definitionquerylist) - 1
+        if definitionquerylist[finalentryindex] == "me":
+            print("finalentryindex was me... checking for \"for\"")
+            penultimateentryindex = finalentryindex - 1
+            if definitionquerylist[penultimateentryindex] == "for":
+                print("penultimate index was for and last index was me. deleting both.")
+                del definitionquerylist[penultimateentryindex]
+                del definitionquerylist[penultimateentryindex]
+                print("new definitionquerylist after deletion: [" + str(definitionquerylist) + "]")
         definitionquery = " ".join(definitionquerylist)
         print("starting definition get with query: [" + definitionquery + "]")
         return(getdefinition(definitionquery))
@@ -195,6 +203,15 @@ class heycomputer:
         if imgquerylist[0] == "a" or imgquerylist == "an":
             print("imgquerylist[0] was a or an, deleting imgquerylist[0]")
             imgquerylist = removefirstindex(imgquerylist)
+        finalentryindex = len(imgquerylist) - 1
+        if imgquerylist[finalentryindex] == "me":
+            print("finalentryindex was me... checking for \"for\"")
+            penultimateentryindex = finalentryindex - 1
+            if imgquerylist[penultimateentryindex] == "for":
+                print("penultimate index was for and last index was me. deleting both.")
+                del imgquerylist[penultimateentryindex]
+                del imgquerylist[penultimateentryindex]
+                print("new definitionquerylist after deletion: [" + str(imgquerylist) + "]")
         if len(imgquerylist) < 1:
             return("inv")
         else:
@@ -238,6 +255,15 @@ class heycomputer:
             return(imgfromsearchres)
         else:
             print("not an image search after searchexecute :)")
+        finalentryindex = len(searchquerylist) - 1
+        if searchquerylist[finalentryindex] == "me":
+            print("finalentryindex was me... checking for \"for\"")
+            penultimateentryindex = finalentryindex - 1
+            if searchquerylist[penultimateentryindex] == "for":
+                print("penultimate index was for and last index was me. deleting both.")
+                del searchquerylist[penultimateentryindex]
+                del searchquerylist[penultimateentryindex]
+                print("new searchquerylist after deletion: [" + str(searchquerylist) + "]")
         if len(searchquerylist) < 1:
             return("inv")
         else:
