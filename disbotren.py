@@ -30,7 +30,7 @@ from datetime import datetime, timedelta
 from discord import File
 from discord.ext import commands, tasks
 from googleapiclient.discovery import build #google-api-python-client
-from google_images_download import google_images_download
+# from google_images_download import google_images_download
 from GoogleScraper import scrape_with_config, GoogleSearchError
 from googlesearch import search #google
 from nltk.corpus import brown
@@ -390,52 +390,6 @@ async def close_error(ctx, error):
         ]
         await ctx.send(random.choice(response))
         print("insufficient perms to terminate " + username + " " + str(userid))
-
-# @bot.command()
-# @commands.has_role("High Council of Emoji")
-# async def close(ctx):
-#     await ctx.send("Personal PC Computer plugging off online mode shut down - COMPUTER OFF")
-#     print("terminate request received")
-#     await client.close()
-#     await sys.exit()
-
-
-# @close.error
-# async def close_error(ctx, error):
-#     if isinstance(error, commands.CheckFailure):
-#         username = ctx.message.author.display_name
-#         userid = ctx.message.author.id
-#         variable = [
-#             "You do not have the clearance for that command... are you retarded?",
-#             "You aren't a server admin... this is why she left you dude.",
-#             "Try that shit again and see who gets terminated bitch ;)",
-#             "It seems like there's a lot you don't know about terminating this bot",
-#         ]
-#         await ctx.send(random.choice(variable))
-#         print("insufficient perms to terminate " + username + " " + str(userid))
-
-
-@bot.command()
-async def logtest(ctx):
-    bingimgquery = ctx.message.content[9:]
-    delcmd = await ctx.send(bingimage(bingimgquery))
-    deletelog[ctx.message.id] = delcmd
-
-
-@reboot.error
-async def reboot_error(ctx, error):
-    if isinstance(error, commands.CheckFailure):
-        username = ctx.message.author.display_name
-        userid = ctx.message.author.id
-        now = datetime.now()
-        variable = [
-            "You do not have the clearance for that command... are you retarded?",
-            "You aren't a rebooter... this is why she left you dude.",
-            "Try that shit again and see who gets rebooted bitch ;)",
-            "It seems like there's a lot you don't know about rebooting this pi",
-        ]
-        await ctx.send(random.choice(variable))
-        print(now + " insufficient perms to reboot " + username + " " + str(userid))
 
 
 # ---------------------------------------- #
@@ -804,7 +758,7 @@ async def gif(ctx):
 @bot.command()
 async def img(ctx):
     imgquery = ctx.message.content[5:]
-    delcmd = await ctx.send(imageget(imgquery))
+    delcmd = await ctx.send(bingimage(imgquery))
     deletelog[ctx.message.id] = delcmd
 
 

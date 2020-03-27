@@ -1,3 +1,4 @@
+from modules.bingimageapi import bingimage
 from modules.googleimageapi import imageget
 from modules.googleapi import googleget
 from modules.definitionwebscrape import getdefinition
@@ -214,9 +215,14 @@ class heycomputer:
                 print("new definitionquerylist after deletion: [" + str(imgquerylist) + "]")
         if len(imgquerylist) < 1:
             return("inv")
+        print("filtype is: [" + filetype + "]")
+        if filetype == "" or filetype == "nonspecific":
+            imgquery = " ".join(imgquerylist)
+            print("starting bingimage with query: [" + imgquery + "]")
+            return(bingimage(imgquery))
         else:
             imgquery = " ".join(imgquerylist)
-            print("starting imageget with query: [" + imgquery + "]")
+            print("starting bingimage with query: [" + imgquery + "]")
             return(imageget(imgquery, filetype))
     
 

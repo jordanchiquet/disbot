@@ -37,12 +37,13 @@ from nltk.corpus import brown
 from urlextract import URLExtract
 from uszipcode import SearchEngine
 
+from modules.bingimageapi import bingimage
 from modules.timermod.timercl import timercl
 from modules.timermod.timeparser import timeparser
 from modules.renardusers import renardusers
 from modules.dice import dice
 from modules.definitionwebscrape import getdefinition
-from modules.googleimageapi import imageget
+# from modules.googleimageapi import bingimage
 from modules.heycomputer import heycomputer
 # from modules.timer.timermonthpass import timermonthpass
 # from test.modules.timer.ogtimer import ogtimer
@@ -763,7 +764,7 @@ async def gifold(ctx):
 @bot.command()
 async def img(ctx):
     imgquery = ctx.message.content[5:]
-    delcmd = await ctx.send(imageget(imgquery))
+    delcmd = await ctx.send(bingimage(imgquery))
     deletelog[ctx.message.id] = delcmd
 
 
