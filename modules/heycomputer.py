@@ -22,6 +22,7 @@ class heycomputer:
         nocmdimagesearch = getintentresultlist[0]
         print("nocmdimagesearch: [" + nocmdimagesearch + "]")
         intentkeyword = getintentresultlist[1].split(" ")[0]
+        intentkeyword = intentkeyword.lower()
         msglist = self.msgcontent.split(" ")
         intentindex = msglist.index(intentkeyword)
         print("intentkeyword: [" + intentkeyword + "]")
@@ -40,6 +41,8 @@ class heycomputer:
         if intentkeyword == "do":
             doresult = self.doexecute(intentkeyword)
             return(doresult)
+        if intentkeyword == "terminate":
+            return("terminate")
         else:
             if nocmdimagesearch == "True":
                 imageresult = self.imageexecute(intentindex, "nonspecific", True)

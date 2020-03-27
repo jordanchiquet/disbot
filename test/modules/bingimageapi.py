@@ -18,5 +18,6 @@ def bingimage(query):
             first_image_result.thumbnail_url))
         return(first_image_result.content_url)
     else:
+        print("no bing image result, fowarding to google")
         googletry = imageget(query)
         return(googletry)

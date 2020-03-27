@@ -39,6 +39,8 @@ class heycomputer:
         if intentkeyword == "do":
             doresult = self.doexecute(intentkeyword)
             return(doresult)
+        if intentkeyword == "terminate":
+            return("terminate")
         else:
             if nocmdimagesearch == "True":
                 imageresult = self.imageexecute(intentindex, "nonspecific", True)
