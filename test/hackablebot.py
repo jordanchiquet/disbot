@@ -43,6 +43,7 @@ from modules.timermod.timeparser import timeparser
 from modules.renardusers import renardusers
 from modules.dice import dice
 from modules.definitionwebscrape import getdefinition
+from modules.dickshadow import executeoverlay
 # from modules.googleimageapi import bingimage
 from modules.heycomputer import heycomputer
 # from modules.timer.timermonthpass import timermonthpass
@@ -600,6 +601,55 @@ async def eat(ctx):
         "Velvet Cactus"
     )
     await ctx.send(random.choice(any))
+
+
+@bot.command()
+async def enhance(ctx):
+    msg = ctx.message
+    channel = ctx.message.channel
+    if not msg.attachments and not msg.embeds:
+        print("enhance message did not have an attachment")
+        attachmentlist = []
+        messagehistory = await channel.history(limit=10).flatten()
+        for message in messagehistory:
+            print("iterating history")
+            hasembeddedimage = False
+            if message.embeds:
+                if message.embeds[0].type == "image":
+                    hasembeddedimage = True
+            if message.attachments or hasembeddedimage:
+                print("message found in history with attachments or embedded image")
+                if message.attachments:
+                    print("was attachment")
+                    attachmentlist.append(str(message.id) + "|attachment")
+                else:
+                    print("was embed")
+                    attachmentlist.append(str(message.id) + "|embed")
+        if len(attachmentlist) == 0:
+            await ctx.send("Could not find an image to enhance...")
+            return
+        for message in messagehistory:
+            print("second iteration")
+            if message.id == int(attachmentlist[0].split("|")[0]):
+                print("found messageid of last attachment positive message")
+                if attachmentlist[0].split("|")[1] == "attachment":
+                    print("attempting to save attachment...")
+                    await message.attachments[0].save("E:/disbot/picfolder/shadowdir/providedbackground.png")
+                else:
+                    print("attempting to save embed...")
+                    print(message.embeds[0].url)
+                    urllib.request.urlretrieve(message.embeds[0].url, "E:/disbot/picfolder/shadowdir/providedbackground.png")
+
+
+    else:
+        print("enhance message had one or more attachments")
+        await ctx.message.attachments[0].save("E:/disbot/picfolder/shadowdir/providedbackground.png")
+    shadowpath = ("E:/disbot/picfolder/shadowdir/providedbackground.png")
+    newfilepath = executeoverlay(shadowpath)
+    if newfilepath == "inv":
+        await ctx.send("some ting wong...")
+    else:
+        await ctx.send(file=File(newfilepath))
 
 
 @bot.command()
