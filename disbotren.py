@@ -844,16 +844,16 @@ async def ing(ctx):
     await img.invoke(ctx)
 
 
-@bot.command()
-async def rev(ctx):
-    await ctx.send("Working on it...")
-    revquery = ctx.message.attachments[0].url
-    response = google_images_download.googleimagesdownload()
-    arguments = {"similar_images": revquery,"limit":1,"no_download":True}
-    revresult = response.download(arguments)
-    extractor = URLExtract()
-    for url in extractor.gen_urls(str(revresult)):
-        await ctx.send("Found this:\n" + url)
+# @bot.command()
+# async def rev(ctx):
+#     await ctx.send("Working on it...")
+#     revquery = ctx.message.attachments[0].url
+#     response = google_images_download.googleimagesdownload()
+#     arguments = {"similar_images": revquery,"limit":1,"no_download":True}
+#     revresult = response.download(arguments)
+#     extractor = URLExtract()
+#     for url in extractor.gen_urls(str(revresult)):
+#         await ctx.send("Found this:\n" + url)
 
 
 @bot.command()
