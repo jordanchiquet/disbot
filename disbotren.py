@@ -857,6 +857,22 @@ async def rev(ctx):
 
 
 @bot.command()
+async def sky(ctx):
+    print("sky called")
+    url = "https://earthsky.org/tonight"
+    req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    skyhtml = urllib.request.urlopen(req)
+    skysoup = BeautifulSoup(skyhtml.read(), 'html.parser')
+    print("reqwuesrt succesful")
+    image = skysoup.findAll("img", src=True)
+    # print(skysoup)
+    print(image[1])
+    splitone = str(image[1]).split("src=")[1]
+    splittwo = splitone.split(" ")[0]
+    await ctx.send(splittwo.replace("\"", ""))
+
+
+@bot.command()
 async def spell(ctx):
     spellresult = gsource.list(q=ctx.message.content[7:],
                              cx='016515025707600383118:zzbf7g7bqty').execute()
