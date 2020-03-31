@@ -4,10 +4,10 @@ import callofduty
 from callofduty import Mode, Platform, Title
 
 
-async def main(user):
-    client = await callofduty.Login("YourEmail@email.com", "YourPassword")
+async def getcodstats(user):
+    client = await callofduty.Login("jordanchiq@gmail.com", "CoDPass40+2")
 
-    results = await client.SearchPlayers(Platform.Activision, user, limit=3)
+    results = await client.SearchPlayers(Platform.BattleNet, user, limit=3)
     for player in results:
         print(f"{player.username} ({player.platform.name})")
 
@@ -23,4 +23,4 @@ async def main(user):
 
     await client.Logout()
 
-asyncio.get_event_loop().run_until_complete(main("HotDog94#11957"))
+asyncio.get_event_loop().run_until_complete(getcodstats("HotDog94#11957"))

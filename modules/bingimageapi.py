@@ -8,7 +8,7 @@ def bingimage(query):
 
     client = ImageSearchClient(endpoint=subscription_endpoint, credentials=CognitiveServicesCredentials(subscription_key))
 
-    image_results = client.images.search(query=search_term)
+    image_results = client.images.search(query=search_term, safe_search="Off")
 
     if image_results.value:
         first_image_result = image_results.value[0]
@@ -19,4 +19,4 @@ def bingimage(query):
     else:
         return("No image results returned!")
 
-bingimage("placeholder")
+bingimage("tits")
