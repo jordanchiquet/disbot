@@ -1,26 +1,11 @@
-import asyncio
+import requests
 
-import callofduty
-from callofduty import Mode, Platform, Title
+def warzonestats(user):
+    trackerkey = "dff84ce3-8767-4b63-9a8b-1c86ae8c57f4"
+    trackerurl = "'https://my.callofduty.com/api/papi-client/stats/cod/v1/title/mw/platform/battle/gamer/" + user.split("#")[0] + "%23" + user.split("#")[1] + "/profile/type/mp"
+    trackerheaders = {"TRN-Api-Key": trackerkey}
+    response = requests.get(url = trackerurl)
+    warzonejson = response.json()
+    print(warzonejson)
 
-
-async def getcodstats(user):
-    client = await callofduty.Login("jordanchiq@gmail.com", "CoDPass40+2")
-
-    results = await client.SearchPlayers(Platform.BattleNet, user, limit=3)
-    for player in results:
-        print(f"{player.username} ({player.platform.name})")
-
-    me = results[1]
-    profile = await me.profile(Title.ModernWarfare, Mode.Multiplayer)
-
-    level = profile["level"]
-    kd = profile["lifetime"]["all"]["properties"]["kdRatio"]
-    wl = profile["lifetime"]["all"]["properties"]["wlRatio"]
-
-    print(f"\n{me.username} ({me.platform.name})")
-    print(f"Level: {level}, K/D Ratio: {kd}, W/L Ratio: {wl}")
-
-    await client.Logout()
-
-asyncio.get_event_loop().run_until_complete(getcodstats("HotDog94#11957"))
+warzonestats("Hotdog94#11957")
