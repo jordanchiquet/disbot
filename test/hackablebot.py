@@ -46,6 +46,7 @@ from modules.definitionwebscrape import getdefinition
 from modules.dickshadow import executeoverlay
 # from modules.googleimageapi import bingimage
 from modules.heycomputer import heycomputer
+from modules.warzone import warzonestats
 # from modules.timer.timermonthpass import timermonthpass
 # from test.modules.timer.ogtimer import ogtimer
 # from test.modules.timer.timer import timercl
@@ -968,6 +969,56 @@ async def w(ctx, a: str = None, b: str = None):
             await ctx.send(embed=embed)
         except:
             await ctx.send("dude wtf... I can't find zip code \"" + a + "\". Maybe it was erased from the archive memory.")
+
+
+@bot.command()
+async def war(ctx, a: str = None, b: str = None):
+    userid = ctx.message.author.id
+    if a is None:
+        battlenetcheckinit = renardusers(userid, "battlenet")
+        print("warzone reached users class")
+        battlenetcheck = battlenetcheckinit.userread()
+        print("battlenetcheck: [" + str(battlenetcheck) +"]")
+        print("battlenetcheck[0]: [" + str(battlenetcheck[0]) +"]")
+        if battlenetcheck[0] is None:
+            await ctx.send("No user found! Use \".war register battlenettagwithnumbersignandnumbers\"")
+        else:
+            battlenettag = battlenetcheck[0]
+            print("battlecheck[0] was not None, continuing")
+            warzoneresponse = warzonestats(str(battlenetcheck[0]))
+    elif a == "register" or a == "reg":
+        battlenetcheckinit = renardusers(userid, "battlenet", b)  
+        print("warzone reached users class")
+        battlenetcheckinit.userwrite()
+        print("warzone wrote battlenet tag: [" + a + "]")
+        await ctx.send("new gamertag stored")
+    else:
+        battlenettag = battlenetcheck[0]
+        warzoneresponse = warzonestats(a)
+    if warzoneresponse == "inv":
+        print("got inv")
+        await ctx.send(file=File("/home/ubuntu/disbot/picfolder/archivememory.png"))
+    else:
+        warstats = warzoneresponse.split("|")
+        level = warstats[0]
+        kills = warstats[1]
+        deaths = warstats[2]
+        suicides = warstats[3]
+        ratio = warstats[4]
+        wins = warstats[5]
+        top10 = warstats[6]
+        games = warstats[7]
+        embed = discord.Embed(title=battlenettag.split("#")[0] + " Level " + level, color=0x00badf)
+        embed.set_thumbnail(url="https://i.insider.com/55a3e234eab8eab243028ac8?width=300&format=jpeg&auto=webp")
+        embed.add_field(name="KILLS", value=kills)
+        embed.add_field(name="DEATHS", value=deaths + " (" + suicides + " suicides)")
+        embed.add_field(name="K/D", value=ratio)
+        embed.add_field(name="WINS", value=wins + " (" + str(int(wins)*100/int(games))[:4] + "%)")
+        embed.add_field(name="TOP 10", value=top10 + " (" + str(int(top10)*100/int(games))[:4] + "%)")
+        embed.add_field(name="GAMES", value=games)
+        await ctx.send(embed=embed)
+
+
 
 @bot.command()
 async def wiki(ctx):

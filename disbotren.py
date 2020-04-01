@@ -30,7 +30,6 @@ from datetime import datetime, timedelta
 from discord import File
 from discord.ext import commands, tasks
 from googleapiclient.discovery import build #google-api-python-client
-# from google_images_download import google_images_download
 from GoogleScraper import scrape_with_config, GoogleSearchError
 from googlesearch import search #google
 from nltk.corpus import brown
@@ -38,14 +37,17 @@ from urlextract import URLExtract
 from uszipcode import SearchEngine
 
 from modules.bingimageapi import bingimage
+from modules.definitionwebscrape import getdefinition
 from modules.dice import dice
+from modules.dickshadow import executeoverlay
 from modules.googleimageapi import imageget
+from modules.heycomputer import heycomputer
+from modules.renardusers import renardusers
 from modules.timermod.timercl import timercl
 from modules.timermod.timeparser import timeparser
-from modules.dice import dice
-from modules.definitionwebscrape import getdefinition
-from modules.heycomputer import heycomputer
-from modules.dickshadow import executeoverlay
+from modules.warzone import warzonestats
+
+
 
 messages = joined = 0
 
@@ -827,21 +829,6 @@ async def img(ctx):
 
 
 @bot.command()
-async def imgold(ctx):
-    imgquery = ctx.message.content[8:]
-    response = google_images_download.googleimagesdownload()
-    arguments = {"keywords":imgquery,"limit":1,"no_download":True}
-    imgresult = response.download(arguments)
-    extractor = URLExtract()
-    if "[]" in str(imgresult):
-        delcmd = await ctx.send("how you say? not any image find for that image")
-        deletelog[ctx.message.id] = delcmd
-    for url in extractor.gen_urls(str(imgresult)):
-        delcmd = await ctx.send(url)
-        deletelog[ctx.message.id] = delcmd
-
-
-@bot.command()
 async def ing(ctx):
     await img.invoke(ctx)
 
@@ -976,6 +963,55 @@ async def w(ctx, a: str = None, b: str = None):
             await ctx.send(embed=embed)
         except:
             await ctx.send("dude wtf... I can't find zip code \"" + a + "\". Maybe it was erased from the archive memory.")
+
+
+@bot.command()
+async def war(ctx, a: str = None, b: str = None):
+    userid = ctx.message.author.id
+    if a is None:
+        battlenetcheckinit = renardusers(userid, "battlenet")
+        print("warzone reached users class")
+        battlenetcheck = battlenetcheckinit.userread()
+        print("battlenetcheck: [" + str(battlenetcheck) +"]")
+        print("battlenetcheck[0]: [" + str(battlenetcheck[0]) +"]")
+        if battlenetcheck[0] is None:
+            await ctx.send("No user found! Use \".war register battlenettagwithnumbersignandnumbers\"")
+        else:
+            battlenettag = battlenetcheck[0]
+            print("battlecheck[0] was not None, continuing")
+            warzoneresponse = warzonestats(str(battlenetcheck[0]))
+    elif a == "register" or a == "reg":
+        battlenetcheckinit = renardusers(userid, "battlenet", b)  
+        print("warzone reached users class")
+        battlenetcheckinit.userwrite()
+        print("warzone wrote battlenet tag: [" + a + "]")
+        await ctx.send("new gamertag stored")
+    else:
+        battlenettag = battlenetcheck[0]
+        warzoneresponse = warzonestats(a)
+    if warzoneresponse == "inv":
+        print("got inv")
+        await ctx.send(file=File("/home/ubuntu/disbot/picfolder/archivememory.png"))
+    else:
+        warstats = warzoneresponse.split("|")
+        level = warstats[0]
+        kills = warstats[1]
+        deaths = warstats[2]
+        suicides = warstats[3]
+        ratio = warstats[4]
+        wins = warstats[5]
+        top10 = warstats[6]
+        games = warstats[7]
+        embed = discord.Embed(title=battlenettag.split("#")[0] + " Level " + level, color=0x00badf)
+        embed.set_thumbnail(url="https://i.insider.com/55a3e234eab8eab243028ac8?width=300&format=jpeg&auto=webp")
+        embed.add_field(name="KILLS", value=kills)
+        embed.add_field(name="DEATHS", value=deaths + " (" + suicides + " suicides)")
+        embed.add_field(name="K/D", value=ratio)
+        embed.add_field(name="WINS", value=wins + " (" + str(int(wins)*100/int(games))[:4] + "%)")
+        embed.add_field(name="TOP 10", value=top10 + " (" + str(int(top10)*100/int(games))[:4] + "%)")
+        embed.add_field(name="GAMES", value=games)
+        await ctx.send(embed=embed)
+
 
 @bot.command()
 async def wiki(ctx):
