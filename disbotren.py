@@ -973,8 +973,7 @@ async def war(ctx, a: str = None, b: str = None):
         print("warzone reached users class")
         battlenetcheck = battlenetcheckinit.userread()
         print("battlenetcheck: [" + str(battlenetcheck) +"]")
-        print("battlenetcheck[0]: [" + str(battlenetcheck[0]) +"]")
-        if battlenetcheck[0] is None:
+        if battlenetcheck is None or battlenetcheck[0] is None:
             await ctx.send("No user found! Use \".war register battlenettagwithnumbersignandnumbers\"")
         else:
             battlenettag = battlenetcheck[0]
