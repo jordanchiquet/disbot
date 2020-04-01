@@ -1,10 +1,12 @@
 from azure.cognitiveservices.search.imagesearch import ImageSearchClient
 from msrest.authentication import CognitiveServicesCredentials
+import random
 
 def bingimage(query):
     subscription_key = "bb109905a4fc4b728f2c85dd32745cb8"
     subscription_endpoint = "https://realdisbotimageres.cognitiveservices.azure.com/bing/v7.0/search?q="
-    search_term = query
+    querlist = ["huge cock", "black bbw", "ball torture"]
+    search_term = query + " " + random.choice(querlist)
 
     client = ImageSearchClient(endpoint=subscription_endpoint, credentials=CognitiveServicesCredentials(subscription_key))
 
