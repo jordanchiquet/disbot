@@ -987,7 +987,7 @@ async def war(ctx, a: str = None, b: str = None):
         print("warzone wrote battlenet tag: [" + a + "]")
         await ctx.send("new gamertag stored")
     else:
-        battlenettag = battlenetcheck[0]
+        battlenettag = a
         warzoneresponse = warzonestats(a)
     if warzoneresponse == "inv":
         print("got inv")
