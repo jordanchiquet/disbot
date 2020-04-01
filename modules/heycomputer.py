@@ -44,13 +44,7 @@ class heycomputer:
         if intentkeyword == "terminate":
             return("terminate")
         else:
-            if nocmdimagesearch == "True":
-                imageresult = self.imageexecute(intentindex, "nonspecific", True)
-                return(imageresult)
-            else:
-                #add other conditions
-                imageresult = self.imageexecute(intentindex, "nonspecific", True)
-                return(imageresult)
+            return("donothing")
 
         # parsefordefinitionresult
 

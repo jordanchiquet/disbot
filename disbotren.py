@@ -128,6 +128,8 @@ async def on_message(message):
                 await channel.send(file=File("/home/ubuntu/disbot/picfolder/terminate.png"))
             elif heycomputeresult == "inv" or heycomputeresult is None:
                 await channel.send("a mistake was made... the computer have processed your message but could not... process")
+            elif heycomputeresult == "donothing":
+                return
             else:
                 if heycomputeresult[0] == "~":
                     heycomputeresult = "```" + heycomputeresult[1:] + "```"
@@ -142,6 +144,8 @@ async def on_message(message):
             await channel.send(file=File("/home/ubuntu/disbot/picfolder/terminate.png"))
         elif heycomputeresult == "inv" or heycomputeresult is None:
             await channel.send("a mistake was made... the computer have processed your message but could not... process")
+        elif heycomputeresult == "donothing":
+            return
         else:
             if heycomputeresult[0] == "~":
                 heycomputeresult = "```" + heycomputeresult[1:] + "```"
