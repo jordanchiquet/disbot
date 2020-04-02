@@ -47,6 +47,7 @@ from modules.dickshadow import executeoverlay
 # from modules.googleimageapi import bingimage
 from modules.heycomputer import heycomputer
 from modules.warzone import warzonestats
+from modules.merriamapi import getmeaning
 # from modules.timer.timermonthpass import timermonthpass
 # from test.modules.timer.ogtimer import ogtimer
 # from test.modules.timer.timer import timercl
@@ -772,8 +773,8 @@ gsource = build("customsearch", 'v1', developerKey=gapi).cse()
 @bot.command()
 async def d(ctx):
     print("d called")
-    meaning = getdefinition(ctx.message.content[3:])
-    delcmd = await ctx.send("```" + meaning + "```")
+    meaning = getmeaning(ctx.message.content[3:])
+    delcmd = await ctx.send(meaning)
     deletelog[ctx.message.id] = delcmd
 
 

@@ -37,11 +37,11 @@ from urlextract import URLExtract
 from uszipcode import SearchEngine
 
 from modules.bingimageapi import bingimage
-from modules.definitionwebscrape import getdefinition
 from modules.dice import dice
 from modules.dickshadow import executeoverlay
 from modules.googleimageapi import imageget
 from modules.heycomputer import heycomputer
+from modules.merriamapi import getmeaning
 from modules.renardusers import renardusers
 from modules.timermod.timercl import timercl
 from modules.timermod.timeparser import timeparser
@@ -791,17 +791,23 @@ gsource = build("customsearch", 'v1', developerKey=gapi).cse()
 @bot.command()
 async def d(ctx):
     print("d called")
-    meaning = getdefinition(ctx.message.content[3:])
-    delcmd = await ctx.send("```" + meaning + "```")
+    meaning = getmeaning(ctx.message.content[3:])
+    delcmd = await ctx.send(meaning)
     deletelog[ctx.message.id] = delcmd
 
 
 @bot.command()
 async def define(ctx):
     print("define called")
-    meaning = getdefinition(ctx.message.content[8:])
-    delcmd = await ctx.send("```" + meaning + "```")
-    deletelog[ctx.message.id] = delcmd
+    meaning = getmeaning(ctx.message.content[8:])
+    if meaning == "inv":
+        print("got inv")
+        delcmd = await ctx.send(file=File("/home/ubuntu/disbot/picfolder/archivememory.png"))
+        deletelog[ctx.message.id] = delcmd
+    else:    
+        delcmd = await ctx.send(meaning)
+        deletelog[ctx.message.id] = delcmd
+
 
 
 @bot.command()
@@ -835,18 +841,6 @@ async def img(ctx):
 @bot.command()
 async def ing(ctx):
     await img.invoke(ctx)
-
-
-# @bot.command()
-# async def rev(ctx):
-#     await ctx.send("Working on it...")
-#     revquery = ctx.message.attachments[0].url
-#     response = google_images_download.googleimagesdownload()
-#     arguments = {"similar_images": revquery,"limit":1,"no_download":True}
-#     revresult = response.download(arguments)
-#     extractor = URLExtract()
-#     for url in extractor.gen_urls(str(revresult)):
-#         await ctx.send("Found this:\n" + url)
 
 
 @bot.command()
@@ -1008,7 +1002,7 @@ async def war(ctx, a: str = None, b: str = None):
         embed = discord.Embed(title=battlenettag.split("#")[0] + " Level " + level, color=0x00badf)
         embed.set_thumbnail(url="https://i.insider.com/55a3e234eab8eab243028ac8?width=300&format=jpeg&auto=webp")
         embed.add_field(name="KILLS", value=kills)
-        embed.add_field(name="DEATHS", value=deaths + " (" + suicides + " suicides)")
+        embed.add_field(name="DEATHS", value=deaths)
         embed.add_field(name="K/D", value=ratio)
         embed.add_field(name="WINS", value=wins + " (" + str(int(wins)*100/int(games))[:4] + "%)")
         embed.add_field(name="TOP 10", value=top10 + " (" + str(int(top10)*100/int(games))[:4] + "%)")
