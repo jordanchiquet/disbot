@@ -792,8 +792,13 @@ gsource = build("customsearch", 'v1', developerKey=gapi).cse()
 async def d(ctx):
     print("d called")
     meaning = getmeaning(ctx.message.content[3:])
-    delcmd = await ctx.send(meaning)
-    deletelog[ctx.message.id] = delcmd
+    if meaning == "inv":
+        print("got inv")
+        delcmd = await ctx.send(file=File("/home/ubuntu/disbot/picfolder/archivememory.png"))
+        deletelog[ctx.message.id] = delcmd
+    else:    
+        delcmd = await ctx.send(meaning)
+        deletelog[ctx.message.id] = delcmd
 
 
 @bot.command()
