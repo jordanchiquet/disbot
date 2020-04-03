@@ -41,6 +41,12 @@ class heycomputer:
             return(doresult)
         if intentkeyword == "terminate":
             return("terminate")
+        if intentkeyword == "speed":
+            if getintentresultlist[1].split(" ")[1] == "me":
+                if getintentresultlist[2].split(" ")[2] == "up":
+                    return("https://youtu.be/dCuCpVPkWDY")
+                if getintentresultlist[3].split(" ")[2] == "down":
+                    return("https://youtu.be/iALO4L166WU")
         else:
             if nocmdimagesearch == "True":
                 imageresult = self.imageexecute(intentindex, "nonspecific", True)
