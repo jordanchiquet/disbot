@@ -21,6 +21,7 @@ class heycomputer:
         nocmdimagesearch = getintentresultlist[0]
         print("nocmdimagesearch: [" + nocmdimagesearch + "]")
         intentkeyword = getintentresultlist[1].split(" ")[0]
+        getintentresultsplit = getintentresultlist[1].split(" ")
         msglist = self.msgcontent.split(" ")
         intentindex = msglist.index(intentkeyword)
         print("intentkeyword: [" + intentkeyword + "]")
@@ -47,6 +48,7 @@ class heycomputer:
                     return("https://youtu.be/dCuCpVPkWDY")
                 if getintentresultlist[3].split(" ")[2] == "down":
                     return("https://youtu.be/iALO4L166WU")
+            elif getintentresult[1]
         else:
             if nocmdimagesearch == "True":
                 imageresult = self.imageexecute(intentindex, "nonspecific", True)

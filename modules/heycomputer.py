@@ -1,8 +1,8 @@
 from modules.bingimageapi import bingimage
 from modules.googleimageapi import imageget
 from modules.googleapi import googleget
-from modules.definitionwebscrape import getdefinition
 from modules.listemptystring import listemptystring
+from modules.merriamapi import getmeaning
 from modules.removefirstindex import removefirstindex
 
 
@@ -10,6 +10,48 @@ class heycomputer:
     def __init__(self, msgcontent):
         self.msgcontent = msgcontent.replace(".","")
     
+
+    def determineintent(self):
+        print("starting determine intent from hey computer")
+        getintentresult = self.getintenttext()
+        if getintentresult == "inv":
+            print("getintentresult was inv, returning inv")
+            return("inv")
+        getintentresultlist = getintentresult.split("|")
+        intentkeyword = getintentresultlist[1].split(" ")[0]
+        # getintentresultsplit = getintentresultlist[1].split(" ")
+        intentkeyword = intentkeyword.lower()
+        # msglist = self.msgcontent.split(" ")
+        # intentindex = msglist.index(intentkeyword)
+        print("intentkeyword: [" + intentkeyword + "]")
+        parseforimagelist = self.parseforimage(intentkeyword).split("|")
+        if parseforimagelist[0] == "True":
+            print("command is for image.")
+            return("imagesearch") # + parseforimagelist[1] + "|" +  intentindex)
+            # imagefiletype = parseforimageresult.split("|")[1]
+            # imageresult = self.imageexecute(intentindex, imagefiletype)
+            # return(imageresult)
+        if self.parsefordefinition(intentkeyword) == True:
+            print("command is for defintion")
+            return("define")
+            # definitionresult = self.definitionexecute(intentkeyword)
+            # return("~" + definitionresult)
+        if intentkeyword == "do":
+            return("do")
+            # doresult = self.doexecute(intentkeyword)
+            # return(doresult)
+        if intentkeyword == "terminate":
+            return("terminate")
+        if intentkeyword == "speed":
+            return("speed")
+            # if getintentresultsplit[1] == "me":
+            #     if getintentresultlist[2].split(" ")[2] == "up":
+            #         return("https://youtu.be/dCuCpVPkWDY")
+            #     if getintentresultlist[3].split(" ")[2] == "down":
+            #         return("https://youtu.be/iALO4L166WU")
+        else:
+            return("nothing")
+
 
     def heycomputerexecute(self):
         print("starting defineintent from heycomputer flow")
@@ -22,6 +64,7 @@ class heycomputer:
         nocmdimagesearch = getintentresultlist[0]
         print("nocmdimagesearch: [" + nocmdimagesearch + "]")
         intentkeyword = getintentresultlist[1].split(" ")[0]
+        getintentresultsplit = getintentresultlist[1].split(" ")
         intentkeyword = intentkeyword.lower()
         msglist = self.msgcontent.split(" ")
         intentindex = msglist.index(intentkeyword)
@@ -43,6 +86,12 @@ class heycomputer:
             return(doresult)
         if intentkeyword == "terminate":
             return("terminate")
+        if intentkeyword == "speed":
+            if getintentresultsplit[1] == "me":
+                if getintentresultlist[2].split(" ")[2] == "up":
+                    return("https://youtu.be/dCuCpVPkWDY")
+                if getintentresultlist[3].split(" ")[2] == "down":
+                    return("https://youtu.be/iALO4L166WU")
         else:
             return("donothing")
 
@@ -146,7 +195,7 @@ class heycomputer:
                 print("new definitionquerylist after deletion: [" + str(definitionquerylist) + "]")
         definitionquery = " ".join(definitionquerylist)
         print("starting definition get with query: [" + definitionquery + "]")
-        return(getdefinition(definitionquery))
+        return(getmeaning(definitionquery))
 
 
     def doexecute(self, dosplitpoint):
