@@ -1,5 +1,6 @@
 import requests
 import json
+from modules.googleapi import googleget
 
 def getmeaning(query):
     print("getmeaning with query: [" + query + "]")
@@ -37,6 +38,13 @@ def getmeaning(query):
             meaninglist.append("```")
             meaningjoin = "\n".join(meaninglist)
     except:
-        meaningjoin = "inv"
+        try:
+            result = googleget("what is " + query)
+            if result == "how you say? not any resultfind for find for that result to find the search find":
+                meaningjoin = "inv"
+            else:
+                meaningjoin = ("Couldn't find a meaning in the dictionary, tried google:\n" + result)
+        except:
+            meaningjoin = "inv"
     return(meaningjoin)
     

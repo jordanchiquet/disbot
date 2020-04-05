@@ -122,7 +122,7 @@ async def on_message(message):
         mclowersplit = mclower.split(" ")
         if mclowersplit[1].startswith("comput") or mclowersplit[1] == ("compadre") or mclowersplit[1] == "machine" or mclowersplit[1] == "renard":
             heycomputerinit = heycomputer(mclower)
-            heycomputeresult = heycomputerinit.heycomputerexecute()
+            heycomputeresult = heycomputerinit.execute()
             print("heycomputeresult: [" + heycomputeresult + "]")
             if heycomputeresult == "terminate":
                 await channel.send(file=File("/home/ubuntu/disbot/picfolder/terminate.png"))
@@ -131,14 +131,12 @@ async def on_message(message):
             elif heycomputeresult == "donothing":
                 return
             else:
-                if heycomputeresult[0] == "~":
-                    heycomputeresult = "```" + heycomputeresult[1:] + "```"
                 await channel.send(heycomputeresult)
         else:
             return
     if mclower.startswith("comput") or mclower.startswith("compadre") or mclower.startswith("machine") or mclower.startswith("renard"):
         heycomputerinit = heycomputer(mclower)
-        heycomputeresult = heycomputerinit.heycomputerexecute()
+        heycomputeresult = heycomputerinit.execute()
         print("heycomputeresult: [" + heycomputeresult + "]")
         if heycomputeresult == "terminate":
             await channel.send(file=File("/home/ubuntu/disbot/picfolder/terminate.png"))
