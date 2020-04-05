@@ -205,6 +205,11 @@ class heycomputer:
         return(isimagecmd + "|" + specificfilesearch)
 
 
+    def parseforsearch(self):
+        print("starting parseforsearch with keyword: [" + self.msglist[0] + "]")
+        searchcmdlist = ["bing", "google", "search"]
+
+
     def whatparse(self):
         whatlist1 = ["is", "a", "an"]
         for x in whatlist1:
