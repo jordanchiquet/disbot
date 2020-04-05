@@ -18,16 +18,13 @@ class heycomputer:
             print("getintentresult was inv, returning inv")
             return("inv")
         getintentresultlist = getintentresult.split("|")
-        intentkeyword = getintentresultlist[1].split(" ")[0]
-        # getintentresultsplit = getintentresultlist[1].split(" ")
-        intentkeyword = intentkeyword.lower()
-        # msglist = self.msgcontent.split(" ")
-        # intentindex = msglist.index(intentkeyword)
+        intentsplit = getintentresultlist[1].split(" ")
+        intentkeyword = intentsplit[0].lower()
         print("intentkeyword: [" + intentkeyword + "]")
         parseforimagelist = self.parseforimage(intentkeyword).split("|")
         if parseforimagelist[0] == "True":
             print("command is for image.")
-            return("imagesearch") # + parseforimagelist[1] + "|" +  intentindex)
+            return(self.imageexecute(asdsd)) # + parseforimagelist[1] + "|" +  intentindex)
             # imagefiletype = parseforimageresult.split("|")[1]
             # imageresult = self.imageexecute(intentindex, imagefiletype)
             # return(imageresult)
@@ -53,47 +50,47 @@ class heycomputer:
             return("nothing")
 
 
-    def heycomputerexecute(self):
-        print("starting defineintent from heycomputer flow")
-        getintentresult = self.getintenttext()
-        if getintentresult == "inv":
-            print("getintentresult was inv, returning inv")
-            return("inv")
-            #come back to this
-        getintentresultlist = getintentresult.split("|")
-        nocmdimagesearch = getintentresultlist[0]
-        print("nocmdimagesearch: [" + nocmdimagesearch + "]")
-        intentkeyword = getintentresultlist[1].split(" ")[0]
-        getintentresultsplit = getintentresultlist[1].split(" ")
-        intentkeyword = intentkeyword.lower()
-        msglist = self.msgcontent.split(" ")
-        intentindex = msglist.index(intentkeyword)
-        print("intentkeyword: [" + intentkeyword + "]")
-        parseforimageresult = self.parseforimage(intentkeyword)
-        if parseforimageresult.split("|")[0] == "True":
-            print("command is for image.")
-            imagefiletype = parseforimageresult.split("|")[1]
-            imageresult = self.imageexecute(intentindex, imagefiletype)
-            return(imageresult)
-        print("escaped")
-        parsefordefinitionresult = self.parsefordefinition(intentkeyword)
-        if parsefordefinitionresult == True:
-            print("command is for defintion")
-            definitionresult = self.definitionexecute(intentkeyword)
-            return("~" + definitionresult)
-        if intentkeyword == "do":
-            doresult = self.doexecute(intentkeyword)
-            return(doresult)
-        if intentkeyword == "terminate":
-            return("terminate")
-        if intentkeyword == "speed":
-            if getintentresultsplit[1] == "me":
-                if getintentresultlist[2].split(" ")[2] == "up":
-                    return("https://youtu.be/dCuCpVPkWDY")
-                if getintentresultlist[3].split(" ")[2] == "down":
-                    return("https://youtu.be/iALO4L166WU")
-        else:
-            return("donothing")
+    # def heycomputerexecute(self):
+    #     print("starting defineintent from heycomputer flow")
+    #     getintentresult = self.getintenttext()
+    #     if getintentresult == "inv":
+    #         print("getintentresult was inv, returning inv")
+    #         return("inv")
+    #         #come back to this
+    #     getintentresultlist = getintentresult.split("|")
+    #     nocmdimagesearch = getintentresultlist[0]
+    #     print("nocmdimagesearch: [" + nocmdimagesearch + "]")
+    #     intentkeyword = getintentresultlist[1].split(" ")[0]
+    #     getintentresultsplit = getintentresultlist[1].split(" ")
+    #     intentkeyword = intentkeyword.lower()
+    #     msglist = self.msgcontent.split(" ")
+    #     intentindex = msglist.index(intentkeyword)
+    #     print("intentkeyword: [" + intentkeyword + "]")
+    #     parseforimageresult = self.parseforimage(intentkeyword)
+    #     if parseforimageresult.split("|")[0] == "True":
+    #         print("command is for image.")
+    #         imagefiletype = parseforimageresult.split("|")[1]
+    #         imageresult = self.imageexecute(intentindex, imagefiletype)
+    #         return(imageresult)
+    #     print("escaped")
+    #     parsefordefinitionresult = self.parsefordefinition(intentkeyword)
+    #     if parsefordefinitionresult == True:
+    #         print("command is for defintion")
+    #         definitionresult = self.definitionexecute(intentkeyword)
+    #         return("~" + definitionresult)
+    #     if intentkeyword == "do":
+    #         doresult = self.doexecute(intentkeyword)
+    #         return(doresult)
+    #     if intentkeyword == "terminate":
+    #         return("terminate")
+    #     if intentkeyword == "speed":
+    #         if getintentresultsplit[1] == "me":
+    #             if getintentresultlist[2].split(" ")[2] == "up":
+    #                 return("https://youtu.be/dCuCpVPkWDY")
+    #             if getintentresultlist[3].split(" ")[2] == "down":
+    #                 return("https://youtu.be/iALO4L166WU")
+    #     else:
+    #         return("donothing")
 
         # parsefordefinitionresult
 
@@ -228,9 +225,11 @@ class heycomputer:
             return(dosearchresult)
     
         
-    def imageexecute(self, imagecommandsplitpoint, filetype, genericsearch: bool = False):
-        imgqueryorig = self.msgcontent.split(" ")
-        imgquerylist = imgqueryorig[imagecommandsplitpoint:]
+    def imageexecute(self, intentkeyword, filetype, genericsearch: bool = False):
+            #     intentindex = msglist.index(intentkeyword)
+        intentlist = self.msgcontent.split(" ")
+        intentindex = intentlist.index(intentkeyword)
+        imgquerylist = imgqueryorig[intentindex:]
         print("starting imgquerylist: [" + str(imgquerylist) + "]")
         imgquerylist = listemptystring(imgquerylist)    
         for x in imagecmdlistfull:
@@ -360,6 +359,9 @@ class heycomputer:
             isimagecmd = "False"
             specificfilesearch = ""
         return(isimagecmd + "|" + specificfilesearch)
+
+
+    # def speed(self, )
 
 
 imagecmdlistfull = ["img", "image", "photo", "photograph", "pic", "picture", "snaphot", "bmp", "gif", "jpg", "jpeg", "png"]

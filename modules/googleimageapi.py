@@ -8,8 +8,12 @@ def imageget(query, filetype: str = None):
         rawresult = gsource.list(q=query, searchType='image',
                                 cx='016515025707600383118:gqogcmpp7ka').execute()
     else:
-        rawresult = gsource.list(q=query, searchType='image', fileType=filetype,
-                                cx='016515025707600383118:gqogcmpp7ka').execute()
+        if filetype == "gif":
+            rawresult = gsource.list(q=query, searchType='image', fileType=filetype,
+                                    cx='016515025707600383118:gqogcmpp7ka').execute()
+        else:        
+            rawresult = gsource.list(q=query, searchType='image', fileType=filetype,
+                                    cx='016515025707600383118:gqogcmpp7ka').execute()
     try:
         print("made it to try")
         firstresult = rawresult['items'][0]
