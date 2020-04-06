@@ -41,7 +41,7 @@ class heycomputer:
         elif intentparams[2] == "1":
             return(self.definitionexecute())
         else:
-            return("nothing")
+            return("I didn't understand your command because I'm retarded and Jordan gave me a very small vocabulary!")
 
 
     def getintenttext(self):
