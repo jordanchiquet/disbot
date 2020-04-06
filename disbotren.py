@@ -189,8 +189,6 @@ async def on_message(message):
             "-live-florida-georgia-line-meant-to-be/2147632005458542/")
     if "print time" == mclower:
         await channel.send(datetime.now())
-    if "promotion" in mclower:
-        await channel.send(file=File("/home/ubuntu/disbot/picfolder/promotions.jpg"))
     if "same sex" in mclower:
         await channel.send(file=File("/home/ubuntu/disbot/picfolder/dmx.png"))
     if "what is your purpose" in mclower:

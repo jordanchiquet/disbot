@@ -45,13 +45,16 @@ class heycomputer:
     def getintenttext(self):
         print("starting getintenttext")
         getintentlist1 = ["ay", "ayo", "ayy", "ayyy", "hey", "hello", "hi", "hola", "yo", "comp", "computer", "compadre",
-                    "machine", "renard", "retard", "bot", "robot", "please", "fucking", "fuckin", "freaking", "frikking", "freakin",
-                    "frikkin", "go", "a", "head", "ahead", "and", "give", "look", "pull", "do"]
+                    "machine", "renard", "retard", "bot", "robot", "please", "fucking", "fuckin", "freaking", "frikking", 
+                    "freakin", "frikkin", "go", "a", "head", "ahead", "and", "give", "look", "do"]
         fallbacktoimagesearch = "fallbacktoimagesearch:False"
+        loadpull = "loadpull:False"
         for x in getintentlist1:
             if self.msglist[0] == x:
                 self.msglist = removefirstindex(self.msglist)
-        if self.msglist[0] == "load":
+        if self.msglist[0] == "load" or self.msglist[0] == "pull":
+            print("self.msglist[0] was load")
+            loadpull = "loadpull:True"
             self.msglist = removefirstindex(self.msglist[0])
         if self.msglist[0] == "show" or (self.msglist[0] == "let" and self.msglist[2] == "see"):
             fallbacktoimagesearch = "fallbacktoimagesearch:True"
@@ -80,7 +83,7 @@ class heycomputer:
         if len(self.msglist) < 1:
             return("inv")            
         else:
-            return(fallbacktoimagesearch)
+            return(fallbacktoimagesearch + "|" + loadpull)
 
 
     def definitionexecute(self):
