@@ -15,11 +15,11 @@ class heycomputer:
     def execute(self):
         print("EXECUTING HEYCOMPUTER")
         getintentresult = self.getintenttext()
+        intentparams = getintentresult.split("|")
+        print("intentparams: [" + str(intentparams) + "]")
         if getintentresult == "inv":
             print("INTENT WAS INVALID")
             return("inv")
-        getintentresultlist = getintentresult.split(":")
-        fallbacktoimagesearch = getintentresultlist[1]
         parseforimagelist = self.parseforimage().split("|")
         if parseforimagelist[0] == "True":
             print("executing heycomputer image search")
@@ -27,17 +27,19 @@ class heycomputer:
         elif (self.parsefordefinition().split("|"))[0] == "True":
             print("executing heycomputer merriam webster")
             return(self.definitionexecute())
-        #MARK set up parse for search and clean up search execute. 
+        elif self.parseforsearch() == True:
+            print("executing heycomputer search")
+            return(self.searchexecute())
         elif self.msglist[0] == "terminate":
             return("terminate")
         elif self.msglist[0] == "speed":
-            return("speed")
-            # if getintentresultsplit[1] == "me":
-            #     if getintentresultlist[2].split(" ")[2] == "up":
-            #         return("https://youtu.be/dCuCpVPkWDY")
-            #     if getintentresultlist[3].split(" ")[2] == "down":
-            #         return("https://youtu.be/iALO4L166WU")
-
+            return(self.speedexecute())
+        elif intentparams[0] == "1":
+            return(self.imageexecute("nonspecific"))
+        elif intentparams[1] == "1":
+            return(self.searchexecute())
+        elif intentparams[2] == "1":
+            return(self.definitionexecute())
         else:
             return("nothing")
 
@@ -46,18 +48,23 @@ class heycomputer:
         print("starting getintenttext")
         getintentlist1 = ["ay", "ayo", "ayy", "ayyy", "hey", "hello", "hi", "hola", "yo", "comp", "computer", "compadre",
                     "machine", "renard", "retard", "bot", "robot", "please", "fucking", "fuckin", "freaking", "frikking", 
-                    "freakin", "frikkin", "go", "a", "head", "ahead", "and", "give", "look", "do"]
-        fallbacktoimagesearch = "fallbacktoimagesearch:False"
-        loadpull = "loadpull:False"
+                    "freakin", "frikkin", "go", "a", "head", "ahead", "and", "give", "do"]
+        fallbacktoimagesearch = "0"
+        loadpull = "0"
+        look = "0"
         for x in getintentlist1:
             if self.msglist[0] == x:
                 self.msglist = removefirstindex(self.msglist)
-        if self.msglist[0] == "load" or self.msglist[0] == "pull":
+        if self.msglist[0] == "load" or self.msglist[0] == "pull" or self.msglist[0] == "laod" or self.msglist[0] == "lod":
             print("self.msglist[0] was load")
-            loadpull = "loadpull:True"
-            self.msglist = removefirstindex(self.msglist[0])
+            loadpull = "1"
+            self.msglist = removefirstindex(self.msglist)
+        if self.msglist[0] == "look":
+            print("self.msglist[0] was look")
+            look = "1"
+            self.msglist = removefirstindex(self.msglist)
         if self.msglist[0] == "show" or (self.msglist[0] == "let" and self.msglist[2] == "see"):
-            fallbacktoimagesearch = "fallbacktoimagesearch:True"
+            fallbacktoimagesearch = "1"
             self.msglist = removefirstindex(self.msglist)
         getintentlist2 = ["2", "to", "too", "i", "me", "us", "we", "this", "these", "those"]
         for x in getintentlist2:
@@ -83,7 +90,7 @@ class heycomputer:
         if len(self.msglist) < 1:
             return("inv")            
         else:
-            return(fallbacktoimagesearch + "|" + loadpull)
+            return(fallbacktoimagesearch + "|" + loadpull + "|" + look)
 
 
     def definitionexecute(self):
@@ -113,56 +120,11 @@ class heycomputer:
     
 
     def searchexecute(self):
-        print("starting searchexecute")
-        searchcmdlistfull = ["bing", "google", "g", "ggl", "gogle", "duckduckgo", "search", "look"]
-        for x in searchcmdlistfull:
-            if self.msglist[0] == x:
-                print("self.msglist[0] in searchcmdlist, removing")
-                self.msglist = removefirstindex(self.msglist)
-        print("escaped searchexecute searcmd loop")
-        if self.msglist[0] == "up":
-            print("self.msglist[0] was up, deleting self.msglist[0]")
-            self.msglist = removefirstindex(self.msglist)
-        if self.msglist[0] == "a" or self.msglist[0] == "an":
-            print("self.msglist[0] was a or an, deleting self.msglist[0]")
-            self.msglist = removefirstindex(self.msglist)
-        if self.msglist[0] == "for" or self.msglist[0] == "of":
-            print("self.msglist[0] was for or of, deleting self.msglist[0]")
-            self.msglist = removefirstindex(self.msglist)
-        msglist = self.msgcontent.split(" ")
-        transitiontoimage = self.parseforimage()
-        print("transition to image sanity: [" + transitiontoimage + "]")
-        print("made it out of image check after searchexecute")
-        searchqueryindex = msglist.index(self.msglist[0])
-        print("searchqueryindex: [" + str(searchqueryindex) + "]")
-        print("that index is: [" + msglist[searchqueryindex] + "]")
-        if transitiontoimage.split("|")[0] == "True":
-            print("generic search is for an image! transitioning to image search")
-            imgfiletype = transitiontoimage[1]
-            imgfromsearchres = self.imageexecute(imgfiletype)
-            return(imgfromsearchres)
-        else:
-            print("not an image search after searchexecute :)")
-        finalentryindex = len(self.msglist) - 1
-        if self.msglist[finalentryindex] == "me":
-            print("finalentryindex was me... checking for \"for\"")
-            penultimateentryindex = finalentryindex - 1
-            if self.msglist[penultimateentryindex] == "for":
-                print("penultimate index was for and last index was me. deleting both.")
-                del self.msglist[penultimateentryindex]
-                del self.msglist[penultimateentryindex]
-                print("new self.msglist after deletion: [" + str(self.msglist) + "]")
-        if len(self.msglist) < 1:
-            return("inv")
-        else:
-            print("made it to searchexecute else")
-            queryjoinindex = msglist[searchqueryindex:]
-            print("queryjoinindex : [" + str(queryjoinindex) + "]")
-            searchquery = " ".join(queryjoinindex)
-            print("searchquery: [" + searchquery + "]")
-        finalsearchresult = googleget(searchquery)
-        print("finalsearchresult: [" + finalsearchresult + "]")
-        return(finalsearchresult)
+        if self.msglist[0] == "who":
+            who = True
+        googlequery = " ".join(self.msglist)
+        print("starting googleget get with query: [" + googlequery + "]")
+        return(googleget(googlequery))
 
 
     def parsefordefinition(self):
@@ -212,7 +174,25 @@ class heycomputer:
 
     def parseforsearch(self):
         print("starting parseforsearch with keyword: [" + self.msglist[0] + "]")
-        searchcmdlist = ["bing", "google", "search"]
+        searchcmdlist = ["bing", "google", "search", "find"]
+        search = False
+        for x in searchcmdlist:
+            if self.msglist[0] == searchcmdlist:
+                removefirstindex(self.msglist)
+                search = True
+                break
+        if self.msglist[0] == "for" or self.msglist[0] == "of":
+            removefirstindex(self.msglist)
+        return(search)
+
+
+
+    def speedexecute(self):
+            if self.msglist[1] == "me":
+                if self.msglist[2] == "up":
+                    return("https://youtu.be/dCuCpVPkWDY")
+                if self.msglist[2] == "down":
+                    return("https://youtu.be/iALO4L166WU")
 
 
     def whatparse(self):
@@ -231,21 +211,6 @@ class heycomputer:
                             return("whatsthemeaningofthis")
         if self.msglist[0] == "if":
             return("whatif")
-
-
-
-            
-
-
-
-
-# def speed(self, intentkeyword):
-#     if intentkeyword == "speed":
-#         if getintentresultsplit[1] == "me":
-#             if getintentresultlist[2].split(" ")[2] == "up":
-#                 return("https://youtu.be/dCuCpVPkWDY")
-#             if getintentresultlist[3].split(" ")[2] == "down":
-#                 return("https://youtu.be/iALO4L166WU")
 
 
 
