@@ -11,7 +11,7 @@ class heycomputer:
     def __init__(self, msgcontent):
         self.msgcontent = (msgcontent.replace(".", "")).lower()
         self.msgcontent = (self.msgcontent.replace(",", "")).lower()
-        self.msglist = msgcontent.split(" ")
+        self.msglist = self.msgcontent.split(" ")
     
 
     def execute(self):
@@ -78,7 +78,7 @@ class heycomputer:
         if self.msglist[0] == "show" or (self.msglist[0] == "let" and self.msglist[2] == "see") or (self.msglist[0] == "see"):
             fallbacktoimagesearch = "1"
             self.msglist = removefirstindex(self.msglist)
-        getintentlist3 = ["2", "to", "too", "for", "i", "me", "us", "we", "this", "these", "those"]
+        getintentlist3 = ["to", "too", "for", "i", "me", "us", "we", "this", "these", "those"]
         for x in getintentlist3:
             if self.msglist[0] == x:
                 self.msglist = removefirstindex(self.msglist)
