@@ -70,7 +70,7 @@ class heycomputer:
             print("self.msglist[0] was look")
             look = "1"
             self.msglist = removefirstindex(self.msglist)
-        if self.msglist[0] == "show" or (self.msglist[0] == "let" and self.msglist[2] == "see"):
+        if self.msglist[0] == "show" or (self.msglist[0] == "let" and self.msglist[2] == "see") or (self.msglist[0] == "see"):
             fallbacktoimagesearch = "1"
             self.msglist = removefirstindex(self.msglist)
         getintentlist2 = ["2", "to", "too", "i", "me", "us", "we", "this", "these", "those"]
