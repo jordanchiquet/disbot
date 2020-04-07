@@ -241,7 +241,7 @@ class heycomputer:
     
 
     def videoexecute(self):
-        vidcmdlist = ["vid", "video", "movie", "movies", "youtube", "youtubes", "yt", "of", "a", "an"]
+        vidcmdlist = ["play", "a", "an", "vid", "video", "movie", "movies", "youtube", "youtubes", "yt", "of", "a", "an"]
         for x in vidcmdlist:
             if self.msglist[0] == x:
                 removefirstindex(self.msglist)
