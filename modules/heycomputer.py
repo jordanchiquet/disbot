@@ -93,6 +93,10 @@ class heycomputer:
 
 
     def definitionexecute(self):
+        if self.msglist[0] == "of":
+            removefirstindex(self.msglist)
+            if self.msglist[0] == "being" and self.msglist[1] == "lonely":
+                return("I know this feeling very well...\nhttps://youtu.be/8L-H7TIRRSs")
         definitionquery = " ".join(self.msglist)
         print("starting definition get with query: [" + definitionquery + "]")
         return(getmeaning(definitionquery))
@@ -119,8 +123,6 @@ class heycomputer:
     
 
     def searchexecute(self):
-        if self.msglist[0] == "who":
-            who = True
         googlequery = " ".join(self.msglist)
         print("starting googleget get with query: [" + googlequery + "]")
         return(googleget(googlequery))
@@ -176,7 +178,7 @@ class heycomputer:
         searchcmdlist = ["bing", "google", "search", "find"]
         search = False
         for x in searchcmdlist:
-            if self.msglist[0] == searchcmdlist:
+            if self.msglist[0] == x:
                 removefirstindex(self.msglist)
                 search = True
                 break
@@ -246,6 +248,5 @@ class heycomputer:
                             return("whatsthemeaningofthis")
         if self.msglist[0] == "if":
             return("whatif")
-
 
 
