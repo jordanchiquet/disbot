@@ -29,9 +29,10 @@ class heycomputer:
             print("executing heycomputer merriam webster")
             return(self.definitionexecute())
         elif self.parseforsearch() == True:
+            print("parseforsearch was true")
             print("executing heycomputer search")
             return(self.searchexecute())
-        elif self.parsedforvid(self.msgcontent[0]) == True:
+        elif self.parseforvid(self.msglist[0]) == True:
             print("executing hey computer youtube search")
             return(self.videoexecute)
         elif self.msglist[0] == "terminate":
@@ -184,7 +185,7 @@ class heycomputer:
         return(search)
     
 
-    def parsedforvid(self, intenttext):
+    def parseforvid(self, intenttext):
         print("starting parse for vid with keyword: [" + intenttext + "]")
         vid = False
         if intenttext.startswith("vid") or intenttext.startswith("movie") or intenttext == "youtube" or intenttext == "yt":
@@ -193,20 +194,20 @@ class heycomputer:
 
 
     def nointent(self, intentparams):
-        if intentparams[0] == "1":
-            return(self.imageexecute("nonspecific"))
-        elif intentparams[1] == "1":
-            return(self.searchexecute())
-        elif intentparams[2] == "1":
-            return(self.definitionexecute())
         parseforimagelist = self.parseforimage(self.msglist[len(self.msglist) - 1]).split("|")
         if parseforimagelist[0] == "True":
             print("executing heycomputer image search")
             del self.msglist[len(self.msglist) - 1]
             return(self.imageexecute(parseforimagelist[1]))
-        if self.parseforvid(self.msglist[len(self.msglist) - 1]) == True:
+        elif self.parseforvid(self.msglist[len(self.msglist) - 1]) == True:
             del self.msglist[len(self.msglist) - 1]
             return(self.videoexecute())
+        elif intentparams[0] == "1":
+            return(self.imageexecute("nonspecific"))
+        elif intentparams[1] == "1":
+            return(self.searchexecute())
+        elif intentparams[2] == "1":
+            return(self.definitionexecute())
         else:
             return("I didn't understand your command because I'm retarded and Jordan gave me a very small vocabulary!")
 
