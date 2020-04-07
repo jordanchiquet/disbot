@@ -35,7 +35,7 @@ class heycomputer:
             return(self.searchexecute())
         elif self.parseforvid(self.msglist[0]) == True:
             print("executing hey computer youtube search")
-            return(self.videoexecute)
+            return(self.videoexecute())
         elif self.msglist[0] == "terminate":
             return("terminate")
         elif self.msglist[0] == "speed":
@@ -47,8 +47,7 @@ class heycomputer:
     def getintenttext(self):
         print("starting getintenttext")
         getintentlist1 = ["ay", "ayo", "ayy", "ayyy", "hey", "hello", "hi", "hola", "yo", "comp", "computer", "compadre",
-                    "machine", "renard", "retard", "bot", "robot", "could", "will", "you", "please", "fucking", "fuckin", "freaking", "frikking", 
-                    "freakin", "frikkin", "go", "a", "head", "ahead", "and", "give", "get", "grab", "do"]
+                    "machine", "renard", "retard", "bot", "robot", "could", "will"]
         fallbacktoimagesearch = "0"
         loadpull = "0"
         look = "0"
@@ -63,6 +62,11 @@ class heycomputer:
                 self.msglist = removefirstindex(self.msglist)
                 if self.msglist[0] == "get" or self.msglist[0] == "have":
                     self.msglist = removefirstindex(self.msglist)
+        getintentlist2 = ["you", "please", "fucking", "fuckin", "freaking", "frikking", 
+                        "freakin", "frikkin", "go", "a", "head", "ahead", "and", "give", "get", "grab", "do"]
+        for x in getintentlist2:
+            if self.msglist[0] == x:
+                self.msglist = removefirstindex(self.msglist)
         if self.msglist[0] == "load" or self.msglist[0] == "pull" or self.msglist[0] == "laod" or self.msglist[0] == "lod":
             print("self.msglist[0] was load")
             loadpull = "1"
@@ -74,16 +78,16 @@ class heycomputer:
         if self.msglist[0] == "show" or (self.msglist[0] == "let" and self.msglist[2] == "see") or (self.msglist[0] == "see"):
             fallbacktoimagesearch = "1"
             self.msglist = removefirstindex(self.msglist)
-        getintentlist2 = ["2", "to", "too", "for", "i", "me", "us", "we", "this", "these", "those"]
-        for x in getintentlist2:
+        getintentlist3 = ["2", "to", "too", "for", "i", "me", "us", "we", "this", "these", "those"]
+        for x in getintentlist3:
             if self.msglist[0] == x:
                 self.msglist = removefirstindex(self.msglist)
-        getintentlist3 = ["asshole", "fuckin", "freakin", "frikkin", "jabroni"]
-        for x in getintentlist3:
+        getintentlist4 = ["asshole", "fuckin", "freakin", "frikkin", "jabroni"]
+        for x in getintentlist4:
             if (self.msglist[0]).startswith(x):
                 self.msglist = removefirstindex(self.msglist)
-        getintentlist4 = ["see", "up", "the", "a", "an"]
-        for x in getintentlist4:
+        getintentlist5 = ["see", "up", "the", "a", "an"]
+        for x in getintentlist5:
             if self.msglist[0] == x:
                 self.msglist = removefirstindex(self.msglist)
         finalentryindex = len(self.msglist) - 1
