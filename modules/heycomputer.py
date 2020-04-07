@@ -47,13 +47,21 @@ class heycomputer:
         print("starting getintenttext")
         getintentlist1 = ["ay", "ayo", "ayy", "ayyy", "hey", "hello", "hi", "hola", "yo", "comp", "computer", "compadre",
                     "machine", "renard", "retard", "bot", "robot", "please", "fucking", "fuckin", "freaking", "frikking", 
-                    "freakin", "frikkin", "go", "a", "head", "ahead", "and", "give", "do"]
+                    "freakin", "frikkin", "go", "a", "head", "ahead", "and", "give", "get", "do"]
         fallbacktoimagesearch = "0"
         loadpull = "0"
         look = "0"
+        can = "0"
         for x in getintentlist1:
             if self.msglist[0] == x:
                 self.msglist = removefirstindex(self.msglist)
+        if self.msglist[0] == "can":
+            can = "1"
+            self.msglist = removefirstindex(self.msglist)
+            if self.msglist[0] == "i" or self.msglist[0] == "we":
+                self.msglist = removefirstindex(self.msglist)
+                if self.msglist[0] == "get" or self.msglist[0] == "have":
+                    self.msglist = removefirstindex(self.msglist)
         if self.msglist[0] == "load" or self.msglist[0] == "pull" or self.msglist[0] == "laod" or self.msglist[0] == "lod":
             print("self.msglist[0] was load")
             loadpull = "1"
@@ -89,7 +97,13 @@ class heycomputer:
         if len(self.msglist) < 1:
             return("inv")            
         else:
-            return(fallbacktoimagesearch + "|" + loadpull + "|" + look)
+            return(fallbacktoimagesearch + "|" + loadpull + "|" + look + "|" + can)
+
+
+    def canexecute(self):
+        print("starting canexecute with self.msglist[0]: [" + self.msglist[0] + "]")
+        if (self.msglist[0] == "hot" and self.msglist[1] == "tub") or (self.msglist[0] == "hottub"):
+            return("this robot is in NO WAY associated with State Farm but... keep this between us https://youtu.be/Dkvy6K4CwbM")
 
 
     def definitionexecute(self):
@@ -212,6 +226,8 @@ class heycomputer:
             return(self.searchexecute())
         elif intentparams[2] == "1":
             return(self.definitionexecute())
+        elif intentparams[3] == "1":
+            return(self.canexecute())
         else:
             return("I didn't understand your command because I'm retarded and Jordan gave me a very small vocabulary!")
 
