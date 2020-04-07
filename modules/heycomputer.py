@@ -204,7 +204,7 @@ class heycomputer:
     def parseforvid(self, intenttext):
         print("starting parse for vid with keyword: [" + intenttext + "]")
         vid = False
-        if intenttext.startswith("vid") or intenttext.startswith("movie") or intenttext == "youtube" or intenttext == "yt":
+        if intenttext.startswith("vid") or intenttext.startswith("movie") or intenttext == "youtube" or intenttext == "yt" or intenttext == "play":
             vid = True
         return(vid)
 
