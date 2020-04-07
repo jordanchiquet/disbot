@@ -205,6 +205,8 @@ class heycomputer:
             del self.msglist[len(self.msglist) - 1]
             return(self.videoexecute())
         elif intentparams[0] == "1":
+            if self.msglist[0] == "way" and len(self.msglist) == 1:
+                return("my queen?")
             return(self.imageexecute("nonspecific"))
         elif intentparams[1] == "1":
             return(self.searchexecute())
