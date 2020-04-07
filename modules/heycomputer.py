@@ -4,6 +4,7 @@ from modules.googleapi import googleget
 from modules.listemptystring import listemptystring
 from modules.merriamapi import getmeaning
 from modules.removefirstindex import removefirstindex
+from modules.youtube import youtubesearch
 
 
 class heycomputer:
@@ -20,7 +21,7 @@ class heycomputer:
         if getintentresult == "inv":
             print("INTENT WAS INVALID")
             return("inv")
-        parseforimagelist = self.parseforimage().split("|")
+        parseforimagelist = self.parseforimage(self.msglist[0]).split("|")
         if parseforimagelist[0] == "True":
             print("executing heycomputer image search")
             return(self.imageexecute(parseforimagelist[1]))
@@ -30,18 +31,15 @@ class heycomputer:
         elif self.parseforsearch() == True:
             print("executing heycomputer search")
             return(self.searchexecute())
+        elif self.parsedforvid(self.msgcontent[0]) == True:
+            print("executing hey computer youtube search")
+            return(self.videoexecute)
         elif self.msglist[0] == "terminate":
             return("terminate")
         elif self.msglist[0] == "speed":
             return(self.speedexecute())
-        elif intentparams[0] == "1":
-            return(self.imageexecute("nonspecific"))
-        elif intentparams[1] == "1":
-            return(self.searchexecute())
-        elif intentparams[2] == "1":
-            return(self.definitionexecute())
         else:
-            return("I didn't understand your command because I'm retarded and Jordan gave me a very small vocabulary!")
+            return(self.nointent(intentparams))
 
 
     def getintenttext(self):
@@ -148,22 +146,22 @@ class heycomputer:
             return("False|artificialnull")
     
 
-    def parseforimage(self):
-        print("starting parseforimage with keyword: [" + self.msglist[0] + "]")
+    def parseforimage(self, intenttext):
+        print("starting parseforimage with keyword: [" + intenttext + "]")
         imagecmdlist = ["img", "image", "photo", "photograph", "pic", "picture", "snapshot", "bmp", "gif", "jpg", "jpeg", "png"]
         filetypelist = ["bmp", "gif", "jpg", "jpeg", "png"]
         for x in imagecmdlist:
-            if self.msglist[0] == x:
-                print("self.msglist[0] was found in imagecmdlist: [" + self.msglist[0] + "]")
+            if intenttext == x:
+                print("self.msglist[0] was found in imagecmdlist: [" + intenttext + "]")
                 isimagecmd = "True"
                 specificfilesearch = "nonspecific"
                 break
         else:
             for x in filetypelist:
-                if self.msglist[0] == x:
-                    print("self.msglist[0] was found in filetypelist: [" + self.msglist[0] + "]")
+                if intenttext == x:
+                    print("self.msglist[0] was found in filetypelist: [" + intenttext + "]")
                     isimagecmd = "True"
-                    specificfilesearch = self.msglist[0]
+                    specificfilesearch = intenttext
                     break
             else:
                 print("self.msglist[0] was not image command, isimagecmd to False, specificfilesearch to blank")
@@ -184,15 +182,51 @@ class heycomputer:
         if self.msglist[0] == "for" or self.msglist[0] == "of":
             removefirstindex(self.msglist)
         return(search)
+    
 
+    def parsedforvid(self, intenttext):
+        print("starting parse for vid with keyword: [" + intenttext + "]")
+        vid = False
+        if intenttext.startswith("vid") or intenttext.startswith("movie") or intenttext == "youtube" or intenttext == "yt":
+            vid = True
+        return(vid)
+
+
+    def nointent(self, intentparams):
+        if intentparams[0] == "1":
+            return(self.imageexecute("nonspecific"))
+        elif intentparams[1] == "1":
+            return(self.searchexecute())
+        elif intentparams[2] == "1":
+            return(self.definitionexecute())
+        parseforimagelist = self.parseforimage(self.msglist[len(self.msglist) - 1]).split("|")
+        if parseforimagelist[0] == "True":
+            print("executing heycomputer image search")
+            del self.msglist[len(self.msglist) - 1]
+            return(self.imageexecute(parseforimagelist[1]))
+        if self.parseforvid(self.msglist[len(self.msglist) - 1]) == True:
+            del self.msglist[len(self.msglist) - 1]
+            return(self.videoexecute())
+        else:
+            return("I didn't understand your command because I'm retarded and Jordan gave me a very small vocabulary!")
 
 
     def speedexecute(self):
-            if self.msglist[1] == "me":
-                if self.msglist[2] == "up":
-                    return("https://youtu.be/dCuCpVPkWDY")
-                if self.msglist[2] == "down":
-                    return("https://youtu.be/iALO4L166WU")
+        if self.msglist[1] == "me":
+            if self.msglist[2] == "up":
+                return("https://youtu.be/dCuCpVPkWDY")
+            if self.msglist[2] == "down":
+                return("https://youtu.be/iALO4L166WU")
+    
+
+    def videoexecute(self):
+        vidcmdlist = ["vid", "video", "movie", "movies", "youtube", "youtubes", "yt", "of", "a", "an"]
+        for x in vidcmdlist:
+            if self.msglist[0] == x:
+                removefirstindex(self.msglist)
+        vidquery = " ".join(self.msglist)
+        return(youtubesearch(vidquery))
+        
 
 
     def whatparse(self):
