@@ -46,8 +46,8 @@ class heycomputer:
     def getintenttext(self):
         print("starting getintenttext")
         getintentlist1 = ["ay", "ayo", "ayy", "ayyy", "hey", "hello", "hi", "hola", "yo", "comp", "computer", "compadre",
-                    "machine", "renard", "retard", "bot", "robot", "please", "fucking", "fuckin", "freaking", "frikking", 
-                    "freakin", "frikkin", "go", "a", "head", "ahead", "and", "give", "get", "do"]
+                    "machine", "renard", "retard", "bot", "robot", "could", "will", "you", "please", "fucking", "fuckin", "freaking", "frikking", 
+                    "freakin", "frikkin", "go", "a", "head", "ahead", "and", "give", "get", "grab", "do"]
         fallbacktoimagesearch = "0"
         loadpull = "0"
         look = "0"
@@ -73,7 +73,7 @@ class heycomputer:
         if self.msglist[0] == "show" or (self.msglist[0] == "let" and self.msglist[2] == "see") or (self.msglist[0] == "see"):
             fallbacktoimagesearch = "1"
             self.msglist = removefirstindex(self.msglist)
-        getintentlist2 = ["2", "to", "too", "i", "me", "us", "we", "this", "these", "those"]
+        getintentlist2 = ["2", "to", "too", "for", "i", "me", "us", "we", "this", "these", "those"]
         for x in getintentlist2:
             if self.msglist[0] == x:
                 self.msglist = removefirstindex(self.msglist)
