@@ -9,7 +9,8 @@ from modules.youtube import youtubesearch
 
 class heycomputer:
     def __init__(self, msgcontent):
-        self.msgcontent = (msgcontent.replace(".","")).lower()
+        self.msgcontent = (msgcontent.replace(".", "")).lower()
+        self.msgcontent = (self.msgcontent.replace(",", "")).lower()
         self.msglist = msgcontent.split(" ")
     
 
