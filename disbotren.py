@@ -183,10 +183,10 @@ async def on_message(message):
     "miss you" in mclower):
         await channel.send(
             "haha gay!")
-    if "meant to be" in mclower:
-        await channel.send(
-            "https://www.facebook.com/magicmenlive/videos/magic-men"
-            "-live-florida-georgia-line-meant-to-be/2147632005458542/")
+    # if "meant to be" in mclower:
+    #     await channel.send(
+    #         "https://www.facebook.com/magicmenlive/videos/magic-men"
+    #         "-live-florida-georgia-line-meant-to-be/2147632005458542/")
     if "print time" == mclower:
         await channel.send(datetime.now())
     if "same sex" in mclower:
@@ -443,13 +443,13 @@ async def timercheck():
             if response[2] == "":
                 await channel.send("<@!" + response[1] + "> Ringa ling dong, the time " + (response[5])[:19] + " has finally come!")
             else:
-                await channel.send("<@!" + response[1] + "> Sir you must remember: \"" + response[2] + "\" | " + (response[5])[:-3])
+                await channel.send("<@!" + response[1] + "> Sir you must remember: \"" + response[2] + "\" | " + (response[5])[:19])
         else:
             notifylist = response[4].split("|")
             if response[2] == "":
                 await channel.send("<@!" + response[1] + "> Ringa ling dong, the time " + (response[5])[:19] + " has finally come!")
             else:
-                await channel.send("<@!" + response[1] + "> Sir you must remember: \"" + response[2] + "\" | " + (response[5])[:-3])
+                await channel.send("<@!" + response[1] + "> Sir you must remember: \"" + response[2] + "\" | " + (response[5])[:19])
             for x in notifylist[:-1]:
                 await channel.send("<@!" + x + ">,  you too have been notified!")
 
@@ -731,7 +731,7 @@ async def quote(ctx, a: str = None, b: str = None):
                 await ctx.send("\"" + qtxt + "\" | " + name + " | " + date[:16] + " | ID:" + str(qid))
                 return
             else:
-                embed = discord.Embed(title=qtxt, description=("Quote #" + str(qid) + " by " + name + " - " + date[:]), color=0x800080)
+                embed = discord.Embed(title=qtxt, description=("Quote #" + str(qid) + " by " + name + " - " + date[:16]), color=0x800080)
                 await ctx.send(embed=embed)
         if x is None:
             await ctx.send("quote not found dog")
