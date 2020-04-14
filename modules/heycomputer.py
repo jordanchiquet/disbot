@@ -109,6 +109,8 @@ class heycomputer:
         print("starting canexecute with self.msglist[0]: [" + self.msglist[0] + "]")
         if (self.msglist[0] == "hot" and self.msglist[1] == "tub") or (self.msglist[0] == "hottub"):
             return("this robot is in NO WAY associated with State Farm but... keep this between us https://youtu.be/Dkvy6K4CwbM")
+        if self.msglist[0] == "witness":
+            return("placeholder")
 
 
     def definitionexecute(self):

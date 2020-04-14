@@ -980,8 +980,7 @@ async def war(ctx, a: str = None, b: str = None):
         print("warzone reached users class")
         battlenetcheck = battlenetcheckinit.userread()
         print("battlenetcheck: [" + str(battlenetcheck) +"]")
-        print("battlenetcheck[0]: [" + str(battlenetcheck[0]) +"]")
-        if battlenetcheck[0] is None:
+        if battlenetcheck is None or battlenetcheck[0] is None:
             await ctx.send("No user found! Use \".war register battlenettagwithnumbersignandnumbers\"")
         else:
             battlenettag = battlenetcheck[0]
@@ -994,7 +993,7 @@ async def war(ctx, a: str = None, b: str = None):
         print("warzone wrote battlenet tag: [" + a + "]")
         await ctx.send("new gamertag stored")
     else:
-        battlenettag = battlenetcheck[0]
+        battlenettag = a
         warzoneresponse = warzonestats(a)
     if warzoneresponse == "inv":
         print("got inv")
@@ -1012,7 +1011,7 @@ async def war(ctx, a: str = None, b: str = None):
         embed = discord.Embed(title=battlenettag.split("#")[0] + " Level " + level, color=0x00badf)
         embed.set_thumbnail(url="https://i.insider.com/55a3e234eab8eab243028ac8?width=300&format=jpeg&auto=webp")
         embed.add_field(name="KILLS", value=kills)
-        embed.add_field(name="DEATHS", value=deaths + " (" + suicides + " suicides)")
+        embed.add_field(name="DEATHS", value=deaths)
         embed.add_field(name="K/D", value=ratio)
         embed.add_field(name="WINS", value=wins + " (" + str(int(wins)*100/int(games))[:4] + "%)")
         embed.add_field(name="TOP 10", value=top10 + " (" + str(int(top10)*100/int(games))[:4] + "%)")
