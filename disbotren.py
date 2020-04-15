@@ -119,6 +119,7 @@ async def on_message(message):
     channel = message.channel
     mclower = message.content.lower()
     mclower = mclower.replace(".","")
+    mclower = mclower.replace("!","")
     if mclower.startswith("hey") or mclower.startswith("hi") or mclower.startswith("hello") or mclower.startswith("hola") or mclower.startswith("ay") or mclower.startswith("ayo"):
         mclowersplit = mclower.split(" ")
         if mclowersplit[1].startswith("comput") or mclowersplit[1] == ("compadre") or mclowersplit[1] == "machine" or mclowersplit[1] == "renard":
@@ -214,11 +215,14 @@ async def on_message(message):
         signfile = random.randint(min, max)
         await channel.send(file=File("/home/ubuntu/disbot/picfolder/heresyoursignfolder/heresyoursign" + str(signfile) + ".png"))
     if mclower.endswith("this bitch"):
+        print("this bitch invoked")
         if len(mclower.split(" ")) == 3:
+            print("length 3")
             path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/bitchfolder").__next__()
             min = 1
             max = len(files)
             bitchfile = random.randint(min, max)
+            print("attempting to send file: [" + str(bitchfile) + "]")
             await channel.send(file=File("/home/ubuntu/disbot/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
         else:
             word = mclower.split(" ")[-3]
