@@ -80,7 +80,7 @@ async def on_ready():
     print(bot.latency)
     print("-----------------------------------")
     channel = bot.get_channel(600430089519497235)
-    embed = discord.Embed(title="Computer Online Mode:", description=" [ON] OFF ", color=0xee657)
+    embed = discord.Embed(title="Computer Online Mode:", description=" [ON] OFF ", color=0xee657) 
     await channel.send(embed=embed)
 
 
@@ -128,6 +128,10 @@ async def on_message(message):
             print("heycomputeresult: [" + heycomputeresult + "]")
             if heycomputeresult == "terminate":
                 await channel.send(file=File("/home/ubuntu/disbot/picfolder/terminate.png"))
+            elif heycomputeresult == "witness":
+                embed = discord.Embed(description="[He is risen](https://www.amazon.com/product-reviews/B0015DWLH6/ref=acr_dp_hist_5?ie=UTF8&filterByStar=five_star&reviewerType=all_reviews#reviews-filter-bar)", color=0xee657) 
+                embed.set_thumbnail(url="https://thepreachersword.files.wordpress.com/2013/05/prayer-jesus.jpg")
+                await channel.send(embed=embed)
             elif heycomputeresult == "inv" or heycomputeresult is None:
                 await channel.send("a mistake was made... the computer have processed your message but could not... process")
             elif heycomputeresult == "donothing":
@@ -142,6 +146,10 @@ async def on_message(message):
         print("heycomputeresult: [" + heycomputeresult + "]")
         if heycomputeresult == "terminate":
             await channel.send(file=File("/home/ubuntu/disbot/picfolder/terminate.png"))
+        elif heycomputeresult == "witness":
+            embed = discord.Embed(description="[He is risen](https://www.amazon.com/product-reviews/B0015DWLH6/ref=acr_dp_hist_5?ie=UTF8&filterByStar=five_star&reviewerType=all_reviews#reviews-filter-bar)", color=0xee657) 
+            embed.set_thumbnail(url="https://thepreachersword.files.wordpress.com/2013/05/prayer-jesus.jpg")
+            await channel.send(embed=embed)
         elif heycomputeresult == "inv" or heycomputeresult is None:
             await channel.send("a mistake was made... the computer have processed your message but could not... process")
         elif heycomputeresult == "donothing":
@@ -343,9 +351,8 @@ async def chanid(ctx):
 
 @bot.command()
 async def datetest(ctx):
-    await ctx.send("datetime.now(): " + datetime.now() + "\n" + 
-                    "datetime.now().date: " + datetime.now().date + "\n" +
-                    "datetime.now().date(): " + datetime.now().date())
+    await ctx.send("datetime.now(): " + str(datetime.now()) + "\n" + 
+                    "datetime.now().date(): " + str(datetime.now().date()))
 
 
 @bot.command()

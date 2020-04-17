@@ -40,6 +40,8 @@ class heycomputer:
             return("terminate")
         elif self.msglist[0] == "speed":
             return(self.speedexecute())
+        elif self.msglist[0] == "doctor":
+            return("well I don't have a degree but I have used topaz and opal crystals to infuse positive energy into this message... use it wisely...")
         else:
             return(self.nointent(intentparams))
 
@@ -91,8 +93,8 @@ class heycomputer:
             if self.msglist[0] == x:
                 self.msglist = removefirstindex(self.msglist)
         finalentryindex = len(self.msglist) - 1
-        if self.msglist[finalentryindex] == "me":
-            print("finalentryindex was me... checking for \"for\"")
+        if self.msglist[finalentryindex] == "me" or self.msglist[finalentryindex] == "us":
+            print("finalentryindex was me or us... checking for \"for\"")
             penultimateentryindex = finalentryindex - 1
             if self.msglist[penultimateentryindex] == "for":
                 print("penultimate index was for and last index was me. deleting both.")
@@ -107,10 +109,14 @@ class heycomputer:
 
     def canexecute(self):
         print("starting canexecute with self.msglist[0]: [" + self.msglist[0] + "]")
-        if (self.msglist[0] == "hot" and self.msglist[1] == "tub") or (self.msglist[0] == "hottub"):
+        if self.msglist[0] == "doctor":
+            return("well I don't have a degree but I have used topaz and opal crystals to infuse positive energy into this message... use it wisely...")
+        elif self.msglist[0] == "hand":
+            return("https://i.pinimg.com/736x/e3/29/e7/e329e7f20a4e076d911f314bf1b0216f.jpg")
+        elif (self.msglist[0] == "hot" and self.msglist[1] == "tub") or (self.msglist[0] == "hottub"):
             return("this robot is in NO WAY associated with State Farm but... keep this between us https://youtu.be/Dkvy6K4CwbM")
-        if self.msglist[0] == "witness":
-            return("placeholder")
+        elif self.msglist[0] == "witness":
+            return("witness")
 
 
     def definitionexecute(self):
@@ -236,7 +242,7 @@ class heycomputer:
         elif intentparams[3] == "1":
             return(self.canexecute())
         else:
-            return("I didn't understand your command because I'm retarded and Jordan gave me a very small vocabulary!")
+            return("donothing")
 
 
     def speedexecute(self):
@@ -245,6 +251,8 @@ class heycomputer:
                 return("https://youtu.be/dCuCpVPkWDY")
             if self.msglist[2] == "down":
                 return("https://youtu.be/iALO4L166WU")
+        if self.msglist[1] == "it" and self.msglist[2] == "up":
+            return("I'M TRYING GOD DAMMIT >_<")
     
 
     def videoexecute(self):
