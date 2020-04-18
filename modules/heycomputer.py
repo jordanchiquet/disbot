@@ -42,7 +42,7 @@ class heycomputer:
             return(self.speedexecute())
         elif self.msglist[0] == "doctor":
             return("well I don't have a degree but I have used topaz and opal crystals to infuse positive energy into this message... use it wisely...")
-        elif self.msglist[0] == "add" and self.msglist[1] == "1" and self.msglist[2] == "to" and self.msglist[4] == "lielog"
+        elif self.msglist[0] == "add" and self.msglist[1] == "1" and self.msglist[2] == "to" and self.msglist[4] == "lielog":
             return("LIELOG UPDATED")
         else:
             return(self.nointent(intentparams))
