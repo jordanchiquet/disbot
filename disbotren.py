@@ -1010,14 +1010,20 @@ async def war(ctx, a: str = None, b: str = None):
         suicides = warstats[3]
         ratio = warstats[4]
         wins = warstats[5]
-        top10 = warstats[6]
-        games = warstats[7]
-        embed = discord.Embed(title=battlenettag.split("#")[0] + " Level " + level, color=0x00badf)
+        top5 = warstats[6]
+        top10 = warstats[7]
+        games = warstats[8]
+        namebeforenumber = battlenettag.split("#")[0]
+        numberaftername = battlenettag.split("#")[1]
+        embed = discord.Embed(title = namebeforenumber + " Level " + level, 
+                            description ="[more stats...](https://cod.tracker.gg/modern-warfare/profile/battlenet/" + namebeforenumber + "%23" + numberaftername + "/mp)", 
+                            color = 0x00badf)
         embed.set_thumbnail(url="https://i.insider.com/55a3e234eab8eab243028ac8?width=300&format=jpeg&auto=webp")
         embed.add_field(name="KILLS", value=kills)
         embed.add_field(name="DEATHS", value=deaths)
         embed.add_field(name="K/D", value=ratio)
         embed.add_field(name="WINS", value=wins + " (" + str(int(wins)*100/int(games))[:4] + "%)")
+        embed.add_field(name="TOP 5", value=top5 + " (" + str(int(top5)*100/int(games))[:4] + "%)")
         embed.add_field(name="TOP 10", value=top10 + " (" + str(int(top10)*100/int(games))[:4] + "%)")
         embed.add_field(name="GAMES", value=games)
         await ctx.send(embed=embed)
