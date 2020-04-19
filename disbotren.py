@@ -1016,7 +1016,7 @@ async def war(ctx, a: str = None, b: str = None):
         namebeforenumber = battlenettag.split("#")[0]
         numberaftername = battlenettag.split("#")[1]
         embed = discord.Embed(title = namebeforenumber + " Level " + level, 
-                            description ="[more stats...](https://cod.tracker.gg/modern-warfare/profile/battlenet/" + namebeforenumber + "%23" + numberaftername + "/mp)", 
+                            description ="[more stats...](https://cod.tracker.gg/warzone/profile/battlenet/" + namebeforenumber + "%23" + numberaftername + "/overview)", 
                             color = 0x00badf)
         embed.set_thumbnail(url="https://i.insider.com/55a3e234eab8eab243028ac8?width=300&format=jpeg&auto=webp")
         embed.add_field(name="KILLS", value=kills)
