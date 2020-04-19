@@ -36,14 +36,10 @@ class heycomputer:
         elif self.parseforvid(self.msglist[0]) == True:
             print("executing hey computer youtube search")
             return(self.videoexecute())
-        elif self.msglist[0] == "terminate":
-            return("terminate")
-        elif self.msglist[0] == "speed":
-            return(self.speedexecute())
-        elif self.msglist[0] == "doctor":
-            return("well I don't have a degree but I have used topaz and opal crystals to infuse positive energy into this message... use it wisely...")
-        elif self.msglist[0] == "add" and self.msglist[1] == "1" and self.msglist[2] == "to" and self.msglist[4] == "lielog":
-            return("LIELOG UPDATED")
+            # put "other" parser here
+        otherparse = self.otherparse()
+        if otherparse != "nonefound":
+            return(otherparse)
         else:
             return(self.nointent(intentparams))
 
@@ -155,6 +151,20 @@ class heycomputer:
         googlequery = " ".join(self.msglist)
         print("starting googleget get with query: [" + googlequery + "]")
         return(googleget(googlequery))
+    
+
+    def otherparse(self):
+        if self.msglist[0] == "terminate":
+            return("terminate")
+        elif self.msglist[0] == "speed":
+            return(self.speedexecute())
+        elif self.msglist[0] == "doctor":
+            return("well I don't have a degree but I have used topaz and opal crystals to infuse positive energy into this message... use it wisely...")
+        elif self.msglist[0] == "add" and self.msglist[1].isdigit() and self.msglist[2] == "to" and self.msglist[4] == "lielog":
+            return("LIELOG UPDATED")
+        else:
+            return("foundnone")
+
 
 
     def parsefordefinition(self):
@@ -255,6 +265,8 @@ class heycomputer:
                 return("https://youtu.be/iALO4L166WU")
         if self.msglist[1] == "it" and self.msglist[2] == "up":
             return("I'M TRYING GOD DAMMIT >_<")
+        else:
+            return("donothing")
     
 
     def videoexecute(self):

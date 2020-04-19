@@ -1,13 +1,24 @@
+import sys
 import requests
 import json
 
 def warzonestats(user):
     print("starting warzonestats with provided user: [" + user + "]")
     try:
-        trackerurl = "https://my.callofduty.com/api/papi-client/stats/cod/v1/title/mw/platform/battle/gamer/" + user.split("#")[0] + "%23" + user.split("#")[1] + "/profile/type/wz"
-        response = requests.get(url = trackerurl)
+        loginsession = requests.Session()
+        loginsession.get("https://profile.callofduty.com/cod/login")
+        tokendict = loginsession.cookies.get_dict()
+        xsrf = tokendict["XSRF-TOKEN"]
+        print("got xsrf: [" + xsrf + "]")
+        logindata = {'username': 'jordanchiq@gmail.com', 'password': 'T3ster12',
+                    'remember_me': 'true', '_csrf': xsrf}
+        loginsession.post("https://profile.callofduty.com/do_login?new_SiteId=cod", data = logindata)
+        trackerurl = "https://my.callofduty.com/api/papi-client/stats/cod/v1/title/mw/platform/battle/gamer/" + user.split("#")[0] + "%23" + user.split("#")[1] + "/profile/type/mp"
+        response = loginsession.get(url = trackerurl)
+        # rlogged = 
         print("got warzonestats response")
         warzonejson = response.json()
+        print(warzonejson)
         level = str(warzonejson["data"]["level"]).split(".")[0]
         kills = str(warzonejson["data"]["lifetime"]["mode"]["br"]["properties"]["kills"]).split(".")[0]
         deaths = str(warzonejson["data"]["lifetime"]["mode"]["br"]["properties"]["deaths"]).split(".")[0]
@@ -19,4 +30,3 @@ def warzonestats(user):
         return(level + "|" + kills + "|" + deaths + "|" + suicides + "|" + ratio + "|" + wins + "|" + top10 + "|" + games)
     except:
         return("inv")
-
