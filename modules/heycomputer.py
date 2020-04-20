@@ -38,7 +38,7 @@ class heycomputer:
             return(self.videoexecute())
             # put "other" parser here
         otherparse = self.otherparse()
-        if otherparse != "nonefound":
+        if otherparse != "foundnone":
             return(otherparse)
         else:
             return(self.nointent(intentparams))

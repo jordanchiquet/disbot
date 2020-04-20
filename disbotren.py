@@ -46,6 +46,7 @@ from modules.renardusers import renardusers
 from modules.timermod.timercl import timercl
 from modules.timermod.timeparser import timeparser
 from modules.warzone import warzonestats
+from modules.zooo import zooo
 
 
 
@@ -661,6 +662,7 @@ async def enhance(ctx):
     else:
         await ctx.send(file=File(newfilepath))
 
+
 @bot.command()
 async def fox(ctx):
     foxr = requests.get('https://randomfox.ca/floof/')
@@ -781,12 +783,7 @@ async def xfile(ctx):
 
 @bot.command()
 async def zoo(ctx):
-    zootxt = "/home/ubuntu/disbot/zoo.txt"
-    zooline = open(zootxt).read().splitlines()
-    zoores = random.choice(zooline)
-    extractor = URLExtract()
-    for url in extractor.gen_urls(str(zoores)):
-        await ctx.send("HAVE YOU BEEN DRINKKIN DANIMAALLS...\n" + url)
+        await ctx.send("HAVE YOU BEEN DRINKKIN DANIMAALLS...\n" + zooo())
 
 
 # ------------------------------------------------- #
