@@ -6,6 +6,8 @@ from modules.merriamapi import getmeaning
 from modules.removefirstindex import removefirstindex
 from modules.youtube import youtubesearch
 
+import random
+
 
 class heycomputer:
     def __init__(self, msgcontent):
@@ -52,6 +54,7 @@ class heycomputer:
         loadpull = "0"
         look = "0"
         can = "0"
+        tell = "0"
         for x in getintentlist1:
             if self.msglist[0] == x:
                 self.msglist = removefirstindex(self.msglist)
@@ -70,6 +73,9 @@ class heycomputer:
         if self.msglist[0] == "load" or self.msglist[0] == "pull" or self.msglist[0] == "laod" or self.msglist[0] == "lod":
             print("self.msglist[0] was load")
             loadpull = "1"
+            self.msglist = removefirstindex(self.msglist)
+        if self.msglist[0] == "tell":
+            tell = "1"
             self.msglist = removefirstindex(self.msglist)
         if self.msglist[0] == "look":
             print("self.msglist[0] was look")
@@ -102,7 +108,7 @@ class heycomputer:
         if len(self.msglist) < 1:
             return("inv")            
         else:
-            return(fallbacktoimagesearch + "|" + loadpull + "|" + look + "|" + can)
+            return(fallbacktoimagesearch + "|" + loadpull + "|" + look + "|" + can + "|" + tell)
 
 
     def canexecute(self):
@@ -253,6 +259,8 @@ class heycomputer:
             return(self.definitionexecute())
         elif intentparams[3] == "1":
             return(self.canexecute())
+        elif intentparams[4] == "1":
+            return (self.tellexecute())
         else:
             return("donothing")
 
@@ -268,6 +276,17 @@ class heycomputer:
         else:
             return("donothing")
     
+    
+    def tellexecute(self):
+        tellthisdudelist = ["me", "us", "them", "everyone", "this", "fuckin", "fucking", "fing", "effing", "frikking", "freaking", "frikkin", "freakin", "dude", "guy", 
+                            "man", "woman", "boy", "girl", "person", "human", "being", "m", "motha", "mother", "mutha", "fucker", "effer", "frikker", "freaker", "mfer"]
+        for x in tellthisdudelist:
+            if self.msglist[0] == x:
+                removefirstindex(self.msglist)
+        telljoin1 = " ".join(self.msglist)
+        if (self.msglist[0] == "more" and len(self.msglist) == 1) or telljoin1.replace(",","") == "more tell me more":
+            responselist = ["did you get very far", "like, did he have a car!?"]
+            return(random.choice(responselist))
 
     def videoexecute(self):
         vidcmdlist = ["play", "a", "an", "vid", "video", "movie", "movies", "youtube", "youtubes", "yt", "of", "a", "an"]
@@ -275,6 +294,7 @@ class heycomputer:
             if self.msglist[0] == x:
                 removefirstindex(self.msglist)
         vidquery = " ".join(self.msglist)
+        print(vidquery)
         return(youtubesearch(vidquery))
         
 

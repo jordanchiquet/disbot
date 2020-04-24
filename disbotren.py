@@ -42,6 +42,7 @@ from modules.dickshadow import executeoverlay
 from modules.googleimageapi import imageget
 from modules.heycomputer import heycomputer
 from modules.merriamapi import getmeaning
+from modules.pullrestart import pullrestart
 from modules.renardusers import renardusers
 from modules.timermod.timercl import timercl
 from modules.timermod.timeparser import timeparser
@@ -408,6 +409,11 @@ async def close(ctx):
     print("terminate request received")
     await client.close()
     await sys.exit()
+
+
+@commands.has_role("High Council of Emoji")
+async def pull(ctx):
+    pullrestart()
 
 
 @close.error
