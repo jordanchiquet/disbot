@@ -410,7 +410,7 @@ async def close(ctx):
     await client.close()
     await sys.exit()
 
-
+@bot.command()
 @commands.has_role("High Council of Emoji")
 async def pull(ctx):
     pullrestart()
