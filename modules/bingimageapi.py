@@ -22,7 +22,4 @@ def bingimage(query):
         else:
             return("No image results returned!")
     except:
-        try:
-            return(imageget(query))
-        except:
-            return("no can find...")
+        return(imageget(query))

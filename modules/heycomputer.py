@@ -12,13 +12,15 @@ import random
 
 
 class heycomputer:
-    def __init__(self, msgcontent, time, user: int = None, channel: int = None):
+    def __init__(self, msgcontent, time, userid, channel, user):
         self.msgcontent = (msgcontent.replace(".", "")).lower()
         self.msgcontent = (self.msgcontent.replace(",", "")).lower()
         self.msglist = self.msgcontent.split(" ")
-        self.user = user
-        self.channel = channel
         self.time = time
+        self.userid = userid
+        self.channel = channel
+        self.user = user
+
     
 
     def execute(self):
@@ -57,7 +59,7 @@ class heycomputer:
     def getintenttext(self):
         print("starting getintenttext")
         getintentlist1 = ["ay", "ayo", "ayy", "ayyy", "hey", "hello", "hi", "hola", "yo", "comp", "computer", "compadre",
-                    "machine", "renard", "retard", "bot", "robot", "could", "will"]
+                        "machine", "renard", "retard", "bot", "robot", "could", "will"]
         fallbacktoimagesearch = "0"
         loadpull = "0"
         look = "0"
@@ -285,7 +287,7 @@ class heycomputer:
         for x in remindlist1:
             if x == self.msglist[0]:
                 removefirstindex(self.msglist)
-        tothat = " to ", " that "
+        tothat = [" to ", " that "]
         onin = [" on ", " in ", " at "]
         if self.msglist[0] in str(tothat):
             removefirstindex(self.msglist)
@@ -347,7 +349,7 @@ class heycomputer:
             c = timestrlist[2]
         if len(timestrlist) > 3:
             d = timestrlist[3]
-        timerinit = timercl(timerstrfinal, self.user, self.channel, self.time, a, b, c, d)
+        timerinit = timercl(timerstrfinal, self.userid, self.channel, self.time, a, b, c, d)
         response = timerinit.timerfunc()
         print(response)
         return(response)
@@ -381,8 +383,13 @@ class heycomputer:
             return(namestr + "\n" + self.definitionexecute())
         elif self.msglist[0] == "how":
             return(namestr + "\n" + self.howexecute())
+        if self.msglist[0] == "to":
+            removefirstindex(self.msglist)
         if len(self.msglist) > 0: 
             remainder = " ".join(self.msglist)
+            remainderrep = {" me ": " " + self.user + " ", " my ": " " + self.user + "'s ", " i ": " " + self.user + " ", "not to ": "do not "}
+            for i, j in remainderrep.items():
+                    remainder = remainder.replace(i, j)
             return(namestr + " " + remainder)
         return("donothing")
         

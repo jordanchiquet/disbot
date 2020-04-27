@@ -52,33 +52,6 @@ class timercl:
 
         print(str(timeorig) + ": timer invoked by user " + str(user) + " in channel " + str(channel))
 
-        if a == "del" or a == "delete":
-            print("user passed timer delete argument")
-            delid = b
-            if delid == "1":
-                print("user attempted to delete timer 1, returning invalid")
-                return ("Timer 1 is a permanent timer to simplify programmatic looping. You can ask Jordan if you want to know more.")
-            else:
-                print("attempting to open timer db")
-                timerdata = open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv", "rt")
-                newtimerdata = open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers1.csv", "a", newline='')
-                reader = csv.reader(timerdata, delimiter=",")
-                writer = csv.writer(newtimerdata)
-                for row in reader:
-                    if delid == row[0]:
-                        print("timer exists, proceeding")
-                        if delid != row[0]:
-                            writer.writerow(row)
-                    else:
-                        print("user requested to delete nonexistent timer, returning invalid")
-                        return ("that timer isn't even real")
-                timerdata.close()
-                newtimerdata.close()
-                os.system('rm /Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv')
-                os.system('mv /Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers1.csv /Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv')
-                print("timer removed")
-                return("Timer #" + delid + " deleted.")
-
         if a == "list":
             print("user requested the timer list")
             return("user requested list")
@@ -313,6 +286,11 @@ class timercl:
             user='dbuser',
             passwd='e4miqtng')
         mycursor = mydb.cursor()
+        timernote = " " + timernote
+        noterep = {" you ": " i ", " me ": " you ", " your ": " my ", " not to ": " do not ", " my ": " your ", " i ": " you ", " i'm ": " you're ", " im ": " ur "}
+        for i, j in noterep.items():
+                    timernote = timernote.replace(i, j)
+        timernote = timernote[0:]
         sql = "INSERT INTO renarddb.timers (user, timernote, timepop, channel, timeorig) VALUES (%s, %s, %s, %s, %s);"
         val = [user, timernote, timepop, channel, timeorig]
         mycursor.execute(sql, val)

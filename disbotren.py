@@ -112,7 +112,7 @@ async def on_member_join(member):
     global joined
     joined += 1
     channel = bot.get_channel(649528092691529749)
-    await channel.send("user sickomode9000 has joined the chatroom")
+    await channel.send("a pedophile has joined the chatroom")
         
 
 @bot.event
@@ -122,7 +122,8 @@ async def on_message(message):
     channelid = message.channel.id
     userid = message.author.id
     channel = message.channel
-    user = message.author
+    print(message.author)
+    user = (str(message.author)).split("#")[0]
     timeorig = (message.created_at - timedelta(hours=5))
     mclower = message.content.lower()
     mclower = mclower.replace(".","")
@@ -130,7 +131,7 @@ async def on_message(message):
     if mclower.startswith("hey") or mclower.startswith("hi") or mclower.startswith("hello") or mclower.startswith("hola") or mclower.startswith("ay") or mclower.startswith("ayo"):
         mclowersplit = mclower.split(" ")
         if mclowersplit[1].startswith("comput") or mclowersplit[1] == ("compadre") or mclowersplit[1] == "machine" or mclowersplit[1] == "renard":
-            heycomputerinit = heycomputer(mclower, timeorig, userid, channelid)
+            heycomputerinit = heycomputer(mclower, timeorig, userid, channelid, user)
             heycomputeresult = heycomputerinit.execute()
             print("heycomputeresult: [" + heycomputeresult + "]")
             if heycomputeresult == "terminate":
@@ -148,7 +149,7 @@ async def on_message(message):
         else:
             return
     if mclower.startswith("comput") or mclower.startswith("compadre") or mclower.startswith("machine") or mclower.startswith("renard"):
-        heycomputerinit = heycomputer(mclower, timeorig, userid, channelid)
+        heycomputerinit = heycomputer(mclower, timeorig, userid, channelid, user)
         heycomputeresult = heycomputerinit.execute()
         print("heycomputeresult: [" + heycomputeresult + "]")
         if heycomputeresult == "terminate":
