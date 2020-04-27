@@ -23,5 +23,3 @@ def imageget(query, filetype: str = None):
         return(imgresult)
     except KeyError:
         return("how you say? not any image find for that image")
-
-print("MAIN DIRECTORY imageget was pulled")

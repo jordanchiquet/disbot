@@ -26,5 +26,3 @@ def bingimage(query):
             return(imageget(query))
         except:
             return("no can find...")
-
-bingimage("tits")

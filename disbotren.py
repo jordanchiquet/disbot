@@ -47,6 +47,7 @@ from modules.renardusers import renardusers
 from modules.timermod.timercl import timercl
 from modules.timermod.timeparser import timeparser
 from modules.warzone import warzonestats
+from modules.wikihow import wikihow
 from modules.zooo import zooo
 
 
@@ -845,6 +846,12 @@ async def gif(ctx):
     gifquery = ctx.message.content[5:]
     delcmd = await ctx.send(imageget(gifquery, "gif"))
     deletelog[ctx.message.id] = delcmd
+
+
+@bot.command()
+async def how(ctx):
+    howquery = ctx.message.content[5:]
+    await ctx.send(wikihow(howquery))
 
 
 @bot.command()

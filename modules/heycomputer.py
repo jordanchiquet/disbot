@@ -4,6 +4,7 @@ from modules.googleapi import googleget
 from modules.listemptystring import listemptystring
 from modules.merriamapi import getmeaning
 from modules.removefirstindex import removefirstindex
+from modules.wikihow import wikihow
 from modules.youtube import youtubesearch
 
 import random
@@ -38,7 +39,8 @@ class heycomputer:
         elif self.parseforvid(self.msglist[0]) == True:
             print("executing hey computer youtube search")
             return(self.videoexecute())
-            # put "other" parser here
+        elif self.msglist[0] == "how":
+            return(self.howexecute())
         otherparse = self.otherparse()
         if otherparse != "foundnone":
             return(otherparse)
@@ -134,7 +136,12 @@ class heycomputer:
     
 
     def howexecute(self):
-        print("placeholder")
+        howcleanuplist = ["how", "do", "does", "i", "we", "you", "one"]
+        for x in howcleanuplist:
+            if self.msglist[0] == x:
+                removefirstindex(self.msglist)
+        howquery = " ".join(self.msglist)
+        return(wikihow(howquery))
         
     def imageexecute(self, filetype, genericsearch: bool = False):  
         imagecmdlistfull = ["img", "image", "photo", "photograph", "pic", "picture", "snapshot", "bmp", "gif", "jpg", "jpeg", "png",
@@ -167,8 +174,8 @@ class heycomputer:
             return("terminate")
         elif self.msglist[0] == "speed":
             return(self.speedexecute())
-        elif self.msglist[0] == "doctor":
-            return("well I don't have a degree but I have used topaz and opal crystals to infuse positive energy into this message... use it wisely...")
+        elif self.msglist[0] == "doctor" and len(self.msglist) == 1:
+            return("I have used topaz and opal crystals to infuse positive energy into this message... use it wisely...")
         elif self.msglist[0] == "add" and self.msglist[1].isdigit() and self.msglist[2] == "to" and self.msglist[4] == "lielog":
             return("LIELOG UPDATED")
         else:
@@ -274,7 +281,7 @@ class heycomputer:
             if self.msglist[2] == "down":
                 return("https://youtu.be/iALO4L166WU")
         if self.msglist[1] == "it" and self.msglist[2] == "up":
-            return("I'M TRYING GOD DAMMIT >_<")
+            return("all turbos set to booster")
         else:
             return("donothing")
     
@@ -290,11 +297,20 @@ class heycomputer:
         if (self.msglist[0] == "more" and len(self.msglist) == 1) or telljoin1.replace(",","") == "more tell me more":
             responselist = ["did you get very far", "like, did he have a car!?"]
             return(random.choice(responselist))
-        # nameprocessor
+        namestr = self.nameprocessor()
+        if (self.parsefordefinition().split("|"))[0] == "True":
+            return(namestr + "\n" + self.definitionexecute())
+        elif self.msglist[0] == "how":
+            return(namestr + "\n" + self.howexecute())
+        if len(self.msglist) > 0: 
+            remainder = " ".join(self.msglist)
+            return(namestr + " " + remainder)
+        return("donothing")
+        
 
 
     def nameprocessor(self):
-        andnamelist = ["andrew", "drew", "dross", "andross", "ace", "acefool", "ace#5910", "<@!201811169625899008>"]
+        andnamelist = ["andrew", "androo", "drew", "dross", "andross", "ace", "acefool", "ace#5910", "<@!201811169625899008>"]
         catherinenamelist = ["cat", "catherine", "cathy", "kittycat", "kitty-cat", "thotiana", "thotiana#3974", "<@!583342254597472287>"]
         franknamelist = ["frank", "kittylitter", "franklin", "warren", "kittylitter#6179", "<@!234381222334300162>"]
         joeynamelist = ["joe", "joey", "joseph", "william", "will", "willy", "slomo", "slomojoe", "slomojoe#2412", "<@!172581464066490369>"]
@@ -304,32 +320,32 @@ class heycomputer:
         for x in andnamelist:
             if self.msglist[0] == x:
                 removefirstindex(self.msglist)
-                return("and")
+                return("<@!201811169625899008>")
         for x in catherinenamelist:
             if self.msglist[0] == x:
                 removefirstindex(self.msglist)
-                return("cat")
+                return("@!583342254597472287>")
         for x in franknamelist:
             if self.msglist[0] == x:
                 removefirstindex(self.msglist)
-                return("frank")
+                return("<@!234381222334300162>")
         for x in joeynamelist:
             if self.msglist[0] == x:
                 removefirstindex(self.msglist)
-                return("joey")
+                return("<@!172581464066490369>")
         for x in logannamelist:
             if self.msglist[0] == x:
                 removefirstindex(self.msglist)
-                return("logan")
+                return("<@!183089174868525056>")
         for x in sethnamelist: 
             if self.msglist[0] == x:
                 removefirstindex(self.msglist)
-                return("seth")
+                return("<@!284427532365725711>")
         for x in stephennamelist:
             if self.msglist[0] == x:
                 removefirstindex(self.msglist)
-                return("stephen")
-        return("noname")
+                return("<@!349806545263001602>")
+        return("sir")
 
 
 
