@@ -314,6 +314,7 @@ class heycomputer:
         catherinenamelist = ["cat", "catherine", "cathy", "kittycat", "kitty-cat", "thotiana", "thotiana#3974", "<@!583342254597472287>"]
         franknamelist = ["frank", "kittylitter", "franklin", "warren", "kittylitter#6179", "<@!234381222334300162>"]
         joeynamelist = ["joe", "joey", "joseph", "william", "will", "willy", "slomo", "slomojoe", "slomojoe#2412", "<@!172581464066490369>"]
+        jordannamelist = ["jor", "jc", "jordan", "nascar", "nascardad", "shiddenfart", "karraig", "darkraper420", "soloman", "solomon", "jordan#1887", "<@!191688156427321344>"]
         logannamelist = ["logan", "logang", "egamer", "insane mental cyborg", "egamer#8277", "<@!183089174868525056>"]
         sethnamelist = ["seth", "campo", "nerfherder", "blue#8484", "<@!284427532365725711>"]
         stephennamelist = ["stephen", "steveo", "steve-o", "steve", "esteban", "cuck", "cuckinator", "cuckinator#7217", "<@!349806545263001602>"]
@@ -333,6 +334,10 @@ class heycomputer:
             if self.msglist[0] == x:
                 removefirstindex(self.msglist)
                 return("<@!172581464066490369>")
+        for x in jordannamelist:
+            if self.msglist[0] == x:
+                removefirstindex(self.msglist)
+                return("<<@!191688156427321344>")
         for x in logannamelist:
             if self.msglist[0] == x:
                 removefirstindex(self.msglist)
