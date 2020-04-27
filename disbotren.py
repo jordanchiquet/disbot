@@ -119,14 +119,18 @@ async def on_member_join(member):
 async def on_message(message):
     if message.author == bot.user:
         return
+    channelid = message.channel.id
+    userid = message.author.id
     channel = message.channel
+    user = message.author
+    timeorig = (message.created_at - timedelta(hours=5))
     mclower = message.content.lower()
     mclower = mclower.replace(".","")
     mclower = mclower.replace("!","")
     if mclower.startswith("hey") or mclower.startswith("hi") or mclower.startswith("hello") or mclower.startswith("hola") or mclower.startswith("ay") or mclower.startswith("ayo"):
         mclowersplit = mclower.split(" ")
         if mclowersplit[1].startswith("comput") or mclowersplit[1] == ("compadre") or mclowersplit[1] == "machine" or mclowersplit[1] == "renard":
-            heycomputerinit = heycomputer(mclower)
+            heycomputerinit = heycomputer(mclower, timeorig, userid, channelid)
             heycomputeresult = heycomputerinit.execute()
             print("heycomputeresult: [" + heycomputeresult + "]")
             if heycomputeresult == "terminate":
@@ -144,7 +148,7 @@ async def on_message(message):
         else:
             return
     if mclower.startswith("comput") or mclower.startswith("compadre") or mclower.startswith("machine") or mclower.startswith("renard"):
-        heycomputerinit = heycomputer(mclower)
+        heycomputerinit = heycomputer(mclower, timeorig, userid, channelid)
         heycomputeresult = heycomputerinit.execute()
         print("heycomputeresult: [" + heycomputeresult + "]")
         if heycomputeresult == "terminate":
@@ -497,7 +501,7 @@ async def timer(ctx, a: str = None, b: str = None, c: str = None, d: str = None)
                 timerinit.timerdefaultwrite()
                 await ctx.send("New default time for your calendar reminders written.")
     else:
-        response = await timerinit.timerfunc()
+        response = timerinit.timerfunc()
         if response == "user requested list":
             await ctx.send("list in development")
         else:

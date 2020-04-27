@@ -25,7 +25,7 @@ class timercl:
         self.c = c
         self.d = d
 
-    async def timerfunc(self):
+    def timerfunc(self):
         a = self.a
         b = self.b
         c = self.c

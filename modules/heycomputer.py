@@ -4,6 +4,7 @@ from modules.googleapi import googleget
 from modules.listemptystring import listemptystring
 from modules.merriamapi import getmeaning
 from modules.removefirstindex import removefirstindex
+from modules.timermod.timercl import timercl
 from modules.wikihow import wikihow
 from modules.youtube import youtubesearch
 
@@ -11,10 +12,13 @@ import random
 
 
 class heycomputer:
-    def __init__(self, msgcontent):
+    def __init__(self, msgcontent, time, user: int = None, channel: int = None):
         self.msgcontent = (msgcontent.replace(".", "")).lower()
         self.msgcontent = (self.msgcontent.replace(",", "")).lower()
         self.msglist = self.msgcontent.split(" ")
+        self.user = user
+        self.channel = channel
+        self.time = time
     
 
     def execute(self):
@@ -41,6 +45,8 @@ class heycomputer:
             return(self.videoexecute())
         elif self.msglist[0] == "how":
             return(self.howexecute())
+        elif self.msglist[0] == "remind":
+            return(self.remindexecute())
         otherparse = self.otherparse()
         if otherparse != "foundnone":
             return(otherparse)
@@ -272,7 +278,80 @@ class heycomputer:
             return (self.tellexecute())
         else:
             return("donothing")
+    
 
+    def remindexecute(self):
+        remindlist1 = ["remind", "me"]
+        for x in remindlist1:
+            if x == self.msglist[0]:
+                removefirstindex(self.msglist)
+        tothat = " to ", " that "
+        onin = [" on ", " in ", " at "]
+        if self.msglist[0] in str(tothat):
+            removefirstindex(self.msglist)
+            timerstr = " ".join(self.msglist)
+            for x in onin:
+                if x in timerstr:
+                    durationcheck = timerstr.split(x)[1]
+                    durationchecklist = durationcheck.split(" ")
+                    if not durationchecklist[0].isdigit() or "/" in durationchecklist[0]:
+                        if x in durationchecklist:
+                            durationcheck2 = durationcheck.split(x)[1]
+                            durationchecklist2 = durationcheck2.split(" ")
+                            if not durationchecklist2[0].isdigit() or "/" in durationchecklist[0]:
+                                return("i did not understand the timer")
+                            else:
+                                timerstrpart1 = durationcheck2
+                                timerstrpart2 = durationcheck.split(x)[0]
+                        else:
+                            return("i did not understand the timer")
+                    else:
+                        timerstrpart1 = durationcheck
+                        timerstrpart2 = timerstr.split(x)[0]
+                    break
+        if self.msglist[0] in str(onin):
+            removefirstindex(self.msglist)
+            timerstr = " ".join(self.msglist)
+            for x in tothat:
+                if x in timerstr:
+                    durationcheck = timerstr.split(x)[0]
+                    durationchecklist = durationcheck.split(" ")
+                    if not durationchecklist[0].isdigit() or "/" in durationchecklist[0]:
+                        if x in durationchecklist:
+                            durationcheck2 = durationcheck.split(x)[0]
+                            durationchecklist2 = durationcheck2.split(" ")
+                            if not durationchecklist2[0].isdigit() or "/" in durationchecklist[0]:
+                                return("i did not understand the timer")
+                            else:
+                                timerstrpart1 = durationcheck2
+                                timerstrpart2 = durationcheck.split(x)[1]
+                        else:
+                            return("i did not understand the timer")
+                    else:
+                        timerstrpart1 = durationcheck
+                        timerstrpart2 = timerstr.split(x)[1]
+                    break 
+        timerstrfinal = (timerstrpart1 + " " + timerstrpart2)
+        return(self.timerstart(timerstrfinal))
+
+
+    def timerstart(self, timerstrfinal):
+        c = None
+        d = None
+        timestrlist = timerstrfinal.split(" ")
+        if len(timestrlist) == 1:
+            return("i did not understand the timer")
+        a = timestrlist[0]
+        b = timestrlist[1]
+        if len(timestrlist) > 2:
+            c = timestrlist[2]
+        if len(timestrlist) > 3:
+            d = timestrlist[3]
+        timerinit = timercl(timerstrfinal, self.user, self.channel, self.time, a, b, c, d)
+        response = timerinit.timerfunc()
+        print(response)
+        return(response)
+            
 
     def speedexecute(self):
         if self.msglist[1] == "me":
@@ -308,16 +387,16 @@ class heycomputer:
         return("donothing")
         
 
-
     def nameprocessor(self):
-        andnamelist = ["andrew", "androo", "drew", "dross", "andross", "ace", "acefool", "ace#5910", "<@!201811169625899008>"]
-        catherinenamelist = ["cat", "catherine", "cathy", "kittycat", "kitty-cat", "thotiana", "thotiana#3974", "<@!583342254597472287>"]
+        andnamelist = ["andrew", "androo", "drew", "dross", "andross", "ace", "acefool", "ace#5910", "<@201811169625899008>"]
+        catherinenamelist = ["cat", "catherine", "cathy", "kittycat", "kitty-cat", "thotiana", "thotiana#3974", "<@583342254597472287>"]
         franknamelist = ["frank", "kittylitter", "franklin", "warren", "kittylitter#6179", "<@!234381222334300162>"]
-        joeynamelist = ["joe", "joey", "joseph", "william", "will", "willy", "slomo", "slomojoe", "slomojoe#2412", "<@!172581464066490369>"]
-        jordannamelist = ["jor", "jc", "jordan", "nascar", "nascardad", "shiddenfart", "karraig", "darkraper420", "soloman", "solomon", "jordan#1887", "<@!191688156427321344>"]
-        logannamelist = ["logan", "logang", "egamer", "insane mental cyborg", "egamer#8277", "<@!183089174868525056>"]
-        sethnamelist = ["seth", "campo", "nerfherder", "blue#8484", "<@!284427532365725711>"]
-        stephennamelist = ["stephen", "steveo", "steve-o", "steve", "esteban", "cuck", "cuckinator", "cuckinator#7217", "<@!349806545263001602>"]
+        joeynamelist = ["joe", "joey", "joseph", "william", "will", "willy", "slomo", "slomojoe", "slomojoe#2412", "<@172581464066490369>"]
+        jordannamelist = ["jor", "jc", "jordan", "nascar", "nascardad", "shiddenfart", "karraig", "darkraper420", "soloman", "solomon", "jordan#1887", "<@191688156427321344>"]
+        logannamelist = ["logan", "logang", "egamer", "insane mental cyborg", "egamer#8277", "<@183089174868525056>"]
+        sethnamelist = ["seth", "campo", "nerfherder", "blue#8484", "<@284427532365725711>"]
+        stephennamelist = ["stephen", "steveo", "steve-o", "steve", "esteban", "cuck", "cuckinator", "cuckinator#7217", "<@349806545263001602>"]
+        print("this is value sent to nameprocessor: [" + self.msglist[0] + "]")
         for x in andnamelist:
             if self.msglist[0] == x:
                 removefirstindex(self.msglist)
@@ -325,7 +404,7 @@ class heycomputer:
         for x in catherinenamelist:
             if self.msglist[0] == x:
                 removefirstindex(self.msglist)
-                return("@!583342254597472287>")
+                return("<@!583342254597472287>")
         for x in franknamelist:
             if self.msglist[0] == x:
                 removefirstindex(self.msglist)
@@ -337,7 +416,7 @@ class heycomputer:
         for x in jordannamelist:
             if self.msglist[0] == x:
                 removefirstindex(self.msglist)
-                return("<<@!191688156427321344>")
+                return("<@!191688156427321344>")
         for x in logannamelist:
             if self.msglist[0] == x:
                 removefirstindex(self.msglist)
@@ -351,8 +430,6 @@ class heycomputer:
                 removefirstindex(self.msglist)
                 return("<@!349806545263001602>")
         return("sir")
-
-
 
 
     def videoexecute(self):
