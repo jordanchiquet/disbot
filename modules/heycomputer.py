@@ -132,6 +132,9 @@ class heycomputer:
         print("starting definition get with query: [" + definitionquery + "]")
         return(getmeaning(definitionquery))
     
+
+    def howexecute(self):
+        print("placeholder")
         
     def imageexecute(self, filetype, genericsearch: bool = False):  
         imagecmdlistfull = ["img", "image", "photo", "photograph", "pic", "picture", "snapshot", "bmp", "gif", "jpg", "jpeg", "png",
@@ -172,7 +175,6 @@ class heycomputer:
             return("foundnone")
 
 
-
     def parsefordefinition(self):
         pfdlist = ["def", "define", "definition", "meaning"]
         for x in pfdlist:
@@ -196,7 +198,7 @@ class heycomputer:
 
     def parseforimage(self, intenttext):
         print("starting parseforimage with keyword: [" + intenttext + "]")
-        imagecmdlist = ["img", "image", "photo", "photograph", "pic", "picture", "snapshot", "bmp", "gif", "jpg", "jpeg", "png"]
+        imagecmdlist = ["img", "image", "images", "photo", "photos", "photograph", "photographs", "pic", "pics", "picture", "pictures", "snapshot", "bmp", "gif", "jpg", "jpeg", "png"]
         filetypelist = ["bmp", "gif", "jpg", "jpeg", "png"]
         for x in imagecmdlist:
             if intenttext == x:
@@ -279,7 +281,8 @@ class heycomputer:
     
     def tellexecute(self):
         tellthisdudelist = ["me", "us", "them", "everyone", "this", "fuckin", "fucking", "fing", "effing", "frikking", "freaking", "frikkin", "freakin", "dude", "guy", 
-                            "man", "woman", "boy", "girl", "person", "human", "being", "m", "motha", "mother", "mutha", "fucker", "effer", "frikker", "freaker", "mfer"]
+                            "man", "woman", "boy", "girl", "person", "human", "being", "m", "motha", "mother", "mutha", "fucker", "effer", "frikker", "freaker", "mfer",
+                            "thot"]
         for x in tellthisdudelist:
             if self.msglist[0] == x:
                 removefirstindex(self.msglist)
@@ -287,6 +290,49 @@ class heycomputer:
         if (self.msglist[0] == "more" and len(self.msglist) == 1) or telljoin1.replace(",","") == "more tell me more":
             responselist = ["did you get very far", "like, did he have a car!?"]
             return(random.choice(responselist))
+        # nameprocessor
+
+
+    def nameprocessor(self):
+        andnamelist = ["andrew", "drew", "dross", "andross", "ace", "acefool", "ace#5910", "<@!201811169625899008>"]
+        catherinenamelist = ["cat", "catherine", "cathy", "kittycat", "kitty-cat", "thotiana", "thotiana#3974", "<@!583342254597472287>"]
+        franknamelist = ["frank", "kittylitter", "franklin", "warren", "kittylitter#6179", "<@!234381222334300162>"]
+        joeynamelist = ["joe", "joey", "joseph", "william", "will", "willy", "slomo", "slomojoe", "slomojoe#2412", "<@!172581464066490369>"]
+        logannamelist = ["logan", "logang", "egamer", "insane mental cyborg", "egamer#8277", "<@!183089174868525056>"]
+        sethnamelist = ["seth", "campo", "nerfherder", "blue#8484", "<@!284427532365725711>"]
+        stephennamelist = ["stephen", "steveo", "steve-o", "steve", "esteban", "cuck", "cuckinator", "cuckinator#7217", "<@!349806545263001602>"]
+        for x in andnamelist:
+            if self.msglist[0] == x:
+                removefirstindex(self.msglist)
+                return("and")
+        for x in catherinenamelist:
+            if self.msglist[0] == x:
+                removefirstindex(self.msglist)
+                return("cat")
+        for x in franknamelist:
+            if self.msglist[0] == x:
+                removefirstindex(self.msglist)
+                return("frank")
+        for x in joeynamelist:
+            if self.msglist[0] == x:
+                removefirstindex(self.msglist)
+                return("joey")
+        for x in logannamelist:
+            if self.msglist[0] == x:
+                removefirstindex(self.msglist)
+                return("logan")
+        for x in sethnamelist: 
+            if self.msglist[0] == x:
+                removefirstindex(self.msglist)
+                return("seth")
+        for x in stephennamelist:
+            if self.msglist[0] == x:
+                removefirstindex(self.msglist)
+                return("stephen")
+        return("noname")
+
+
+
 
     def videoexecute(self):
         vidcmdlist = ["play", "a", "an", "vid", "video", "movie", "movies", "youtube", "youtubes", "yt", "of", "a", "an"]
@@ -296,7 +342,6 @@ class heycomputer:
         vidquery = " ".join(self.msglist)
         print(vidquery)
         return(youtubesearch(vidquery))
-        
 
 
     def whatparse(self):
