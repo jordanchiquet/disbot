@@ -39,6 +39,7 @@ from uszipcode import SearchEngine
 from modules.bingimageapi import bingimage
 from modules.dice import dice
 from modules.dickshadow import executeoverlay
+from modules.giphy import getgif
 from modules.googleimageapi import imageget
 from modules.heycomputer import heycomputer
 from modules.merriamapi import getmeaning
@@ -849,8 +850,7 @@ async def g(ctx):
 @bot.command()
 async def gif(ctx):
     gifquery = ctx.message.content[5:]
-    delcmd = await ctx.send(imageget(gifquery, "gif"))
-    deletelog[ctx.message.id] = delcmd
+    return(getgif(gifquery))
 
 
 @bot.command()

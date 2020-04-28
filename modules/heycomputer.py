@@ -1,4 +1,5 @@
 from modules.bingimageapi import bingimage
+from modules.giphy import getgif
 from modules.googleimageapi import imageget
 from modules.googleapi import googleget
 from modules.listemptystring import listemptystring
@@ -144,13 +145,14 @@ class heycomputer:
     
 
     def howexecute(self):
-        howcleanuplist = ["how", "do", "does", "i", "we", "you", "one"]
+        howcleanuplist = ["how", "do", "does", "could", "can", "i", "we", "you", "one"]
         for x in howcleanuplist:
             if self.msglist[0] == x:
                 removefirstindex(self.msglist)
         howquery = " ".join(self.msglist)
         return(wikihow(howquery))
         
+
     def imageexecute(self, filetype, genericsearch: bool = False):  
         imagecmdlistfull = ["img", "image", "photo", "photograph", "pic", "picture", "snapshot", "bmp", "gif", "jpg", "jpeg", "png",
                             "search", "find", "recon", "seek", "for", "of", "a", "an"]
@@ -161,12 +163,10 @@ class heycomputer:
         if len(self.msglist) < 1:
             return("inv")
         print("filetype is: [" + filetype + "]")
-        if filetype == "" or filetype == "nonspecific":
-            imgquery = " ".join(self.msglist)
-            print("starting bingimage with query: [" + imgquery + "]")
-            return(bingimage(imgquery))
+        imgquery = " ".join(self.msglist)
+        if filetype == "gif":
+            return(getgif(imgquery))
         else:
-            imgquery = " ".join(self.msglist)
             print("starting bingimage with query: [" + imgquery + "]")
             return(imageget(imgquery, filetype))
     
@@ -252,7 +252,7 @@ class heycomputer:
     def parseforvid(self, intenttext):
         print("starting parse for vid with keyword: [" + intenttext + "]")
         vid = False
-        if intenttext.startswith("vid") or intenttext.startswith("movie") or intenttext == "youtube" or intenttext == "yt" or intenttext == "play":
+        if intenttext.startswith("vid") or intenttext.startswith("movie") or intenttext == "youtube" or intenttext == "yt" or intenttext == "play" or intenttext == "talkie":
             vid = True
         return(vid)
 
@@ -440,7 +440,7 @@ class heycomputer:
 
 
     def videoexecute(self):
-        vidcmdlist = ["play", "a", "an", "vid", "video", "movie", "movies", "youtube", "youtubes", "yt", "of", "a", "an"]
+        vidcmdlist = ["play", "a", "an", "vid", "video", "movie", "talkie", "movies", "youtube", "youtubes", "yt", "of", "a", "an"]
         for x in vidcmdlist:
             if self.msglist[0] == x:
                 removefirstindex(self.msglist)
