@@ -290,7 +290,7 @@ class timercl:
         noterep = {" you ": " i ", " me ": " you ", " your ": " my ", " not to ": " do not ", " my ": " your ", " i ": " you ", " i'm ": " you're ", " im ": " ur "}
         for i, j in noterep.items():
                     timernote = timernote.replace(i, j)
-        timernote = timernote[0:]
+        timernote = timernote[1:]
         sql = "INSERT INTO renarddb.timers (user, timernote, timepop, channel, timeorig) VALUES (%s, %s, %s, %s, %s);"
         val = [user, timernote, timepop, channel, timeorig]
         mycursor.execute(sql, val)
