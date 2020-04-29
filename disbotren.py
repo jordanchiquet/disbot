@@ -850,7 +850,7 @@ async def g(ctx):
 @bot.command()
 async def gif(ctx):
     gifquery = ctx.message.content[5:]
-    return(getgif(gifquery))
+    await ctx.send(getgif(gifquery))
 
 
 @bot.command()
