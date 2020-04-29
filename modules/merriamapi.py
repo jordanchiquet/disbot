@@ -9,6 +9,7 @@ def getmeaning(query):
         response = requests.get(url = meaningurl)
         print("got meaning response")
         meaningjson = response.json()
+        print("meaningjson: [" + meaningjson + "]")
         defcount = len(meaningjson)
         meanings = []
         for x in range(0, min(defcount, 3)):
@@ -41,10 +42,10 @@ def getmeaning(query):
         try:
             result = googleget("what is " + query)
             if result == "how you say? not any resultfind for find for that result to find the search find":
-                meaningjoin = "inv"
+                meaningjoin = ""
             else:
                 meaningjoin = ("Couldn't find a meaning in the dictionary, tried google:\n" + result)
         except:
-            meaningjoin = "inv"
+            meaningjoin = ""
     return(meaningjoin)
     
