@@ -127,7 +127,6 @@ async def on_message(message):
     user = (str(message.author)).split("#")[0]
     timeorig = (message.created_at - timedelta(hours=5))
     mclower = message.content.lower()
-    mclower = mclower.replace(".","")
     mclower = mclower.replace("!","")
     if mclower.startswith("hey") or mclower.startswith("hi") or mclower.startswith("hello") or mclower.startswith("hola") or mclower.startswith("ay") or mclower.startswith("ayo"):
         mclowersplit = mclower.split(" ")
@@ -167,6 +166,7 @@ async def on_message(message):
             if heycomputeresult[0] == "~":
                 heycomputeresult = "```" + heycomputeresult[1:] + "```"
             await channel.send(heycomputeresult)
+    mclower = mclower.replace(".","")
     if "bad bot" in mclower:
         await channel.send(
         "dang...")

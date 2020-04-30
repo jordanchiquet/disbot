@@ -14,8 +14,9 @@ import random
 
 class heycomputer:
     def __init__(self, msgcontent, time, userid, channel, user):
-        self.msgcontent = (msgcontent.replace(".", "")).lower()
-        self.msgcontent = (self.msgcontent.replace(",", "")).lower()
+        print("self thing: [" + msgcontent + "]")
+        self.msgcontent = (msgcontent.replace(",", "")).lower()
+        print("self thing: [" + self.msgcontent + "]")
         self.msglist = self.msgcontent.split(" ")
         self.time = time
         self.userid = userid
@@ -296,11 +297,13 @@ class heycomputer:
                 if x in timerstr:
                     durationcheck = timerstr.split(x)[1]
                     durationchecklist = durationcheck.split(" ")
-                    if not durationchecklist[0].isdigit() or "/" in durationchecklist[0]:
+                    durationchecklistfloatconv = durationchecklist[0].replace(".","")
+                    if not durationchecklistfloatconv.isdigit() and "/" not in durationchecklist[0]:
                         if x in durationchecklist:
                             durationcheck2 = durationcheck.split(x)[1]
                             durationchecklist2 = durationcheck2.split(" ")
-                            if not durationchecklist2[0].isdigit() or "/" in durationchecklist[0]:
+                            durationchecklistfloatconv2 = durationchecklist2[0].replace(".","")
+                            if not durationchecklistfloatconv2.isdigit() and "/" not in durationchecklist[0]:
                                 return("i did not understand the timer")
                             else:
                                 timerstrpart1 = durationcheck2
@@ -318,11 +321,13 @@ class heycomputer:
                 if x in timerstr:
                     durationcheck = timerstr.split(x)[0]
                     durationchecklist = durationcheck.split(" ")
-                    if not durationchecklist[0].isdigit() or "/" in durationchecklist[0]:
+                    durationchecklistfloatconv = durationchecklist[0].replace(".","")
+                    if not durationchecklistfloatconv.isdigit() and "/" not in durationchecklist[0]:
                         if x in durationchecklist:
                             durationcheck2 = durationcheck.split(x)[0]
                             durationchecklist2 = durationcheck2.split(" ")
-                            if not durationchecklist2[0].isdigit() or "/" in durationchecklist[0]:
+                            durationchecklistfloatconv2 = durationchecklist2[0].replace(".","")
+                            if not durationchecklistfloatconv2.isdigit() and "/" not in durationchecklist[0]:
                                 return("i did not understand the timer")
                             else:
                                 timerstrpart1 = durationcheck2
