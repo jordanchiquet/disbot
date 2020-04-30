@@ -380,9 +380,10 @@ class timercl:
     def timerold(self, msgcontent, timeorig, a, b, c: str = None, d: str = None):
         print("timerold started")
         print("this is the timeorig we getting [" + timeorig +"]")
-        if a.isdigit():
+        afloatcheck = a.replace(".","")
+        if afloatcheck.isdigit():
             print("a is digit, continuing")
-            timeval1raw = int(a)
+            timeval1raw = float(a)
             unit1 = b.lower()
             if unit1.startswith("m"):
                 timeval1 = timeval1raw
@@ -399,8 +400,9 @@ class timercl:
                 print("invalid unit used")
                 return("Invalid duration unit OR you tried to name a specific time without using a colon.")
             if c is not None:
-                if c.isdigit():
-                    timeval2raw = int(c)
+                cfloatcheck = c.replace(".","")
+                if cfloatcheck.isdigit():
+                    timeval2raw = float(c)
                     unit2 = d.lower()
                     timernote = msgcontent.split(d)[1]
                     timernote = timernote[1:]
@@ -417,7 +419,7 @@ class timercl:
                     else:
                         print("invalid unit used")
                         return("Invalid duration unit OR you tried to name a specific time without using a colon.")
-                if not c.isdigit():
+                if not cfloatcheck.isdigit():
                     timeval2 = 0
                     timeval2raw = ""
                     unit2 = ""
@@ -432,6 +434,8 @@ class timercl:
             timeval = timeval1 + timeval2
             timeorig = datetime.strptime(timeorig, '%Y-%m-%d %H:%M:%S.%f')
             print(timeorig)
+            print("timeval after new float stuff: [" + str(timeval) + "]")
+            timeval = int(str(timeval).split(".")[0])
             timepop = timeorig + timedelta(minutes=timeval)
             print("made it to timepop at end of original timer: [" + str(timepop) + "]")
             return ("timepop|" + str(timepop) + "|" + timernote)                   

@@ -6,6 +6,7 @@ class ogtimer:
         print("starting ogparse")
         durationortime = self.durationortime
         dortnocolon = durationortime.replace(":", "")
+        dortnocolon = dortnocolon.replace(".", "")
         if ":" in durationortime and dortnocolon.isdigit():
             time = durationortime
             print("colon in durationortime and isdigit")
@@ -18,7 +19,7 @@ class ogtimer:
         elif ":" in durationortime and not dortnocolon.isdigit():
             print("user input was invalid (colon for durationortime but not digit without): [" + durationortime +"]")
             return('inv')
-        elif durationortime.isdigit():
+        elif dortnocolon.isdigit():
             duration = durationortime
             print("value for ogparse looks like duration")
             return('wasduration|' + duration)
