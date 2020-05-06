@@ -32,6 +32,7 @@ def weatherget(userid, userzip: str = None, register: bool = False):
         city = zipresult.post_office_city
         wlat = zipresult.lat
         wlng = zipresult.lng
+        print("made it to darksky api provision")
         darksky = DarkSky("7d2873772103272916b9cc1e357b6331")
         wbase = darksky.get_forecast(wlat, wlng, extend=False, lang=languages.ENGLISH, units = units.US,
                                         exclude=[weather.MINUTELY, weather.ALERTS])
