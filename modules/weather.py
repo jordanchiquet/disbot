@@ -1,5 +1,5 @@
 
-from darksky.api import DarkSky, DarkSkyAsync #darksky_weather
+from darksky.api import DarkSky, DarkSkyAsync
 from darksky.types import languages, units, weather
 from modules.renardusers import renardusers
 from uszipcode import SearchEngine
@@ -35,6 +35,7 @@ def weatherget(userid, userzip: str = None, register: bool = False):
         darksky = DarkSky("7d2873772103272916b9cc1e357b6331")
         wbase = darksky.get_forecast(wlat, wlng, extend=False, lang=languages.ENGLISH, units = units.US,
                                         exclude=[weather.MINUTELY, weather.ALERTS])
+        print("got forecast")
         wsum = wbase.currently.summary
         wtemp = str(wbase.currently.temperature)[:2]
         wfeel = str(wbase.currently.apparent_temperature)[:2]
