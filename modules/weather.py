@@ -26,6 +26,7 @@ def weatherget(userid, userzip: str = None, register: bool = False):
                 weatherzip = userzip
             else:
                 return("invalid zip or something broken...")
+        print("starting weather search with zip : [" + weatherzip + "]")
         zipsearch = SearchEngine(simple_zipcode=True)
         zipresult = zipsearch.by_zipcode(int(weatherzip))
         city = zipresult.post_office_city
@@ -38,4 +39,6 @@ def weatherget(userid, userzip: str = None, register: bool = False):
         wtemp = str(wbase.currently.temperature)[:2]
         wfeel = str(wbase.currently.apparent_temperature)[:2]
         wfore = wbase.daily.summary
-        return(city + "|" + wsum + "|" + wtemp + "|" + wfeel + "|" + wfore)
+        returnstr = city + "|" + wsum + "|" + wtemp + "|" + wfeel + "|" + wfore
+        print("weather return string: [" + returnstr + "]")
+        return(returnstr)
