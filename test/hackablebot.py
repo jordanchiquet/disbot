@@ -47,6 +47,7 @@ from modules.dickshadow import executeoverlay
 # from modules.googleimageapi import bingimage
 from modules.heycomputer import heycomputer
 from modules.warzone import warzonestats
+from modules.weather import weatherget
 from modules.merriamapi import getmeaning
 # from modules.timer.timermonthpass import timermonthpass
 # from test.modules.timer.ogtimer import ogtimer
@@ -916,60 +917,27 @@ async def ud_error(ctx, error):
 @bot.command()
 async def w(ctx, a: str = None, b: str = None):
     userid = ctx.message.author.id
-    if a == "set" and b.isdigit():
-        zipwriteinit = renardusers(userid, "zip", str(b))
-
-    if a is None:
-        try:
-            with open("/Users/jordanchiquet/personalandfinance/disbotren/test/weatherloc.csv", 'rt') as f:
-                for line in f:
-                    if str(user) in line:
-                        zipparse = line.split(',')
-                        zipp = zipparse[1]
-                        zipsearch = SearchEngine(simple_zipcode=True)
-                        zipres = zipsearch.by_zipcode(int(zipp))
-                        citystatename = zipres.post_office_city
-                        wlat = zipres.lat
-                        wlng = zipres.lng
-                        darksky = DarkSky("7d2873772103272916b9cc1e357b6331")
-                        wbase = darksky.get_forecast(wlat, wlng, extend=False, lang=languages.ENGLISH, units=units.US,
-                                                        exclude=[weather.MINUTELY, weather.ALERTS])
-                        wsum = wbase.currently.summary
-                        wtemp = str(wbase.currently.temperature)[:2]
-                        wfeel = str(wbase.currently.apparent_temperature)[:2]
-                        wfore = wbase.daily.summary
-                        print(str(wbase.currently.temperature)[:2])
-                        print(wbase.daily.summary)
-                        embed = discord.Embed(title=citystatename, description=wsum + ", "+ wtemp + "\n" +
-                                              "Feels like: " + wfeel, color=0x800080)
-                        embed.add_field(name="Forecast:", value=wfore)
-                        await ctx.send(embed=embed)
-            f.close()
-        except:
-            await ctx.send("provide a zip code to get weather for or use \".w set [zipcode]\" to register one for"
-                           "your username.")
-    elif a.isdigit():
-        try:
-            zipsearch = SearchEngine(simple_zipcode=True)
-            zipres = zipsearch.by_zipcode(int(a))
-            citystatename = zipres.post_office_city
-            wlat = zipres.lat
-            wlng = zipres.lng
-            darksky = DarkSky("7d2873772103272916b9cc1e357b6331")
-            wbase = darksky.get_forecast(wlat, wlng, extend=False, lang=languages.ENGLISH, units=units.US,
-                                         exclude=[weather.MINUTELY, weather.ALERTS])
-            wsum = wbase.currently.summary
-            wtemp = str(wbase.currently.temperature)[:2]
-            wfeel = str(wbase.currently.apparent_temperature)[:2]
-            wfore = wbase.daily.summary
-            print(str(wbase.currently.temperature)[:2])
-            print(wbase.daily.summary)
-            embed = discord.Embed(title=citystatename, description=wsum + ", " + wtemp + "\n" +
-                                                                   "Feels like: " + wfeel, color=0x800080)
+    reg = False
+    if a == "set" or a == "reg" or a == "register":
+        reg = True
+        userzip = b
+        await ctx.send(weatherget(userid, userzip, reg))
+    else:
+        userzip = a
+        result = (weatherget(userid, userzip, reg))
+        if "|" in result:
+            results = (weatherget(userid, userzip, reg).split("|"))
+            city = results[0]
+            wsum = results[1]
+            wtemp = results[2]
+            wfeel = results[3]
+            wfore = results[4]
+            embed = discord.Embed(title=city, description=wsum + ", "+ wtemp + "\n" +
+                                    "Feels like: " + wfeel, color=0x800080)
             embed.add_field(name="Forecast:", value=wfore)
             await ctx.send(embed=embed)
-        except:
-            await ctx.send("dude wtf... I can't find zip code \"" + a + "\". Maybe it was erased from the archive memory.")
+        else:
+            await ctx.send(result)
 
 
 @bot.command()

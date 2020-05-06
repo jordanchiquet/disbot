@@ -61,7 +61,7 @@ class heycomputer:
     def getintenttext(self):
         print("starting getintenttext")
         getintentlist1 = ["ay", "ayo", "ayy", "ayyy", "hey", "hello", "hi", "hola", "yo", "comp", "computer", "compadre",
-                        "machine", "renard", "retard", "bot", "robot", "could", "will"]
+                        "machine", "renard", "retard", "bot", "robot", "could", "will", "would"]
         fallbacktoimagesearch = "0"
         loadpull = "0"
         look = "0"
