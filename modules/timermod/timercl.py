@@ -49,13 +49,24 @@ class timercl:
         needdate = False
         timedigitestablished = False
         timepopestablished = False
+        tom = False
 
         print(str(timeorig) + ": timer invoked by user " + str(user) + " in channel " + str(channel))
 
         if a == "list":
             print("user requested the timer list")
             return("user requested list")
-        
+
+        elif a == "tomorrow" or a == "tom":
+            print("tomorrow was called in timer")
+            tom = True
+            a = b 
+            b = c
+            c = d
+            if b == "at":
+                a = c 
+                b = d
+
         elif "/" in a:
             print("/ in a, sending to dateparse")
             dateparse = a
@@ -116,15 +127,10 @@ class timercl:
                             print("b is not none")
                             timernote = msgcontent.split(a)[1]
                             print("note after dortcheck: [" + timernote + "]")
+                            ampm = b
+                            print("b was not none")
                         else:
-                            timernote = ''
-                            print("timernote from dort dbl check: [" + timernote + "]")
-                            needdate = True
-                            print("timeparse: [" + timeparse + "]")
-                            timeparseinit = timeparser(timeparse, ampm, timernote)
-                            timedigit = timeparseinit.gettime()
-                            print("about ot try to print timedigit")
-                            print(timedigit)
+                            return("sorry Im dummy robot need am or pm")
                     elif dort == 'wasduration':
                         print ("dort wasduration")
                         timedigit = "ph"
@@ -191,6 +197,8 @@ class timercl:
                     print("new note: " + timernote)
             if timedigit == '' or timedigit is None:
                 print("no timedigit, running timeparser with timeparse: [" + timeparse + "] and timernote: [" + timernote + "]")
+                print(ampm)
+                print("ampm: [" + ampm + "]")
                 timeparseinit = timeparser(timeparse, ampm, timernote)
                 timedigit = timeparseinit.gettime()
                 if timedigit == "inv":
