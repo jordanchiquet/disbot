@@ -772,14 +772,18 @@ async def quote(ctx, a: str = None, b: str = None):
             await ctx.send("quote not found dog")
     
     if a == "del":
-        print("user wants to delete a quote: [" + a + "]")
-        sql = "SELECT * FROM renarddb.quotes WHERE id LIKE " + a
+        if b is None or not b.isdigit(): 
+            print("user provided no delete value")
+            await ctx.send("Provide a quote to delete!!")
+            return
+        print("user wants to delete a quote: [" + b + "]")
+        sql = "SELECT * FROM renarddb.quotes WHERE id LIKE " + b
         mycursor.execute(sql)
         for x in mycursor:
-            delsql = "DELETE FROM renarddb.quotes WHERE id LIKE " + a 
+            delsql = "DELETE FROM renarddb.quotes WHERE id LIKE " + b
             mycursor.execute(delsql)
             mydb.commit()
-            await ctx.send("Quote " + a + "erased from the archive memory :).")
+            await ctx.send("Quote " + b + "erased from the archive memory :).")
         else:
             await ctx.send("WTF i can't FUCKING find that one!?!?!?!?!")
     

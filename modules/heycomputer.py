@@ -470,5 +470,9 @@ class heycomputer:
                             return("whatsthemeaningofthis")
         if self.msglist[0] == "if":
             return("whatif")
+    
+
+    def whyexecute(self):
+        whylist = ["why", "is"]
 
 
