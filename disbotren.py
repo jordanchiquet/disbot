@@ -24,6 +24,7 @@ import urllib.parse
 import urllib.request
 import wikipediaapi #wikipedia-api
 from bs4 import BeautifulSoup
+from collections import OrderedDict
 from darksky.api import DarkSky, DarkSkyAsync #darksky_weather
 from darksky.types import languages, units, weather
 from datetime import datetime, timedelta
@@ -36,9 +37,9 @@ from nltk.corpus import brown
 from urlextract import URLExtract
 from uszipcode import SearchEngine
 
-from modules.bingimageapi import bingimage
+from modules.bingimageapi import bingimage #azure-cognitiveservices-search-imagesearch
 from modules.dice import dice
-from modules.dickshadow import executeoverlay
+from modules.dickshadow import executeoverlay #Pillow #numpy #whapi
 from modules.giphy import getgif
 from modules.googleimageapi import imageget
 from modules.heycomputer import heycomputer
@@ -94,6 +95,8 @@ async def on_ready():
 async def on_message_delete(message):
     if message.id in deletelog:
         dellog = deletelog[message.id]
+        print("deleting msg")
+        print(dellog)
         await dellog.delete()
         del deletelog[message.id]
 
@@ -116,10 +119,14 @@ async def on_member_join(member):
     channel = bot.get_channel(649528092691529749)
     await channel.send("a pedophile has joined the chatroom")
         
+commandRunningDict = {}
 
 @bot.event
 async def on_message(message):
     if message.author == bot.user:
+        commandRunningDict[message.id] = message.content
+        print("test command RUnning Dict")
+        print(commandRunningDict)
         return
     channelid = message.channel.id
     userid = message.author.id
@@ -129,6 +136,35 @@ async def on_message(message):
     timeorig = (message.created_at - timedelta(hours=5))
     mclower = message.content.lower()
     mclower = mclower.replace("!","")
+    if "belay that" in mclower or "cancel that order" in mclower or "cancel that command" in mclower:
+        print("belay that in command.. printing the current dict for test:")
+        if  commandRunningDict != []:
+            print("dict more than 1 entry")
+            deletionID = [*commandRunningDict.keys()][-1]
+            print("made it to first key acquire")
+            msgObj = await channel.fetch_message(deletionID)
+            await msgObj.delete()
+            print("attemtped to delete the original command response")
+            if "Timer set for " in commandRunningDict[deletionID]:
+                print("timer detected in command")
+                deltable = "timers"
+            elif commandRunningDict[deletionID].startswith("Quote ") and " added by " in commandRunningDict[deletionID]:
+                print("quotes detected in command")
+                deltable = "quotes"
+            else:
+                return
+            mydb = mysql.connector.connect(
+                host='18.216.39.250',
+                user='dbuser',
+                passwd='e4miqtng')
+            mycursor = mydb.cursor()
+            sql = "DELETE FROM renarddb." + deltable + "\nORDER BY id DESC LIMIT 1"
+            mycursor.execute(sql)
+            mydb.commit()
+            await channel.send(deltable[:-1].upper() + " DESTROYED")
+        else:
+            print("nothing to belay..")
+            await channel.send("nothing to belay captain... perhaps the computers logs are faulty")
     if mclower.startswith("hey") or mclower.startswith("hi") or mclower.startswith("hello") or mclower.startswith("hola") or mclower.startswith("ay") or mclower.startswith("ayo"):
         mclowersplit = mclower.split(" ")
         if mclowersplit[1].startswith("comput") or mclowersplit[1] == ("compadre") or mclowersplit[1] == "machine" or mclowersplit[1] == "renard":
@@ -783,7 +819,7 @@ async def quote(ctx, a: str = None, b: str = None):
             delsql = "DELETE FROM renarddb.quotes WHERE id LIKE " + b
             mycursor.execute(delsql)
             mydb.commit()
-            await ctx.send("Quote " + b + "erased from the archive memory :).")
+            await ctx.send("Quote " + b + " erased from the archive memory :).")
         else:
             await ctx.send("WTF i can't FUCKING find that one!?!?!?!?!")
     

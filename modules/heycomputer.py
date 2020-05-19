@@ -123,6 +123,9 @@ class heycomputer:
             return(fallbacktoimagesearch + "|" + loadpull + "|" + look + "|" + can + "|" + tell)
 
 
+    def cancelexecute(self):
+        print("palceholder")
+
     def canexecute(self):
         print("starting canexecute with self.msglist[0]: [" + self.msglist[0] + "]")
         if self.msglist[0] == "doctor":
