@@ -80,6 +80,7 @@ async def updateserverstats():
 @bot.event
 async def on_ready():
     timercheck.start()
+    commandRunningDictClear.start()
     print("logged in as")
     print(bot.user.name)
     print(bot.user.id)
@@ -118,8 +119,15 @@ async def on_member_join(member):
     joined += 1
     channel = bot.get_channel(649528092691529749)
     await channel.send("a pedophile has joined the chatroom")
-        
+
+
 commandRunningDict = {}
+
+
+@tasks.loop(seconds=180.0)
+async def commandRunningDictClear():
+    commandRunningDict.clear()
+
 
 @bot.event
 async def on_message(message):
@@ -136,7 +144,7 @@ async def on_message(message):
     timeorig = (message.created_at - timedelta(hours=5))
     mclower = message.content.lower()
     mclower = mclower.replace("!","")
-    if "belay that" in mclower or "cancel that order" in mclower or "cancel that command" in mclower:
+    if not mclower.startswith(".") and ("belay that" in mclower or "cancel that order" in mclower or "cancel that command" in mclower):
         print("belay that in command.. printing the current dict for test:")
         if  commandRunningDict != []:
             print("dict more than 1 entry")
@@ -145,9 +153,15 @@ async def on_message(message):
             msgObj = await channel.fetch_message(deletionID)
             await msgObj.delete()
             print("attemtped to delete the original command response")
-            if "Timer set for " in commandRunningDict[deletionID]:
+            commandMsgStr = commandRunningDict[deletionID]
+            if "Timer set for " in commandMsgStr:
                 print("timer detected in command")
-                deltable = "timers"
+                authorRegCheck = re.search("[a-zA-Z]*#[0-9]{4}", commandMsgStr)
+                if message.author == authorRegCheck:
+                    print("belay order call was made by timer author")
+                    deltable = "timers"
+                else:
+                    await channel.send("I cannot do that sir, the timer is DNA-locked by Commander " + authorRegCheck + ".")
             elif commandRunningDict[deletionID].startswith("Quote ") and " added by " in commandRunningDict[deletionID]:
                 print("quotes detected in command")
                 deltable = "quotes"
