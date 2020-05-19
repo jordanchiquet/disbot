@@ -168,6 +168,7 @@ async def on_message(message):
                 deltable = "quotes"
             else:
                 await msgObj.delete()
+                await channel.send("TRANSPHASIC PAYLOAD DROPPED... MESSAGE OBLITERATED")
                 return
             mydb = mysql.connector.connect(
                 host='18.216.39.250',
