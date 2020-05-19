@@ -126,6 +126,7 @@ commandRunningDict = {}
 
 @tasks.loop(seconds=180.0)
 async def commandRunningDictClear():
+    print("clearing commandRunningDict (dict for belay order shit)")
     commandRunningDict.clear()
 
 
@@ -133,8 +134,7 @@ async def commandRunningDictClear():
 async def on_message(message):
     if message.author == bot.user:
         commandRunningDict[message.id] = message.content
-        print("test command RUnning Dict")
-        print(commandRunningDict)
+        print("bot command logged")
         return
     channelid = message.channel.id
     userid = message.author.id
@@ -144,28 +144,30 @@ async def on_message(message):
     timeorig = (message.created_at - timedelta(hours=5))
     mclower = message.content.lower()
     mclower = mclower.replace("!","")
-    if not mclower.startswith(".") and ("belay that" in mclower or "cancel that order" in mclower or "cancel that command" in mclower):
-        print("belay that in command.. printing the current dict for test:")
+    if not mclower.startswith(".") and ("belay that order" in mclower or "cancel that order" in mclower or "cancel that command" in mclower or "delete that timer" in mclower
+     or "cancel that timer" in mclower or "erase that timer" in mclower):
+        print("belay that in command, checking commandRunning Dict")
         if  commandRunningDict != []:
-            print("dict more than 1 entry")
+            print("dict is not empty")
             deletionID = [*commandRunningDict.keys()][-1]
             print("made it to first key acquire")
             msgObj = await channel.fetch_message(deletionID)
-            await msgObj.delete()
-            print("attemtped to delete the original command response")
             commandMsgStr = commandRunningDict[deletionID]
+            print(commandMsgStr)
             if "Timer set for " in commandMsgStr:
                 print("timer detected in command")
-                authorRegCheck = re.search("[a-zA-Z]*#[0-9]{4}", commandMsgStr)
-                if message.author == authorRegCheck:
+                authorRegCheck = re.search("[a-zA-Z]+#[0-9]{4}", commandMsgStr)
+                if authorRegCheck.group() == str(message.author):
                     print("belay order call was made by timer author")
                     deltable = "timers"
                 else:
-                    await channel.send("I cannot do that sir, the timer is DNA-locked by Commander " + authorRegCheck + ".")
+                    await channel.send("I cannot do that sir, the timer is DNA-locked by Commander " + authorRegCheck.group() + ".")
+                    return
             elif commandRunningDict[deletionID].startswith("Quote ") and " added by " in commandRunningDict[deletionID]:
                 print("quotes detected in command")
                 deltable = "quotes"
             else:
+                await msgObj.delete()
                 return
             mydb = mysql.connector.connect(
                 host='18.216.39.250',
@@ -175,10 +177,11 @@ async def on_message(message):
             sql = "DELETE FROM renarddb." + deltable + "\nORDER BY id DESC LIMIT 1"
             mycursor.execute(sql)
             mydb.commit()
-            await channel.send(deltable[:-1].upper() + " DESTROYED")
+            await msgObj.delete()
+            await channel.send("LAUNCHING " + deltable[:-1].upper() + " TORPEDOES")
         else:
             print("nothing to belay..")
-            await channel.send("nothing to belay captain... perhaps the computers logs are faulty")
+            await channel.send("Nothing to belay Sir.")
     if mclower.startswith("hey") or mclower.startswith("hi") or mclower.startswith("hello") or mclower.startswith("hola") or mclower.startswith("ay") or mclower.startswith("ayo"):
         mclowersplit = mclower.split(" ")
         if mclowersplit[1].startswith("comput") or mclowersplit[1] == ("compadre") or mclowersplit[1] == "machine" or mclowersplit[1] == "renard":
@@ -565,7 +568,8 @@ async def timer(ctx, a: str = None, b: str = None, c: str = None, d: str = None)
         if response == "user requested list":
             await ctx.send("list in development")
         else:
-            await ctx.send(response)
+            print(ctx.message.author)
+            await ctx.send(response + " | " + str(ctx.message.author))
 
 
 
