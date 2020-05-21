@@ -1090,4 +1090,4 @@ async def yt(ctx):
     deletelog[ctx.message.id] = delcmd
 
 
-bot.run("NTk4OTI0ODQ5MDU4MDIxMzkz.XVNA9g.zDqCySYZRc9Xmxg9aMFXoTNhVzA", reconnect=True)
+bot.run("NTk4OTI0ODQ5MDU4MDIxMzkz.XsaoRQ.VyuNmN2_5D7IRUpFnimFE3tRmQ8", reconnect=True)
