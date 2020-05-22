@@ -183,7 +183,7 @@ async def on_message(message):
         else:
             print("nothing to belay..")
             await channel.send("Nothing to belay Sir.")
-    if mclower.startswith("hey") or mclower.startswith("hi") or mclower.startswith("hello") or mclower.startswith("hola") or mclower.startswith("ay") or mclower.startswith("ayo"):
+    if mclower.startswith("hey") or mclower.startswith("hi") or mclower.startswith("hello") or mclower.startswith("hola") or mclower.startswith("ay") or mclower.startswith("ayo") or mclower.startswith("yo"):
         mclowersplit = mclower.split(" ")
         if mclowersplit[1].startswith("comput") or mclowersplit[1] == ("compadre") or mclowersplit[1] == "machine" or mclowersplit[1] == "renard":
             heycomputerinit = heycomputer(mclower, timeorig, userid, channelid, user)
