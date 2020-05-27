@@ -8,8 +8,10 @@ def getmeaning(query):
         meaningurl = "https://www.dictionaryapi.com/api/v3/references/collegiate/json/" + query + "?key=bfc38ef7-8e25-45a9-8435-d4e659b353b2"
         response = requests.get(url = meaningurl)
         print("got meaning response")
+        print("response:")
+        print(response)
         meaningjson = response.json()
-        print("meaningjson: [" + meaningjson + "]")
+        print(meaningjson)
         defcount = len(meaningjson)
         meanings = []
         for x in range(0, min(defcount, 3)):
