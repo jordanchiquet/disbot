@@ -51,6 +51,8 @@ class heycomputer:
             return(self.howexecute())
         elif self.msglist[0] == "remind":
             return(self.remindexecute())
+        elif self.msglist[0] == "who":
+            return(self.whoexecute())
         otherparse = self.otherparse()
         if otherparse != "foundnone":
             return(otherparse)
@@ -473,6 +475,17 @@ class heycomputer:
                             return("whatsthemeaningofthis")
         if self.msglist[0] == "if":
             return("whatif")
+    
+
+    def whoexecute(self):
+        wholist1 = ["who", "the", "fuck", "is"]
+        for x in wholist1:
+            if self.msglist[0] == x:
+                removefirstindex(self.msglist)
+        googlequery = " ".join(self.msglist)
+        googlequery = "who is " + googlequery
+        print("starting googleget get with query: [" + googlequery + "]")
+        return(googleget(googlequery))
     
 
     def whyexecute(self):

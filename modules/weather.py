@@ -22,7 +22,7 @@ def weatherget(userid, userzip: str = None, register: bool = False):
             else:
                 weatherzip = result[0]
         else:
-            if userzip.isdigit() and len(userzip) < 6 and len(userzip) > 4:
+            if userzip.isdigit() and len(userzip) == 5:
                 weatherzip = userzip
             else:
                 return("invalid zip or something broken...")
@@ -30,12 +30,14 @@ def weatherget(userid, userzip: str = None, register: bool = False):
         zipsearch = SearchEngine(simple_zipcode=True)
         zipresult = zipsearch.by_zipcode(int(weatherzip))
         city = zipresult.post_office_city
+        print(city)
         wlat = zipresult.lat
+        print(wlat)
         wlng = zipresult.lng
+        print(wlng)
         print("made it to darksky api provision")
-        darksky = DarkSky("7d2873772103272916b9cc1e357b6331")
-        wbase = darksky.get_forecast(wlat, wlng, extend=False, lang=languages.ENGLISH, units = units.US,
-                                        exclude=[weather.MINUTELY, weather.ALERTS])
+        darksky = DarkSky("e18c5cc67731e2f871a8283a4bfaf1f5")
+        wbase = darksky.get_forecast(wlat, wlng, extend=False, lang=languages.ENGLISH, units = units.US)
         print("got forecast")
         wsum = wbase.currently.summary
         wtemp = str(wbase.currently.temperature)[:2]
