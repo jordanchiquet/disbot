@@ -222,6 +222,9 @@ async def on_message(message):
                 heycomputeresult = "```" + heycomputeresult[1:] + "```"
             await channel.send(heycomputeresult)
     mclower = mclower.replace(".","")
+    if "no" == mclower:
+        await channel.send(
+            "https://i.ytimg.com/vi/dI8wt5soxXE/maxresdefault.jpg")
     if "bad bot" in mclower:
         await channel.send(
         "dang...")
