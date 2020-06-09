@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
 
-testroot = "Users/jordanchiquet/personalandfinance/ubuntu/disbot/test"
-
-
 import asyncio
 import codecs
 import csv
@@ -37,6 +34,7 @@ from nltk.corpus import brown
 from urlextract import URLExtract
 from uszipcode import SearchEngine
 
+
 from modules.bingimageapi import bingimage #azure-cognitiveservices-search-imagesearch
 from modules.dice import dice
 from modules.dickshadow import executeoverlay #Pillow #numpy #whapi
@@ -54,28 +52,22 @@ from modules.wikihow import wikihow
 from modules.zooo import zooo
 
 
-
 messages = joined = 0
-
 nltk.download('brown')
-
 client = discord.Client()
-
-
 bot = commands.Bot(command_prefix='.', case_insensitive=True, description='super computer robot')
-
-
 bot.remove_command('help')
-
 bot.remove_command('close')
 
 
 deletelog = {}
+commandRunningDict = {}
 
 
 async def updateserverstats():
     await client.wait_until_ready()
     global messages, joined
+
 
 @bot.event
 async def on_ready():
@@ -111,6 +103,12 @@ async def on_message_edit(before, after):
         ytresult = re.findall(r'href=\"\/watch\?v=(.{11})', html_cont.read().decode())
         delcmd = await edlog.edit(content=("http://youtube.com/watch?v=" + ytresult[0]))
         deletelog[after] = delcmd
+    if (after.content).startswith("."):
+        # edmessage = msgloginmem[before.id]
+        print('starting process cmd')
+        await bot.process_commands(after)
+
+
 
 
 @bot.event
@@ -119,9 +117,6 @@ async def on_member_join(member):
     joined += 1
     channel = bot.get_channel(649528092691529749)
     await channel.send("a pedophile has joined the chatroom")
-
-
-commandRunningDict = {}
 
 
 @tasks.loop(seconds=180.0)

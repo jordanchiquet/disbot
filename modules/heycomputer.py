@@ -474,7 +474,7 @@ class heycomputer:
                         if len(self.msgcontent) < 1:
                             return("whatsthemeaningofthis")
         if self.msglist[0] == "if":
-            return("whatif")
+            return("hm I never thought about it like that before...")
     
 
     def whoexecute(self):
@@ -489,6 +489,12 @@ class heycomputer:
     
 
     def whyexecute(self):
-        whylist = ["why", "is"]
-
-
+        if self.msglist[1] == "can't" and self.msglist[2] == "i":
+            return("you probably could if you really wanted to :)")
+        if self.msglist[1] == "are" and self.msglist[2] == "you":
+            if self.msglist[3] == "gay":
+                return("rap music and liberal propaganda")
+        else:
+            whyquery = " ".join(self.msglist)
+            print("starting whyexecute with google query: [" + whyquery + "]")
+            return(googleget(whyquery))
