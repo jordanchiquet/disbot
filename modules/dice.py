@@ -30,6 +30,7 @@ class dice:
     def roll(self):
         rolltext = self.rolltext
         mult = rolltext.split("d")[0]
+        addsub = True
         if mult.isdigit():
             print("number of dice passed digit check")
             mult = int(mult)
@@ -40,6 +41,13 @@ class dice:
             numsplit1 = rolltext.split("d")[1]
             d = numsplit1.split("+")[0]
             modifier = numsplit1.split("+")[1]
+            strmodifier = "+"
+        elif "-" in rolltext:
+            numsplit1 = rolltext.split("d")[1]
+            d = numsplit1.split("-")[0]
+            modifier = numsplit1.split("-")[1]
+            strmodifier = "-"
+            addsub = False
         else:
             d = rolltext.split("d")[1]
             modifier = 0
@@ -51,11 +59,14 @@ class dice:
             reslist.append(res)
             pass
         rollsum = sum(reslist)
-        addsum = rollsum + int(modifier)
+        if addsub:
+            addsum = rollsum + int(modifier)
+        else: 
+            addsum = rollsum - int(modifier)
         if modifier == 0:
             return(str(addsum) + " " + str(reslist) + "|" + d)
         else:
-            return(str(addsum) + " " + str(reslist) + " + " + modifier + "|" + d)
+            return(str(addsum) + " " + str(reslist) + " " + strmodifier + " " + modifier + "|" + d)
 
 
     def roller(self):
