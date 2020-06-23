@@ -49,6 +49,7 @@ from modules.timermod.timeparser import timeparser
 from modules.warzone import warzonestats
 from modules.weather import weatherget
 from modules.wikihow import wikihow
+from modules.youtube import youtubesearch
 from modules.zooo import zooo
 
 
@@ -1081,10 +1082,7 @@ async def wiki(ctx):
 
 @bot.command()
 async def yt(ctx):
-    ytquery = urllib.parse.urlencode({"search_query" : ctx.message.content[4:]})
-    html_cont = urllib.request.urlopen("http://youtube.com/results?"+ytquery)
-    ytresult = re.findall(r'href=\"\/watch\?v=(.{11})', html_cont.read().decode())
-    delcmd = await ctx.send("https://youtu.be/" + ytresult[0])
+    delcmd = await ctx.send(youtubesearch(ctx.message.content[4:]))
     deletelog[ctx.message.id] = delcmd
 
 
