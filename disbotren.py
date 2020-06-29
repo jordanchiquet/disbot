@@ -131,6 +131,14 @@ async def counter(userid, countfield, tallycount):
     for num in range(tallycount):
         countinit.userintwrite()
 
+
+@bot.event
+async def on_member_update(before, after):
+    if before.nick != after.nick:
+        print("nick changed for user " + str(before.id) + " from " + before.nick + " to " + after.nick)
+        await counter(before.id, "nicknames", 1)
+
+
 @bot.event
 async def on_message(message):
     if message.author == bot.user:
