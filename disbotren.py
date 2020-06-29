@@ -157,7 +157,11 @@ async def on_message(message):
         fuckcount = mclower.count("fuck")
         if mclower.startswith(".fuck"):
             fuckcount = fuckcount - 1
-        await counter(userid, "fuckcount", fuckcount)
+        if fuckcount != 0:
+            await counter(userid, "fuckcount", fuckcount)
+    if "in any case" in mclower:
+        anycount = mclower.count("in any case")
+        await counter(userid, "inanycase", anycount)
     if not mclower.startswith(".") and ("belay that order" in mclower or "cancel that order" in mclower or "cancel that command" in mclower or "delete that timer" in mclower
      or "cancel that timer" in mclower or "erase that timer" in mclower):
         print("belay that in command, checking commandRunning Dict")

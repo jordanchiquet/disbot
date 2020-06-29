@@ -22,4 +22,5 @@ def bingimage(query):
         else:
             return("No image results returned!")
     except:
+        print("bing just failed to get an image, trying google...")
         return(imageget(query))
