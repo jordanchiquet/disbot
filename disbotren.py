@@ -140,6 +140,12 @@ async def on_message(message):
     timeorig = (message.created_at - timedelta(hours=5))
     mclower = message.content.lower()
     mclower = mclower.replace("!","")
+    fuckcount = mclower.count("fuck")
+    if mclower.startswith(".fuck"):
+        fuckcount = fuckcount - 1
+    for fuck in range(fuckcount):
+        dbinit = renardusers(userid, "fuckcount")
+        dbinit.userintwrite()
     if not mclower.startswith(".") and ("belay that order" in mclower or "cancel that order" in mclower or "cancel that command" in mclower or "delete that timer" in mclower
      or "cancel that timer" in mclower or "erase that timer" in mclower):
         print("belay that in command, checking commandRunning Dict")
@@ -743,6 +749,18 @@ async def fox(ctx):
     foxr = requests.get('https://randomfox.ca/floof/')
     foxf = str(foxr.json()['image'])
     await ctx.send(foxf)
+
+@bot.command()
+async def fuck(ctx):
+    userid = ctx.message.author.id
+    readinit = renardusers(userid, "fuckcount")
+    getfucks = readinit.userread()
+    print(getfucks)
+    if getfucks[0] == 0:
+        await ctx.send("no fuck to give B)")
+    else:
+        await ctx.send("you have given " + str(getfucks[0]) + " fucks B)")
+
 
 
 @bot.command()

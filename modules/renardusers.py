@@ -9,13 +9,17 @@ class renardusers:
         self.userid = userid
         self.field = field
         self.param = param
-    
-    def userinit(self):
-        mydb = mysql.connector.connect(
+        self.mydb = mysql.connector.connect(
         host='18.216.39.250',
         user='dbuser',
-        passwd='e4miqtng')
-        mycursor = mydb.cursor()    
+        passwd='e4miqtng')     
+    
+    def userinit(self):
+        # mydb = mysql.connector.connect(
+        # host='18.216.39.250',
+        # user='dbuser',
+        # passwd='e4miqtng')
+        mycursor = self.mydb.cursor()    
         sql = "SELECT * FROM renarddb.users WHERE userid LIKE \"" + self.userid + "\""
         mycursor.execute(sql)
         for x in mycursor:
@@ -30,11 +34,11 @@ class renardusers:
     def userreg(self):
         if self.userexists() == False:
             print("user passed userexists redundancy test... registering user")
-            mydb = mysql.connector.connect(
-            host='18.216.39.250',
-            user='dbuser',
-            passwd='e4miqtng')
-            mycursor = mydb.cursor()
+            # mydb = mysql.connector.connect(
+            # host='18.216.39.250',
+            # user='dbuser',
+            # passwd='e4miqtng')
+            mycursor = self.mydb.cursor()
             sql = "INSERT INTO renarddb.users (user) VALUES (%s)"
             val = [self.userid]
             mycursor.execute(sql, val)
@@ -49,11 +53,11 @@ class renardusers:
 
     def userread(self):
         print("userread function was reached with parameters: USER: [" + str(self.userid) + "] FIELD: [" + self.field + "]")
-        mydb = mysql.connector.connect(
-        host='18.216.39.250',
-        user='dbuser',
-        passwd='e4miqtng')
-        mycursor = mydb.cursor()
+        # mydb = mysql.connector.connect(
+        # host='18.216.39.250',
+        # user='dbuser',
+        # passwd='e4miqtng')
+        mycursor = self.mydb.cursor()
         sql = "SELECT (" + self.field + ") FROM renarddb.users WHERE user LIKE (%s)"
         val = [self.userid]
         mycursor.execute(sql, val)
@@ -62,18 +66,23 @@ class renardusers:
             return(x)
   
     def userwrite(self):
-        mydb = mysql.connector.connect(
-        host='18.216.39.250',
-        user='dbuser',
-        passwd='e4miqtng')          
-        mycursor = mydb.cursor()
+        # mydb = mysql.connector.connect(
+        # host='18.216.39.250',
+        # user='dbuser',
+        # passwd='e4miqtng')          
+        mycursor = self.mydb.cursor()
         sql = "INSERT INTO renarddb.users(user," + self.field + ") VALUES (" + str(self.userid) + ",\"" + self.param + "\") ON DUPLICATE KEY UPDATE " + self.field + " = \"" + self.param + "\";"
         val = [self.field, self.userid, self.param, self.field, self.param]
-        mycursor.execute(sql) 
-        mydb.commit()
-
+        mycursor.execute(sql)
+        self.mydb.commit()
         print("write successful")
         return("write successful")
+    
+    def userintwrite(self):
+        mycursor = self.mydb.cursor()
+        sql = "INSERT INTO renarddb.users(user," + self.field + ") VALUES (" + str(self.userid) + ",1) ON DUPLICATE KEY UPDATE " + self.field + " = " + self.field + "+1;"
+        mycursor.execute(sql)
+        self.mydb.commit()
 
     def sqltest(self, user):
         mydb = mysql.connector.connect(
