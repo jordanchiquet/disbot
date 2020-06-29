@@ -126,6 +126,11 @@ async def commandRunningDictClear():
     commandRunningDict.clear()
 
 
+async def counter(userid, countfield, tallycount):
+    countinit = renardusers(userid, countfield)
+    for num in range(tallycount):
+        countinit.userintwrite()
+
 @bot.event
 async def on_message(message):
     if message.author == bot.user:
@@ -140,12 +145,11 @@ async def on_message(message):
     timeorig = (message.created_at - timedelta(hours=5))
     mclower = message.content.lower()
     mclower = mclower.replace("!","")
-    fuckcount = mclower.count("fuck")
-    if mclower.startswith(".fuck"):
-        fuckcount = fuckcount - 1
-    for fuck in range(fuckcount):
-        dbinit = renardusers(userid, "fuckcount")
-        dbinit.userintwrite()
+    if "fuck" in mclower:
+        fuckcount = mclower.count("fuck")
+        if mclower.startswith(".fuck"):
+            fuckcount = fuckcount - 1
+        await counter(userid, "fuckcount", fuckcount)
     if not mclower.startswith(".") and ("belay that order" in mclower or "cancel that order" in mclower or "cancel that command" in mclower or "delete that timer" in mclower
      or "cancel that timer" in mclower or "erase that timer" in mclower):
         print("belay that in command, checking commandRunning Dict")
