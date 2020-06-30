@@ -986,7 +986,7 @@ async def how(ctx):
 @bot.command()
 async def img(ctx):
     imgquery = ctx.message.content[5:]
-    delcmd = await ctx.send(bingimage(imgquery))
+    delcmd = await ctx.send(imageget(imgquery))
     deletelog[ctx.message.id] = delcmd
 
 

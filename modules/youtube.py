@@ -19,16 +19,3 @@ def youtubesearch(query):
     else:
         result = "perhaps there is web net error but no vid found"
     return(result)
-    # print("starting youtube search with query: [" + query + "]")
-    # ytquery = urllib.parse.urlencode({"search_query" : query})
-    # html_cont = urllib.request.urlopen("http://youtube.com/results?"+ytquery)
-    # print("got youtube result")
-    # print("--------------")
-    # print(html_cont)
-    # print(html_cont.read())
-    # ytresult = re.findall(r'href=\"\/watch\?v=(.{11})', html_cont.read().decode())
-    # ytfinal = "https://youtu.be/" + ytresult[0]
-    # print("ytfinal: [" + ytfinal + "]")
-    # return(ytfinal) 
-
-youtubesearch("dog")
