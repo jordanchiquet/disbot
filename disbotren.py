@@ -126,16 +126,47 @@ async def commandRunningDictClear():
     commandRunningDict.clear()
 
 
-async def counter(userid, countfield, tallycount):
+async def counter(userid, countfield, tallycount: int = None, message: str = None, countstring: str = None):
     countinit = renardusers(userid, countfield)
-    for num in range(tallycount):
-        countinit.userintwrite()
+    if tallycount is None:
+        tallycount = message.count(countstring)
+    if countfield == "fuckcount":
+        if message.startswith(".fuck"):
+            tallycount = tallycount - 1
+    if countfield == "nocount":
+        if message == "no":
+            tallycount = 1
+    if tallycount != 0:
+        for num in range(tallycount):
+            countinit.userintwrite()
+
+
+async def countprocessor(userid, message):
+    if "fuck" in message:
+        await counter(userid, "fuckcount", None, message, "fuck")
+    if "in any case" in message:
+        await counter(userid, "inanycase", None, message, "in any case")
+    if "no" in message:
+        await counter(userid, "nocount", None, message, "no ")
+    if "yes" in message:
+        await counter(userid, "yescount", None, message, "yes ")
+    if "dude" in message:
+        await counter(userid, "dudecount", None, message, "dude")
+    if message.startswith(".img"):
+        await counter(userid, "imgsearchcount", 1)
+    southlist = ["yall", "ya'll", "aint", "ain't", "he don't", "she don't", "he dont", "she dont"]
+    issouth = [s for s in southlist if(s in message)]
+    if issouth:
+        await counter(userid, "southcount", 1)
 
 
 @bot.event
 async def on_member_update(before, after):
     if before.nick != after.nick:
-        print("nick changed for user " + str(before.id) + " from " + before.nick + " to " + after.nick)
+        try:
+            print("nick changed for user " + str(before.id) + " from " + before.nick + " to " + after.nick)
+        except:
+            print("user " + str(before.id) + " changed name from one there's no record of to " + after.nick)
         await counter(before.id, "nicknames", 1)
 
 
@@ -153,15 +184,7 @@ async def on_message(message):
     timeorig = (message.created_at - timedelta(hours=5))
     mclower = message.content.lower()
     mclower = mclower.replace("!","")
-    if "fuck" in mclower:
-        fuckcount = mclower.count("fuck")
-        if mclower.startswith(".fuck"):
-            fuckcount = fuckcount - 1
-        if fuckcount != 0:
-            await counter(userid, "fuckcount", fuckcount)
-    if "in any case" in mclower:
-        anycount = mclower.count("in any case")
-        await counter(userid, "inanycase", anycount)
+    await countprocessor(userid, mclower)
     if not mclower.startswith(".") and ("belay that order" in mclower or "cancel that order" in mclower or "cancel that command" in mclower or "delete that timer" in mclower
      or "cancel that timer" in mclower or "erase that timer" in mclower):
         print("belay that in command, checking commandRunning Dict")
