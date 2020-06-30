@@ -110,8 +110,6 @@ async def on_message_edit(before, after):
         await bot.process_commands(after)
 
 
-
-
 @bot.event
 async def on_member_join(member):
     global joined
@@ -126,8 +124,8 @@ async def commandRunningDictClear():
     commandRunningDict.clear()
 
 
-async def counter(userid, countfield, tallycount: int = None, message: str = None, countstring: str = None):
-    countinit = renardusers(userid, countfield)
+async def counter(userid, username, countfield, tallycount: int = None, message: str = None, countstring: str = None):
+    countinit = renardusers(userid, countfield, username=username)
     if tallycount is None:
         tallycount = message.count(countstring)
     if countfield == "fuckcount":
@@ -141,23 +139,23 @@ async def counter(userid, countfield, tallycount: int = None, message: str = Non
             countinit.userintwrite()
 
 
-async def countprocessor(userid, message):
+async def countprocessor(userid, username, message):
     if "fuck" in message:
-        await counter(userid, "fuckcount", None, message, "fuck")
+        await counter(userid, username, "fuckcount", None, message, "fuck")
     if "in any case" in message:
-        await counter(userid, "inanycase", None, message, "in any case")
+        await counter(userid, username, "inanycase", None, message, "in any case")
     if "no" in message:
-        await counter(userid, "nocount", None, message, "no ")
+        await counter(userid, username, "nocount", None, message, "no ")
     if "yes" in message:
-        await counter(userid, "yescount", None, message, "yes ")
+        await counter(userid, username, "yescount", None, message, "yes ")
     if "dude" in message:
-        await counter(userid, "dudecount", None, message, "dude")
+        await counter(userid, username, "dudecount", None, message, "dude")
     if message.startswith(".img"):
-        await counter(userid, "imgsearchcount", 1)
+        await counter(userid, username, "imgsearchcount", 1)
     southlist = ["yall", "ya'll", "aint", "ain't", "he don't", "she don't", "he dont", "she dont"]
     issouth = [s for s in southlist if(s in message)]
     if issouth:
-        await counter(userid, "southcount", 1)
+        await counter(userid, username, "southcount", 1)
 
 
 @bot.event
@@ -167,7 +165,7 @@ async def on_member_update(before, after):
             print("nick changed for user " + str(before.id) + " from " + before.nick + " to " + after.nick)
         except:
             print("user " + str(before.id) + " changed name from one there's no record of to " + after.nick)
-        await counter(before.id, "nicknames", 1)
+        await counter(before.id, after.nick, "nicknames", 1)
 
 
 @bot.event
@@ -178,13 +176,14 @@ async def on_message(message):
         return
     channelid = message.channel.id
     userid = message.author.id
+    author = str(message.author)
     channel = message.channel
     print(message.author)
     user = (str(message.author)).split("#")[0]
     timeorig = (message.created_at - timedelta(hours=5))
     mclower = message.content.lower()
     mclower = mclower.replace("!","")
-    await countprocessor(userid, mclower)
+    await countprocessor(userid, author, mclower)
     if not mclower.startswith(".") and ("belay that order" in mclower or "cancel that order" in mclower or "cancel that command" in mclower or "delete that timer" in mclower
      or "cancel that timer" in mclower or "erase that timer" in mclower):
         print("belay that in command, checking commandRunning Dict")
