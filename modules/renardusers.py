@@ -52,6 +52,18 @@ class renardusers:
         for x in mycursor:
             print("read result: [" + str(x) + "]")
             return(x)
+    
+
+    def getgraphdata(self):
+        mycursor = self.mydb.cursor()
+        sql = "SELECT username, " + self.field + " FROM renarddb.users"
+        mycursor.execute(sql)
+        graphresults = []
+        for x in mycursor:
+            print(x)
+            graphresults.append(x)
+        return(graphresults)
+
   
     def userwrite(self): 
         mycursor = self.mydb.cursor()
@@ -78,3 +90,7 @@ class renardusers:
         mycursor.execute(sql)
         for x in mycursor:
             return(x)
+
+
+init = renardusers(1, "fuckcount")
+init.getgraphdata()

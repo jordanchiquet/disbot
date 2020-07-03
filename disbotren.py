@@ -40,6 +40,7 @@ from modules.dice import dice
 from modules.dickshadow import executeoverlay #Pillow #numpy #whapi
 from modules.giphy import getgif
 from modules.googleimageapi import imageget
+from modules.graphmaker import getgraph
 from modules.heycomputer import heycomputer
 from modules.merriamapi import getmeaning
 from modules.pullrestart import pullrestart
@@ -145,13 +146,22 @@ async def countprocessor(userid, username, message):
     if "in any case" in message:
         await counter(userid, username, "inanycase", None, message, "in any case")
     if "no" in message:
-        await counter(userid, username, "nocount", None, message, "no ")
+        await counter(userid, username, "nocount", None, message, "no")
+        await counter(userid, username, "nocount", None, message, "no.")
+    if "nah" in message:
+        await counter(userid, username, "nocount", None, message, "nah")
     if "yes" in message:
         await counter(userid, username, "yescount", None, message, "yes ")
+    if "yah" in message:
+        await counter(userid, username, "yescount", None, message, "yah ")
+    if "yee" in message:
+        await counter(userid, username, "yescount", None, message, "yee ")
     if "dude" in message:
         await counter(userid, username, "dudecount", None, message, "dude")
     if message.startswith(".img"):
         await counter(userid, username, "imgsearchcount", 1)
+    if "like" in message:
+        await counter(userid, username, "likecount", None, message, "like")
     southlist = ["yall", "ya'll", "aint", "ain't", "he don't", "she don't", "he dont", "she dont"]
     issouth = [s for s in southlist if(s in message)]
     if issouth:
@@ -176,7 +186,8 @@ async def on_message(message):
         return
     channelid = message.channel.id
     userid = message.author.id
-    author = str(message.author)
+    authorfull = str(message.author)
+    author = authorfull.split("#")[0]
     channel = message.channel
     print(message.author)
     user = (str(message.author)).split("#")[0]
@@ -467,6 +478,14 @@ async def chanid(ctx):
 async def datetest(ctx):
     await ctx.send("datetime.now(): " + str(datetime.now()) + "\n" + 
                     "datetime.now().date(): " + str(datetime.now().date()))
+
+
+@bot.command()
+async def graphtest(ctx, a):
+    if a is None:
+        await ctx.send("specify something to get data for dummy")
+    else:
+        print(getgraph(a))
 
 
 @bot.command()
@@ -798,7 +817,9 @@ async def fuck(ctx):
         await ctx.send("no fuck to give B)")
     else:
         await ctx.send("you have given " + str(getfucks[0]) + " fucks B)")
-
+        getgraph("fuckcount")
+        await ctx.send(file=File("graph.png"))
+        os.remove('graph.png')
 
 
 @bot.command()
