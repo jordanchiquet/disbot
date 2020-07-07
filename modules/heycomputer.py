@@ -460,7 +460,14 @@ class heycomputer:
 
 
     def whatparse(self):
-        whatlist1 = ["is", "a", "an"]
+        if len(self.msglist) > 1:
+            whatlist0 = ["the", "fuck"]
+            for x in whatlist0:
+                if self.msglist[0] == x:
+                    removefirstindex(self.msglist)
+            if len(self.msglist) == 0:
+                return("beats me man")
+        whatlist1 = ["is", "a", "an", "the"]
         for x in whatlist1:
             if self.msglist[0] == x:
                 removefirstindex(self.msglist)
