@@ -7,9 +7,10 @@ def getgraph(column):
     usersinit = renardusers(1, column)
     graphdataraw = usersinit.getgraphdata()
     print(graphdataraw)
-    columns = ("user", column)
+    columns = ("", column)
     graphdata = pd.DataFrame.from_records(graphdataraw, columns = columns)
-    graphdata.plot(x = "user", y = column, kind = "bar")
+    graphdata.plot(x = "", y = column, kind = "bar")
+    plt.tight_layout()
     plt.savefig('graph.png')
     # return(graphdata)
 

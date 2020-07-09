@@ -807,19 +807,68 @@ async def fox(ctx):
     foxf = str(foxr.json()['image'])
     await ctx.send(foxf)
 
+
 @bot.command()
 async def fuck(ctx):
-    userid = ctx.message.author.id
-    readinit = renardusers(userid, "fuckcount")
-    getfucks = readinit.userread()
-    print(getfucks)
-    if getfucks[0] == 0:
-        await ctx.send("no fuck to give B)")
-    else:
-        await ctx.send("you have given " + str(getfucks[0]) + " fucks B)")
-        getgraph("fuckcount")
-        await ctx.send(file=File("graph.png"))
-        os.remove('graph.png')
+    getgraph("fuckcount")
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
+
+
+@bot.command()
+async def south(ctx):
+    getgraph("southcount")
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
+
+
+@bot.command()
+async def inanycase(ctx):
+    getgraph("inanycase")
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
+
+
+@bot.command()
+async def nicks(ctx):
+    getgraph("nicknames")
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
+
+
+@bot.command()
+async def positive(ctx):
+    getgraph("yescount")
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
+
+
+@bot.command()
+async def negative(ctx):
+    getgraph("nocount")
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
+
+
+@bot.command()
+async def dude(ctx):
+    getgraph("dudecount")
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
+
+
+@bot.command()
+async def imgcount(ctx):
+    getgraph("imgsearchcount")
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
+
+
+@bot.command()
+async def like(ctx):
+    getgraph("likecount")
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
 
 
 @bot.command()
