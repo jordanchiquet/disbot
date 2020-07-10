@@ -162,7 +162,7 @@ async def countprocessor(userid, username, message):
         await counter(userid, username, "imgsearchcount", 1)
     if "like" in message:
         await counter(userid, username, "likecount", None, message, "like")
-    southlist = ["yall", "ya'll", "y'all", "aint", "ain't", "he don't", "she don't", "he dont", "she dont"]
+    southlist = ["yall", "ya'll", "y'all", "aint", "ain't", "he don't", "she don't", "he dont", "she dont", "it dont", "it don't", "not no", "dont got", "don't got"]
     issouth = [s for s in southlist if(s in message)]
     if issouth:
         await counter(userid, username, "southcount", 1)
