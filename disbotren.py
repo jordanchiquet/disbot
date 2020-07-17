@@ -873,6 +873,13 @@ async def like(ctx):
 
 
 @bot.command()
+async def count(ctx):
+    getgraph("msgcount")
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
+
+
+@bot.command()
 async def gun(ctx):
     path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/bitchfolder").__next__()
     min = 1
