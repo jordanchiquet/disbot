@@ -293,7 +293,7 @@ class heycomputer:
         for x in remindlist1:
             if x == self.msglist[0]:
                 removefirstindex(self.msglist)
-        tothat = [" to ", " that "]
+        tothat = [" to ", " that ", " about "]
         onin = [" on ", " in ", " at "]
         if self.msglist[0] in str(tothat):
             removefirstindex(self.msglist)

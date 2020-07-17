@@ -279,7 +279,7 @@ class timercl:
                     return("That month only has 30 days my friend")
                 elif datestr == 'date inv too many feb':
                     print('too many days for february')
-                    return("February don't have that many days my ")
+                    return("February don't have that many days my person")
                 elif datestr == 'year inv':
                     print("year invalid")
                     return("Invalid year my yuengling")
