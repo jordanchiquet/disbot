@@ -146,13 +146,27 @@ async def countprocessor(userid, username, message):
         await counter(userid, username, "fuckcount", None, message, "fuck")
     if "in any case" in message:
         await counter(userid, username, "inanycase", None, message, "in any case")
+async def countprocessor(userid, username, message):
+    if "fuck" in message:
+        await counter(userid, username, "fuckcount", None, message, "fuck")
+    if "in any case" in message:
+        await counter(userid, username, "inanycase", None, message, "in any case")
     if "no" in message:
-        await counter(userid, username, "nocount", None, message, "no")
+        await counter(userid, username, "nocount", None, message, "no ")
         await counter(userid, username, "nocount", None, message, "no.")
+        await counter(userid, username, "nocount", None, message, "no!")
+        await counter(userid, username, "nocount", None, message, "no?")
+        await counter(userid, username, "nocount", None, message, "no,")
+    if "no" == message:
+        await counter(userid, username, "nocount", None, message, "no")
     if "nah" in message:
         await counter(userid, username, "nocount", None, message, "nah")
     if "yes" in message:
         await counter(userid, username, "yescount", None, message, "yes ")
+        await counter(userid, username, "yescount", None, message, "yes.")
+        await counter(userid, username, "yescount", None, message, "yes!")
+        await counter(userid, username, "yescount", None, message, "yes?")
+        await counter(userid, username, "yescount", None, message, "yes,")
     if "yah" in message:
         await counter(userid, username, "yescount", None, message, "yah ")
     if "yee" in message:
