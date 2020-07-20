@@ -178,7 +178,8 @@ async def countprocessor(userid, username, message):
     if "like" in message:
         await counter(userid, username, "likecount", None, message, "like")
     southlist = ["yall", "ya'll", "y'all", "aint", "ain't", "he don't", "she don't", "he dont", "she dont" "it dont", "it don't", "not no", "dont got", "don't got", "they was", "we was", "you was",
-    "up a storm", "yonder", "that dont", "that don't"]
+    "up a storm", "yonder", "that dont", "that don't", "lick of sense", "reckon", "fixin to", "fixing to", "finna", "bowed up", "hanker", "howdy", "lickety", "ornery", "purdy", "purty", "rile", "riling",
+    "skidaddle", "skedaddle", "skidaddling", "skedaddling", "tarnation", "varmint", "yankee", "crawfish"]
     issouth = [s for s in southlist if(s in message)]
     if issouth:
         await counter(userid, username, "southcount", 1)
