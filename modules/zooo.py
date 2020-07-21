@@ -43,6 +43,7 @@ zoolist = [
 "https://en.wikipedia.org/wiki/Scotoplanes",
 "https://en.wikipedia.org/wiki/Sunda_flying_lemur",
 "https://en.wikipedia.org/wiki/Synchiropus_splendidus",
+"https://en.wikipedia.org/wiki/Telmatobius_culeus",
 "https://en.wikipedia.org/wiki/Thorny_devil",
 "https://en.wikipedia.org/wiki/Weaver_ant",
 "https://en.wikipedia.org/wiki/White-bellied_go-away-bird"]
