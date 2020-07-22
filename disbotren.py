@@ -129,6 +129,8 @@ async def counter(userid, username, countfield, tallycount: int = None, message:
     countinit = renardusers(userid, countfield, username=username)
     if tallycount is None:
         tallycount = message.count(countstring)
+    if countfield == "wordcount":
+        tallycount = tallycount + 1
     if countfield == "fuckcount":
         if message.startswith(".fuck"):
             tallycount = tallycount - 1
@@ -142,9 +144,7 @@ async def counter(userid, username, countfield, tallycount: int = None, message:
 
 async def countprocessor(userid, username, message):
     await counter(userid, username, "msgcount", 1)
-    msgsearch = " "
-    for msgsearch in message:
-        await counter(userid, username, "wordcount", 1)
+    await counter(userid, username, "wordcount", None, message, " ")
     if "fuck" in message:
         await counter(userid, username, "fuckcount", None, message, "fuck")
     if "in any case" in message:
