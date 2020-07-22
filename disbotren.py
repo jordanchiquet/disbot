@@ -131,6 +131,8 @@ async def counter(userid, username, countfield, tallycount: int = None, message:
         tallycount = message.count(countstring)
     if countfield == "wordcount":
         tallycount = tallycount + 1
+        if message.startswith("."):
+            tallycount = tallycount - 1
     if countfield == "fuckcount":
         if message.startswith(".fuck"):
             tallycount = tallycount - 1
