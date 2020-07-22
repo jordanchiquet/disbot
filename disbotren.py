@@ -146,11 +146,6 @@ async def countprocessor(userid, username, message):
         await counter(userid, username, "fuckcount", None, message, "fuck")
     if "in any case" in message:
         await counter(userid, username, "inanycase", None, message, "in any case")
-async def countprocessor(userid, username, message):
-    if "fuck" in message:
-        await counter(userid, username, "fuckcount", None, message, "fuck")
-    if "in any case" in message:
-        await counter(userid, username, "inanycase", None, message, "in any case")
     if "no" in message:
         await counter(userid, username, "nocount", None, message, "no ")
         await counter(userid, username, "nocount", None, message, "no.")
