@@ -142,7 +142,8 @@ async def counter(userid, username, countfield, tallycount: int = None, message:
 
 async def countprocessor(userid, username, message):
     await counter(userid, username, "msgcount", 1)
-    for " " in message:
+    msgsearch = " "
+    for msgsearch in message:
         await counter(userid, username, "wordcount", 1)
     if "fuck" in message:
         await counter(userid, username, "fuckcount", None, message, "fuck")
