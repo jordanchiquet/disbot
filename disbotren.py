@@ -142,6 +142,8 @@ async def counter(userid, username, countfield, tallycount: int = None, message:
 
 async def countprocessor(userid, username, message):
     await counter(userid, username, "msgcount", 1)
+    for " " in message:
+        await counter(userid, username, "wordcount", 1)
     if "fuck" in message:
         await counter(userid, username, "fuckcount", None, message, "fuck")
     if "in any case" in message:
@@ -826,71 +828,98 @@ async def fox(ctx):
 
 
 @bot.command()
-async def fuck(ctx):
-    getgraph("fuckcount")
+async def fuck(ctx, a: str = None):
+    if a is None:
+        getgraph("fuckcount")
+    elif a == "total":
+        getgraph("fuckcount", True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
 
 @bot.command()
-async def south(ctx):
-    getgraph("southcount")
+async def south(ctx, a: str = None):
+    if a is None:
+        getgraph("southcount")
+    elif a == "total":
+        getgraph("southcount", True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
 
 @bot.command()
-async def inanycase(ctx):
-    getgraph("inanycase")
+async def inanycase(ctx, a: str = None):
+    if a is None:
+        getgraph("inanycase")
+    elif a == "total":
+        getgraph("inanycount", True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
 
 @bot.command()
-async def nicks(ctx):
-    getgraph("nicknames")
+async def nicks(ctx, a: str = None):
+    if a is None:
+        getgraph("nicknames")
+    elif a == "total":
+        getgraph("nicknames", True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
 
 @bot.command()
-async def positive(ctx):
-    getgraph("yescount")
+async def positive(ctx, a: str = None):
+    if a is None:
+        getgraph("yescount")
+    elif a == "total":
+        getgraph("yescount", True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
 
 @bot.command()
-async def negative(ctx):
-    getgraph("nocount")
+async def negative(ctx, a: str = None):
+    if a is None:
+        getgraph("nocount")
+    elif a == "total":
+        getgraph("nocount", True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
 
 @bot.command()
-async def dude(ctx):
-    getgraph("dudecount")
+async def dude(ctx, a: str = None):
+    if a is None:
+        getgraph("dudecount")
+    elif a == "total":
+        getgraph("dudecount", True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
 
 @bot.command()
-async def imgcount(ctx):
-    getgraph("imgsearchcount")
+async def imgcount(ctx, a: str = None):
+    if a is None:
+        getgraph("imgsearchcount")
+    elif a == "total":
+        getgraph("imgsearchcount", True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
 
 @bot.command()
-async def like(ctx):
-    getgraph("likecount")
+async def like(ctx, a: str = None):
+    if a is None:
+        getgraph("likecount")
+    elif a == "total":
+        getgraph("likecount", True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
 
 @bot.command()
 async def count(ctx):
-    getgraph("msgcount")
+    getgraph("msgcount", True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
