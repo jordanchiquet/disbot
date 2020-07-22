@@ -853,11 +853,8 @@ async def inanycase(ctx, a: str = None):
 
 
 @bot.command()
-async def nicks(ctx, a: str = None):
-    if a is None:
-        getgraph("nicknames")
-    elif a == "total":
-        getgraph("nicknames", True)
+async def nicks(ctx):
+    getgraph("nicknames", True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
