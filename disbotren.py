@@ -134,9 +134,6 @@ async def counter(userid, username, countfield, tallycount: int = None, message:
     if countfield == "fuckcount":
         if message.startswith(".fuck"):
             tallycount = tallycount - 1
-    if countfield == "nocount":
-        if message == "no":
-            tallycount = 1
     if tallycount != 0:
         for num in range(tallycount):
             countinit.userintwrite()
