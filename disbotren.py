@@ -917,6 +917,18 @@ async def count(ctx):
 
 
 @bot.command()
+async def words(ctx):
+    getgraph("wordcount", True)
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
+
+
+@bot.command()
+async def word(ctx):
+    words.invoke(ctx)
+
+
+@bot.command()
 async def gun(ctx):
     path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/bitchfolder").__next__()
     min = 1
