@@ -3,9 +3,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-def getgraph(column, rawcount: bool = False):
-    usersinit = renardusers(1, column)
-    totalcountinit = renardusers(1, "wordcount")
+def getgraph(column, serverid, rawcount: bool = False):
+    usersinit = renardusers(1, column, serverid=serverid)
+    totalcountinit = renardusers(1, "wordcount", serverid=serverid)
     graphdatarawcolumn = usersinit.getgraphdata()
     if rawcount:
         finaldata = graphdatarawcolumn

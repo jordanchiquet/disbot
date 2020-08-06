@@ -504,10 +504,10 @@ async def close(ctx):
     await client.close()
     await sys.exit()
 
-@bot.command()
-@commands.has_role("High Council of Emoji")
-async def pull(ctx):
-    pullrestart()
+# @bot.command()
+# @commands.has_role("High Council of Emoji")
+# async def pull(ctx):
+#     pullrestart()
 
 
 @close.error
@@ -772,101 +772,112 @@ async def fox(ctx):
 
 @bot.command()
 async def fuck(ctx, a: str = None):
+    serverid = ctx.guild.id
     if a is None:
-        getgraph("fuckcount")
+        getgraph("fuckcount", serverid)
     elif a == "total":
-        getgraph("fuckcount", True)
+        getgraph("fuckcount", serverid, True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
 
 @bot.command()
 async def south(ctx, a: str = None):
+    serverid = ctx.guild.id
     if a is None:
-        getgraph("southcount")
+        getgraph("southcount", serverid)
     elif a == "total":
-        getgraph("southcount", True)
+        getgraph("southcount", serverid, True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
 
 @bot.command()
 async def inanycase(ctx, a: str = None):
+    serverid = ctx.guild.id
     if a is None:
-        getgraph("inanycase")
+        getgraph("inanycase", serverid)
     elif a == "total":
-        getgraph("inanycount", True)
+        getgraph("inanycount", serverid, True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
 
 @bot.command()
 async def nicks(ctx):
-    getgraph("nicknames", True)
+    serverid = ctx.guild.id
+    getgraph("nicknames", serverid, True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
 
 @bot.command()
 async def positive(ctx, a: str = None):
+    serverid = ctx.guild.id
     if a is None:
-        getgraph("yescount")
+        getgraph("yescount", serverid)
     elif a == "total":
-        getgraph("yescount", True)
+        getgraph("yescount", serverid, True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
 
 @bot.command()
 async def negative(ctx, a: str = None):
+    serverid = ctx.guild.id
     if a is None:
-        getgraph("nocount")
+        getgraph("nocount", serverid)
     elif a == "total":
-        getgraph("nocount", True)
+        getgraph("nocount", serverid, True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
 
 @bot.command()
 async def dude(ctx, a: str = None):
+    serverid = ctx.guild.id
     if a is None:
-        getgraph("dudecount")
+        getgraph("dudecount", serverid)
     elif a == "total":
-        getgraph("dudecount", True)
+        getgraph("dudecount", serverid, True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
 
 @bot.command()
 async def imgcount(ctx, a: str = None):
+    serverid = ctx.guild.id
     if a is None:
-        getgraph("imgsearchcount")
+        getgraph("imgsearchcount", serverid)
     elif a == "total":
-        getgraph("imgsearchcount", True)
+        getgraph("imgsearchcount", serverid, True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
 
 @bot.command()
 async def like(ctx, a: str = None):
+    serverid = ctx.guild.id
     if a is None:
-        getgraph("likecount")
+        getgraph("likecount", serverid)
     elif a == "total":
-        getgraph("likecount", True)
+        getgraph("likecount", serverid, True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
 
 @bot.command()
 async def count(ctx):
-    getgraph("msgcount", True)
+    serverid = ctx.guild.id
+    getgraph("msgcount", serverid, True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
 
 @bot.command()
 async def words(ctx):
-    getgraph("wordcount", True)
+    serverid = ctx.guild.id
+    getgraph("wordcount", serverid, True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
 
