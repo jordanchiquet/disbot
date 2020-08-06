@@ -155,7 +155,9 @@ async def on_message(message):
     mclower = mclower.replace("!","")
     print("serverid: " + str(serverid))
     wordcounterinit = wordcounter(userid, serverid, user, mclower)
+    wordcounteruni = wordcounter(userid, "uni", user, mclower)
     wordcounterinit.countprocessor()
+    wordcounteruni.countprocessor()
     if not mclower.startswith(".") and ("belay that order" in mclower or "cancel that order" in mclower or "cancel that command" in mclower or "delete that timer" in mclower
      or "cancel that timer" in mclower or "erase that timer" in mclower):
         print("belay that in command, checking commandRunning Dict")
@@ -1158,10 +1160,12 @@ async def w(ctx, a: str = None, b: str = None):
 
 @bot.command()
 async def war(ctx, a: str = None, b: str = None):
+    print("war were declared")
     userid = ctx.message.author.id
-    serverid = ctx.guild.id
+    authorfull = str(ctx.message.author)
+    username = authorfull.split("#")[0]
     if a is None:
-        battlenetcheckinit = renardusers(userid, "battlenet")
+        battlenetcheckinit = renardusers(userid, "battlenet", serverid="uni")
         print("warzone reached users class")
         battlenetcheck = battlenetcheckinit.userread()
         print("battlenetcheck: [" + str(battlenetcheck) +"]")
@@ -1172,7 +1176,7 @@ async def war(ctx, a: str = None, b: str = None):
             print("battlecheck[0] was not None, continuing")
             warzoneresponse = warzonestats(str(battlenetcheck[0]))
     elif a == "register" or a == "reg":
-        battlenetcheckinit = renardusers(userid, "battlenet", b)  
+        battlenetcheckinit = renardusers(userid, "battlenet", b, username, "uni")  
         print("warzone reached users class")
         battlenetcheckinit.userwrite()
         print("warzone wrote battlenet tag: [" + a + "]")

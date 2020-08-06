@@ -5,7 +5,7 @@ import mysql.connector
 
 class renardusers:
     
-    def __init__(self, userid, field, param : str = None, username: str = None, serverid: int = None):
+    def __init__(self, userid, field, param : str = None, username: str = None, serverid = None):
         print("users initiated")
         self.userid = userid
         self.field = field
@@ -19,6 +19,9 @@ class renardusers:
         elif serverid == 237397384676507651:
             print("renard users called from renmemorial server")
             self.servername = "renmemorial"
+        elif serverid == "uni":
+            print("renard users called for universal table")
+            self.servername = "universal"
         else:
             print("something wrong with serverid in users module chief")
         self.mydb = mysql.connector.connect(
