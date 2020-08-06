@@ -45,7 +45,8 @@ class wordcounter:
             self.counter("likecount", None, "like")
         southlist = ["yall", "ya'll", "y'all", "aint", "ain't", "he don't", "she don't", "he dont", "she dont" "it dont", "it don't", "not no", "dont got", "don't got", "they was", "we was", "you was",
         "up a storm", "yonder", "that dont", "that don't", "lick of sense", "reckon", "fixin to", "fixing to", "fixin' to", "finna", "bowed up", "hanker", "howdy", "lickety", "ornery", "purdy", "purty", "rile", "riling",
-        "skidaddle", "skedaddle", "skidaddling", "skedaddling", "tarnation", "varmint", "yankee", "crawfish", "we's", "we is", "theys", "they is", "they's", "them dudes", "lagniappe", "mawmaw", "pawpaw"]
+        "skidaddle", "skedaddle", "skidaddling", "skedaddling", "tarnation", "varmint", "yankee", "crawfish", "we's", "we is", "theys", "they is", "they's", "them dudes", "lagniappe", "mawmaw", "pawpaw", "cross the way",
+        "damn near"]
         issouth = [s for s in southlist if(s in self.message)]
         if issouth:
             self.counter("southcount", 1)
