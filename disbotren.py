@@ -36,6 +36,7 @@ from uszipcode import SearchEngine
 
 
 from modules.bingimageapi import bingimage #azure-cognitiveservices-search-imagesearch
+from modules.wordcounter import wordcounter
 from modules.dice import dice
 from modules.dickshadow import executeoverlay #Pillow #numpy #whapi
 from modules.giphy import getgif
@@ -125,63 +126,6 @@ async def commandRunningDictClear():
     commandRunningDict.clear()
 
 
-async def counter(userid, username, countfield, tallycount: int = None, message: str = None, countstring: str = None):
-    countinit = renardusers(userid, countfield, username=username)
-    if tallycount is None:
-        tallycount = message.count(countstring)
-    if countfield == "wordcount":
-        tallycount = tallycount + 1
-        if message.startswith("."):
-            tallycount = tallycount - 1
-    if countfield == "fuckcount":
-        if message.startswith(".fuck"):
-            tallycount = tallycount - 1
-    if tallycount != 0:
-        for num in range(tallycount):
-            countinit.userintwrite()
-
-
-async def countprocessor(userid, username, message):
-    await counter(userid, username, "msgcount", 1)
-    await counter(userid, username, "wordcount", None, message, " ")
-    if "fuck" in message:
-        await counter(userid, username, "fuckcount", None, message, "fuck")
-    if "in any case" in message:
-        await counter(userid, username, "inanycase", None, message, "in any case")
-    if "no" in message:
-        await counter(userid, username, "nocount", None, message, "no ")
-        await counter(userid, username, "nocount", None, message, "no.")
-        await counter(userid, username, "nocount", None, message, "no!")
-        await counter(userid, username, "nocount", None, message, "no?")
-        await counter(userid, username, "nocount", None, message, "no,")
-    if "no" == message:
-        await counter(userid, username, "nocount", None, message, "no")
-    if "nah" in message:
-        await counter(userid, username, "nocount", None, message, "nah")
-    if "yes" in message:
-        await counter(userid, username, "yescount", None, message, "yes ")
-        await counter(userid, username, "yescount", None, message, "yes.")
-        await counter(userid, username, "yescount", None, message, "yes!")
-        await counter(userid, username, "yescount", None, message, "yes?")
-        await counter(userid, username, "yescount", None, message, "yes,")
-    if "yah" in message:
-        await counter(userid, username, "yescount", None, message, "yah ")
-    if "yee" in message:
-        await counter(userid, username, "yescount", None, message, "yee ")
-    if "dude" in message:
-        await counter(userid, username, "dudecount", None, message, "dude")
-    if message.startswith(".img"):
-        await counter(userid, username, "imgsearchcount", 1)
-    if "like" in message:
-        await counter(userid, username, "likecount", None, message, "like")
-    southlist = ["yall", "ya'll", "y'all", "aint", "ain't", "he don't", "she don't", "he dont", "she dont" "it dont", "it don't", "not no", "dont got", "don't got", "they was", "we was", "you was",
-    "up a storm", "yonder", "that dont", "that don't", "lick of sense", "reckon", "fixin to", "fixing to", "fixin' to", "finna", "bowed up", "hanker", "howdy", "lickety", "ornery", "purdy", "purty", "rile", "riling",
-    "skidaddle", "skedaddle", "skidaddling", "skedaddling", "tarnation", "varmint", "yankee", "crawfish", "we's", "we is", "theys", "they is", "they's", "them dudes", "lagniappe", "mawmaw", "pawpaw"]
-    issouth = [s for s in southlist if(s in message)]
-    if issouth:
-        await counter(userid, username, "southcount", 1)
-
-
 @bot.event
 async def on_member_update(before, after):
     if before.nick != after.nick:
@@ -198,6 +142,7 @@ async def on_message(message):
         commandRunningDict[message.id] = message.content
         print("bot command logged")
         return
+    serverid = message.guild.id
     channelid = message.channel.id
     userid = message.author.id
     authorfull = str(message.author)
@@ -208,7 +153,9 @@ async def on_message(message):
     timeorig = (message.created_at - timedelta(hours=5))
     mclower = message.content.lower()
     mclower = mclower.replace("!","")
-    await countprocessor(userid, author, mclower)
+    print("serverid: " + str(serverid))
+    wordcounterinit = wordcounter(userid, serverid, user, mclower)
+    wordcounterinit.countprocessor()
     if not mclower.startswith(".") and ("belay that order" in mclower or "cancel that order" in mclower or "cancel that command" in mclower or "delete that timer" in mclower
      or "cancel that timer" in mclower or "erase that timer" in mclower):
         print("belay that in command, checking commandRunning Dict")
@@ -402,10 +349,12 @@ async def on_reaction_add(reaction, user):
     if reaction.emoji == '💬' and not user.bot:
         message = reaction.message
         channel = reaction.message.channel
+        serverid = reaction.message.guild.id
         ts = message.created_at - timedelta(hours=5)
         messageuser = message.author
         quote = message.content
-        sql = "INSERT INTO renarddb.quotes (user, quote, timestamp) VALUES (\"" + str(messageuser) + "\", \"" + str(quote) + "\", \"" + str(ts) + "\");"
+        sql = "INSERT INTO renarddb.quotes (user, quote, timestamp, serverid) VALUES (\"" + str(messageuser) + "\", \"" + str(quote) + "\", \"" + str(ts) + "\", \"" + str(serverid) + "\");"
+        print("sql query:\n" + sql)
         mycursor.execute(sql)
         mydb.commit()
         idquery = "SELECT id FROM renarddb.quotes WHERE timestamp = \"" + str(ts) + "\""
@@ -623,7 +572,6 @@ async def timer(ctx, a: str = None, b: str = None, c: str = None, d: str = None)
     channel = ctx.channel.id
     msgcontent = ctx.message.content
     timeorig = (ctx.message.created_at - timedelta(hours=5))
-    # timeorig = (datetime.now())
     user = ctx.message.author.id
     timerinit = timercl(msgcontent, user, channel, timeorig, a, b, c, d)
     if a == "default":
@@ -967,9 +915,10 @@ async def quote(ctx, a: str = None, b: str = None):
     user='dbuser',
     passwd='e4miqtng')
     mycursor = mydb.cursor(buffered=True)
+    serverid = ctx.guild.id
     if a is None:
         qlist = []
-        sql = "SELECT * FROM renarddb.quotes"
+        sql = "SELECT * FROM renarddb.quotes WHERE serverid LIKE \"" + str(serverid) + "\""
         mycursor.execute(sql)
         for x in mycursor:
             qlist.append(x)
@@ -1199,6 +1148,7 @@ async def w(ctx, a: str = None, b: str = None):
 @bot.command()
 async def war(ctx, a: str = None, b: str = None):
     userid = ctx.message.author.id
+    serverid = ctx.guild.id
     if a is None:
         battlenetcheckinit = renardusers(userid, "battlenet")
         print("warzone reached users class")

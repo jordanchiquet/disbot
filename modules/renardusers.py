@@ -5,11 +5,22 @@ import mysql.connector
 
 class renardusers:
     
-    def __init__(self, userid, field, param : str = None, username: str = None):
+    def __init__(self, userid, field, param : str = None, username: str = None, serverid: int = None):
+        print("users initiated")
         self.userid = userid
         self.field = field
         self.param = param
         self.username = username
+        if serverid is None:
+            print("serverid was None, moving on")
+        elif serverid == 688494181727207478:
+            print("renard users called from endowed server")
+            self.servername = "endowed"
+        elif serverid == 237397384676507651:
+            print("renard users called from renmemorial server")
+            self.servername = "renmemorial"
+        else:
+            print("something wrong with serverid in users module chief")
         self.mydb = mysql.connector.connect(
         host='18.216.39.250',
         user='dbuser',
@@ -17,7 +28,7 @@ class renardusers:
     
     def userinit(self):
         mycursor = self.mydb.cursor()    
-        sql = "SELECT * FROM renarddb.users WHERE userid LIKE \"" + self.userid + "\""
+        sql = "SELECT * FROM renarddb." + self.servername + "users WHERE userid LIKE \"" + self.userid + "\""
         mycursor.execute(sql)
         for x in mycursor:
             return(x)
@@ -32,7 +43,7 @@ class renardusers:
         if self.userexists() == False:
             print("user passed userexists redundancy test... registering user")
             mycursor = self.mydb.cursor()
-            sql = "INSERT INTO renarddb.users (user) VALUES (%s)"
+            sql = "INSERT INTO renarddb." + self.servername + "users (user) VALUES (%s)"
             val = [self.userid]
             mycursor.execute(sql, val)
             mydb.commit()
@@ -46,7 +57,7 @@ class renardusers:
     def userread(self):
         print("userread function was reached with parameters: USER: [" + str(self.userid) + "] FIELD: [" + self.field + "]")
         mycursor = self.mydb.cursor()
-        sql = "SELECT (" + self.field + ") FROM renarddb.users WHERE user LIKE (%s)"
+        sql = "SELECT (" + self.field + ") FROM renarddb." + self.servername + "users WHERE user LIKE (%s)"
         val = [self.userid]
         mycursor.execute(sql, val)
         for x in mycursor:
@@ -56,7 +67,7 @@ class renardusers:
 
     def getgraphdata(self):
         mycursor = self.mydb.cursor()
-        sql = "SELECT username, " + self.field + " FROM renarddb.users"
+        sql = "SELECT username, " + self.field + " FROM renarddb." + self.servername + "users"
         mycursor.execute(sql)
         graphresults = []
         for x in mycursor:
@@ -68,7 +79,7 @@ class renardusers:
     def userwrite(self): 
         mycursor = self.mydb.cursor()
         print("self.username: [" + self.username + "]")
-        sql = "INSERT INTO renarddb.users(user," + self.field + ",username) VALUES (" + str(self.userid) + ",\"" + self.param + "\",\"" + self.username + "\") ON DUPLICATE KEY UPDATE " + self.field + " = \"" + self.param + "\", username = \"" + self.username + "\";"
+        sql = "INSERT INTO renarddb." + self.servername + "users(user," + self.field + ",username) VALUES (" + str(self.userid) + ",\"" + self.param + "\",\"" + self.username + "\") ON DUPLICATE KEY UPDATE " + self.field + " = \"" + self.param + "\", username = \"" + self.username + "\";"
         mycursor.execute(sql)
         self.mydb.commit()
         print("write successful")
@@ -76,7 +87,7 @@ class renardusers:
     
     def userintwrite(self):
         mycursor = self.mydb.cursor()
-        sql = "INSERT INTO renarddb.users(user," + self.field + ",username) VALUES (" + str(self.userid) + ",1,\"" + self.username + "\") ON DUPLICATE KEY UPDATE " + self.field + " = " + self.field + "+1, username = \"" + self.username + "\";"
+        sql = "INSERT INTO renarddb." + self.servername + "users(user," + self.field + ",username) VALUES (" + str(self.userid) + ",1,\"" + self.username + "\") ON DUPLICATE KEY UPDATE " + self.field + " = " + self.field + "+1, username = \"" + self.username + "\";"
         mycursor.execute(sql)
         self.mydb.commit()
 
@@ -90,7 +101,3 @@ class renardusers:
         mycursor.execute(sql)
         for x in mycursor:
             return(x)
-
-
-init = renardusers(1, "fuckcount")
-init.getgraphdata()
