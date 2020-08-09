@@ -303,16 +303,6 @@ class timercl:
         val = [user, timernote, timepop, channel, timeorig]
         mycursor.execute(sql, val)
         mydb.commit()
-        # with open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv", "r") as f:
-        #     print("csv open")
-        #     timercsv = f.readlines()
-        #     oldid = timercsv[-1].split(',')[0]
-        #     timerid = (int(oldid) + 1)
-        #     fields = [timerid, user, timernote, timeorig, timepop, channel]
-        #     with open("/Users/jordanchiquet/personalandfinance/disbotren/test/discordtimers.csv", "a", newline='') as f:
-        #         writer = csv.writer(f)
-        #         writer.writerow(fields)
-        # f.close()
         return("Timer set for " + timepop[:-10] + "!")
 
     def printtest(self):
@@ -320,7 +310,7 @@ class timercl:
 
     def timerdefaultcheck(self):
         print("starting sql query for default time")
-        usertimeinit = renardusers(self.user, "timerdefault")
+        usertimeinit = renardusers(self.user, "timerdefault", serverid="uni")
         print("reached users class")
         usertimerdefaultcheck = usertimeinit.userread()
         print("reached userread func, result: [" + str(usertimerdefaultcheck) + "]")
@@ -333,7 +323,8 @@ class timercl:
         return(usertimerdefaultcheck[0])
     
     def timerdefaultwrite(self): 
-        timerdefaultinit = renardusers(self.user, "timerdefault", self.b)
+        timerdefaultinit = renardusers(self.user, "timerdefault", self.b, serverid="uni")
+        print("attempting to write default time: " + self.b)
         timerdefaultinit.userwrite()
         return("timer default write complete")
     

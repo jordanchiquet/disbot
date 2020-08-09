@@ -588,6 +588,7 @@ async def timer(ctx, a: str = None, b: str = None, c: str = None, d: str = None)
             else:
                 print("this is writetime after sending from default write: [" + str(writetime) + "]")
                 timerinit = timercl(msgcontent, user, channel, timeorig, a, writetime, c, d)
+                print("init for default write ran")
                 timerinit.timerdefaultwrite()
                 await ctx.send("New default time for your calendar reminders written.")
     else:
