@@ -116,7 +116,10 @@ async def on_message_edit(before, after):
 async def on_member_join(member):
     global joined
     joined += 1
-    channel = bot.get_channel(649528092691529749)
+    if member.guild.id == 237397384676507651:
+        channel = bot.get_channel(649528092691529749)
+    if member.guild.id == 688494181727207478:
+        channel = bot.get_chanel(688494182691766404)
     await channel.send("a pedophile has joined the chatroom")
 
 

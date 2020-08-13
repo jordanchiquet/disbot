@@ -80,9 +80,11 @@ class renardusers:
 
   
     def userwrite(self): 
+        print("starting userwrite for server " + self.servername + " for field " + self.field + " with value " + self.param + " where user like " + str(self.userid))
         mycursor = self.mydb.cursor()
         print("self.username: [" + self.username + "]")
         sql = "INSERT INTO renarddb." + self.servername + "users(user," + self.field + ",username) VALUES (" + str(self.userid) + ",\"" + self.param + "\",\"" + self.username + "\") ON DUPLICATE KEY UPDATE " + self.field + " = \"" + self.param + "\", username = \"" + self.username + "\";"
+        print("WRITESQL: [" + sql + "]")
         mycursor.execute(sql)
         self.mydb.commit()
         print("write successful")
