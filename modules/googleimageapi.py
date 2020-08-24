@@ -14,12 +14,23 @@ def imageget(query, filetype: str = None):
         else:        
             rawresult = gsource.list(q=query, searchType='image', fileType=filetype,
                                     cx='016515025707600383118:gqogcmpp7ka').execute()
+    tryint = 0
+    imglink = resultiterator(rawresult, tryint)
+    while imglink.endswith(".svg") or imglink.endswith("&get_thumbnail=1"):
+        print("svg or facebook image in link [" + imglink + "] ; iterating")
+        tryint = tryint + 1
+        imglink = resultiterator(rawresult, tryint)
+    print(imglink)
+    return(imglink)
+
+
+def resultiterator(rawresult, tryint):
     try:
-        print("made it to try")
-        firstresult = rawresult['items'][0]
-        print("firstresult: [" + str(firstresult) + "]")
-        imgresult = firstresult['link']
-        print("result: [" + str(imgresult) + "]")
-        return(imgresult)
+        result = rawresult['items'][tryint]
+        imglink = result['link']
     except KeyError:
-        return("how you say? not any image find for that image")
+        imglink = "how you say? not any image find for that image"
+    return(imglink)
+
+
+imageget("me and my friends looking at u")

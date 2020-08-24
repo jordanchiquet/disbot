@@ -429,12 +429,12 @@ async def on_command_error(ctx,error):
 # ----------------- Commands ----------------- #
 # ---------------------------------------- #
 # admin and debug shit
-@bot.command()
-async def feedback(ctx):
-    fdbackmsg = ctx.message.content[10:]
-    admin = ctx.message.guild.owner
-    await discord.DMChannel.send(admin, fdbackmsg)
-    await ctx.send("feedback sent to creator")
+# @bot.command()
+# async def feedback(ctx):
+#     fdbackmsg = ctx.message.content[10:]
+#     admin = ctx.message.guild.owner
+#     await discord.DMChannel.send(admin, fdbackmsg)
+#     await ctx.send("feedback sent to creator")
 
 
 @bot.command()
@@ -462,12 +462,12 @@ async def ding(ctx):
     await ctx.send("dong!! " + dong[:2] + " ms")
 
 
-@bot.command()
-async def fb(ctx):
-    fdbackmsg = ctx.message.content[3:]
-    admin = ctx.message.guild.owner
-    await discord.DMChannel.send(admin, fdbackmsg)
-    await ctx.send("feedback sent to creator")
+# @bot.command()
+# async def fb(ctx):
+#     fdbackmsg = ctx.message.content[3:]
+#     admin = ctx.message.guild.owner
+#     await discord.DMChannel.send(admin, fdbackmsg)
+#     await ctx.send("feedback sent to creator")
 
 
 @bot.command()
@@ -991,7 +991,10 @@ async def quote(ctx, a: str = None, b: str = None):
             await ctx.send("WTF i can't FUCKING find that one!?!?!?!?!")
     
     if a == "list":
-        await ctx.send("http://18.216.39.250:3000/")
+        if ctx.guild.id == 237397384676507651:
+            await ctx.send("http://18.216.39.250:3000/")
+        else:
+            await ctx.send("quote list for your server still WIP")
 
 
 @bot.command()
