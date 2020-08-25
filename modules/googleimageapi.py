@@ -8,16 +8,13 @@ def imageget(query, filetype: str = None):
         rawresult = gsource.list(q=query, searchType='image',
                                 cx='016515025707600383118:gqogcmpp7ka').execute()
     else:
-        if filetype == "gif":
-            rawresult = gsource.list(q=query, searchType='image', fileType=filetype,
-                                    cx='016515025707600383118:gqogcmpp7ka').execute()
-        else:        
-            rawresult = gsource.list(q=query, searchType='image', fileType=filetype,
-                                    cx='016515025707600383118:gqogcmpp7ka').execute()
+        rawresult = gsource.list(q=query, searchType='image', fileType=filetype,
+                                cx='016515025707600383118:gqogcmpp7ka').execute()
+
     tryint = 0
     imglink = resultiterator(rawresult, tryint)
-    while imglink.endswith(".svg") or imglink.endswith("&get_thumbnail=1"):
-        print("svg or facebook image in link [" + imglink + "] ; iterating")
+    while imglink.endswith(".svg") or imglink.endswith("&get_thumbnail=1") or "lookaside.fbsbx" in imglink:
+        print("non-discord supported image in link [" + imglink + "] ; iterating")
         tryint = tryint + 1
         imglink = resultiterator(rawresult, tryint)
     print(imglink)
@@ -31,6 +28,3 @@ def resultiterator(rawresult, tryint):
     except KeyError:
         imglink = "how you say? not any image find for that image"
     return(imglink)
-
-
-imageget("me and my friends looking at u")
