@@ -16,7 +16,7 @@ def imageget(query, filetype: str = None):
     while imglink.endswith(".svg") or imglink.endswith("&get_thumbnail=1") or "lookaside.fbsbx" in imglink:
         print("non-discord supported image in link [" + imglink + "] ; iterating")
         tryint = tryint + 1
-        imglink = resultiterator(rawresult, tryint) + " (got Discord-unsupported image from Google, iterated to image result " + str(tryint + 1) +")"
+        imglink = resultiterator(rawresult, tryint) #+ " (result " + str(tryint + 1) +")"
     print(imglink)
     return(imglink)
 
