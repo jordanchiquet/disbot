@@ -1185,7 +1185,7 @@ async def war(ctx, a: str = None, b: str = None):
             if numberlen == 4 or numberlen == 5:
                 platform = "battle"
             if numberlen == 7:
-                platform = "xb"
+                platform = "uno"
             warzoneresponse = warzonestats(str(battlenetcheck[0]), platform)
     elif a == "register" or a == "reg":
         battlenetcheckinit = renardusers(userid, "battlenet", b, username, "uni")  
