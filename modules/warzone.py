@@ -2,7 +2,7 @@ import sys
 import requests
 import json
 
-def warzonestats(user):
+def warzonestats(user, platform):
     print("starting warzonestats with provided user: [" + user + "]")
     try:
         loginsession = requests.Session()
@@ -13,7 +13,7 @@ def warzonestats(user):
         logindata = {'username': 'jordanchiq@gmail.com', 'password': 'T3ster12',
                     'remember_me': 'true', '_csrf': xsrf}
         loginsession.post("https://profile.callofduty.com/do_login?new_SiteId=cod", data = logindata)
-        trackerurl = "https://my.callofduty.com/api/papi-client/stats/cod/v1/title/mw/platform/battle/gamer/" + user.split("#")[0] + "%23" + user.split("#")[1] + "/profile/type/mp"
+        trackerurl = "https://my.callofduty.com/api/papi-client/stats/cod/v1/title/mw/platform/" + platform + "/gamer/" + user.split("#")[0] + "%23" + user.split("#")[1] + "/profile/type/mp"
         response = loginsession.get(url = trackerurl)
         print("got warzonestats response")
         warzonejson = response.json()

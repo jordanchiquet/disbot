@@ -1180,8 +1180,13 @@ async def war(ctx, a: str = None, b: str = None):
             await ctx.send("No user found! Use \".war register battlenettagwithnumbersignandnumbers\"")
         else:
             battlenettag = battlenetcheck[0]
+            numberlen = len(battlenettag.split("#")[1])
             print("battlecheck[0] was not None, continuing")
-            warzoneresponse = warzonestats(str(battlenetcheck[0]))
+            if numberlen == 4 or numberlen == 5:
+                platform = "battle"
+            if numberlen == 7:
+                platform = "xb"
+            warzoneresponse = warzonestats(str(battlenetcheck[0]), platform)
     elif a == "register" or a == "reg":
         battlenetcheckinit = renardusers(userid, "battlenet", b, username, "uni")  
         print("warzone reached users class")
@@ -1190,11 +1195,20 @@ async def war(ctx, a: str = None, b: str = None):
         await ctx.send("new gamertag stored")
     else:
         battlenettag = a
-        warzoneresponse = warzonestats(a)
+        numberlen = len(battlenettag.split("#")[1])
+        if numberlen == 4 or numberlen == 5:
+            platform = "battle"
+        if numberlen == 7:
+            platform = "uno"
+        warzoneresponse = warzonestats(a, platform)
     if warzoneresponse == "inv":
         print("got inv")
         await ctx.send(file=File("/home/ubuntu/disbot/picfolder/archivememory.png"))
     else:
+        if platform == "uno":
+            platformfullurl = "atvi"
+        else:
+            platformfullurl = "battlenet"
         warstats = warzoneresponse.split("|")
         level = warstats[0]
         kills = warstats[1]
@@ -1208,7 +1222,7 @@ async def war(ctx, a: str = None, b: str = None):
         namebeforenumber = battlenettag.split("#")[0]
         numberaftername = battlenettag.split("#")[1]
         embed = discord.Embed(title = namebeforenumber + " Level " + level, 
-                            description ="[more stats...](https://cod.tracker.gg/warzone/profile/battlenet/" + namebeforenumber + "%23" + numberaftername + "/overview)", 
+                            description ="[more stats...](https://cod.tracker.gg/warzone/profile/" + platformfullurl + "/" + namebeforenumber + "%23" + numberaftername + "/overview)", 
                             color = 0x00badf)
         embed.set_thumbnail(url="https://i.insider.com/55a3e234eab8eab243028ac8?width=300&format=jpeg&auto=webp")
         embed.add_field(name="KILLS", value=kills)
