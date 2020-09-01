@@ -265,18 +265,6 @@ async def on_message(message):
     if "love" == mclower:
         await channel.send(
             "is suicide")
-    if ("love you" in mclower or
-    "love andrew" in mclower or
-    "love frank" in mclower or
-    "love joey" in mclower or
-    "love jordan" in mclower or
-    "love logan" in mclower or
-    "love seth" in mclower or
-    "love trev" in mclower or
-    "love tgras" in mclower or
-    "miss you" in mclower):
-        await channel.send(
-            "haha gay!")
     # if "meant to be" in mclower:
     #     await channel.send(
     #         "https://www.facebook.com/magicmenlive/videos/magic-men"
@@ -288,7 +276,7 @@ async def on_message(message):
     if "what is your purpose" in mclower:
         await channel.send(
             "My purposes are input, output, processing, and storage.")
-    if "bye" in mclower:
+    if "byebye" in mclower or "bye bye" in mclower:
         path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/byebyefolder").__next__()
         min = 1
         max = len(files)
