@@ -39,6 +39,7 @@ from modules.bingimageapi import bingimage #azure-cognitiveservices-search-image
 from modules.wordcounter import wordcounter
 from modules.dice import dice
 from modules.dickshadow import executeoverlay #Pillow #numpy #whapi
+from modules.figlet import figgletizer 
 from modules.giphy import getgif
 from modules.googleimageapi import imageget
 from modules.graphmaker import getgraph
@@ -885,6 +886,14 @@ async def words(ctx):
 @bot.command()
 async def word(ctx):
     words.invoke(ctx)
+
+
+@bot.command()
+async def figlet(ctx):
+    figinput = ctx.message.content[8:]
+    print("figinput: " + figinput)
+    print(figgletizer(figinput))
+    await ctx.send("```" + figgletizer(figinput) + "```")
 
 
 @bot.command()
