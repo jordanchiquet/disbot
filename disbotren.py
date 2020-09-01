@@ -294,6 +294,12 @@ async def on_message(message):
         max = len(files)
         signfile = random.randint(min, max)
         await channel.send(file=File("/home/ubuntu/disbot/picfolder/heresyoursignfolder/heresyoursign" + str(signfile) + ".png"))
+    if "thanks obama" in mclower or "thx obama" in mclower or "ty obama" in mclower:
+        path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/thanksobama").__next__()
+        min = 1
+        max = len(files)
+        signfile = random.randint(min, max)
+        await channel.send(file=File("/home/ubuntu/disbot/picfolder/thanksobama/thanksobama" + str(signfile) + ".png"))
     if mclower.endswith("this bitch"):
         print("this bitch invoked")
         if len(mclower.split(" ")) == 3:
