@@ -66,6 +66,7 @@ bot.remove_command('close')
 
 deletelog = {}
 commandRunningDict = {}
+chatLog = []
 
 
 async def updateserverstats():
@@ -128,6 +129,7 @@ async def on_member_join(member):
 async def commandRunningDictClear():
     print("clearing commandRunningDict (dict for belay order shit)")
     commandRunningDict.clear()
+    chatLog.clear()
 
 
 @bot.event
@@ -146,6 +148,8 @@ async def on_message(message):
         commandRunningDict[message.id] = message.content
         print("bot command logged")
         return
+    else:
+        chatLog.append(message.content)
     serverid = message.guild.id
     channelid = message.channel.id
     userid = message.author.id
@@ -162,6 +166,11 @@ async def on_message(message):
     wordcounteruni = wordcounter(userid, "uni", user, mclower)
     wordcounterinit.countprocessor()
     wordcounteruni.countprocessor()
+
+    if len(chatLog) >= 3: 
+        if chatLog[-1] == chatLog[-2] and chatLog[-2] == chatLog[-3]:
+            await channel.send(chatLog[-2])
+            chatLog.clear()
     if not mclower.startswith(".") and ("belay that order" in mclower or "cancel that order" in mclower or "cancel that command" in mclower or "delete that timer" in mclower
      or "cancel that timer" in mclower or "erase that timer" in mclower):
         print("belay that in command, checking commandRunning Dict")
@@ -241,8 +250,14 @@ async def on_message(message):
             await channel.send(heycomputeresult)
     mclower = mclower.replace(".","")
     if "no" == mclower:
-        await channel.send(
-            "https://i.ytimg.com/vi/dI8wt5soxXE/maxresdefault.jpg")
+        print("length " + str(len(chatLog)))
+        conditionlist = ["destroy", "remove", "break", "delete", "undo", "dump", "discard", "quit", "stop"]
+        if len(chatLog) >= 2:
+            for condition in conditionlist:
+                if condition in chatLog[-2]:
+                    await channel.send(
+                        "https://i.ytimg.com/vi/dI8wt5soxXE/maxresdefault.jpg")
+                    break
     if "bad bot" in mclower:
         await channel.send(
         "dang...")
