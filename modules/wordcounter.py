@@ -2,15 +2,19 @@ from modules.renardusers import renardusers
 
 class wordcounter:
 
-    def __init__(self, userid, serverid, username, message: str = None):
+    def __init__(self, userid, serverid, username, message: str = None, nicktally: bool = False):
         # super().__init__()
         self.userid = userid
         self.serverid = serverid
         self.username = username
         self.message = message
+        self.nicktally = nicktally
 
 
     def countprocessor(self):
+        if self.nicktally:
+            self.counter("nicknames", 1)
+            return
         self.counter("msgcount", 1)
         self.counter("wordcount", None, " ")
         if "fuck" in self.message:

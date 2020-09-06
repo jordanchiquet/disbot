@@ -125,7 +125,7 @@ async def on_member_join(member):
     await channel.send("a pedophile has joined the chatroom")
 
 
-@tasks.loop(seconds=180.0)
+@tasks.loop(seconds=300.0)
 async def commandRunningDictClear():
     print("clearing commandRunningDict (dict for belay order shit)")
     commandRunningDict.clear()
@@ -139,7 +139,8 @@ async def on_member_update(before, after):
             print("nick changed for user " + str(before.id) + " from " + before.nick + " to " + after.nick)
         except:
             print("user " + str(before.id) + " changed name from one there's no record of to " + after.nick)
-        await counter(before.id, after.nick, "nicknames", 1)
+        nickcounterinit = wordcounter(before.id, before.server.id, after.nick, nicktally=True)
+        nickcounterinit.countprocessor()
 
 
 @bot.event
