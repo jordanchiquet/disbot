@@ -252,7 +252,7 @@ async def on_message(message):
     mclower = mclower.replace(".","")
     if "no" == mclower:
         print("length " + str(len(chatLog)))
-        conditionlist = ["destroy", "remove", "break", "delete", "undo", "dump", "discard", "quit", "stop"]
+        conditionlist = ["destroy", "remove", "break", "delete", "undo", "dump", "discard", "quit", "stop", "banish"]
         if len(chatLog) >= 2:
             for condition in conditionlist:
                 if condition in chatLog[-2]:
@@ -906,10 +906,7 @@ async def word(ctx):
 
 @bot.command()
 async def figlet(ctx):
-    figinput = ctx.message.content[8:]
-    print("figinput: " + figinput)
-    print(figgletizer(figinput))
-    await ctx.send("```" + figgletizer(figinput) + "```")
+    await ctx.send("```" + figgletizer(ctx.message.content[8:]) + "```")
 
 
 @bot.command()
@@ -1087,7 +1084,7 @@ async def g(ctx):
 @bot.command()
 async def gif(ctx):
     gifquery = ctx.message.content[5:]
-    delcmd = await ctx.send(getgif(gifquery))
+    delcmd = await ctx.send(imageget("animated" + gifquery, filetype="gif"))
     deletelog[ctx.message.id] = delcmd
 
 @bot.command()
