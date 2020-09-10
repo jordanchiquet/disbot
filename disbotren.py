@@ -252,7 +252,7 @@ async def on_message(message):
     mclower = mclower.replace(".","")
     if "no" == mclower:
         print("length " + str(len(chatLog)))
-        conditionlist = ["destroy", "remove", "break", "delete", "undo", "dump", "discard", "quit", "stop", "banish", "cast"]
+        conditionlist = ["destroy", "remove", "break", "delete", "undo", "dump", "discard", "quit", "stop", "banish", "cast", "leave", "fix"]
         if len(chatLog) >= 2:
             for condition in conditionlist:
                 if condition in chatLog[-2]:
