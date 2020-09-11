@@ -251,17 +251,25 @@ async def on_message(message):
             await channel.send(heycomputeresult)
     mclower = mclower.replace(".","")
     if "no" == mclower:
-        print("length " + str(len(chatLog)))
-        conditionlist = ["destroy", "remove", "break", "delete", "undo", "dump", "discard", "quit", "stop", "banish", "cast", "leave", "fix"]
+        print("no happen")
+        conditionlist = ["destroy", "remove", "break", "delete", "undo", "dump", "discard", "quit", "stop", "banish", "cast", "leave", "fix", "obliterate",
+        "decimate", "blast", "terminate", "fire", "throw", "put it", "let go", "drop", "get rid", "give", "stop", "relent", "surrender"]
         if len(chatLog) >= 2:
+            print("chat greatere")
             for condition in conditionlist:
-                if condition in chatLog[-2]:
+                if condition in chatLog[-1]:
+                    print("condition met")
                     await channel.send(
                         "https://i.ytimg.com/vi/dI8wt5soxXE/maxresdefault.jpg")
                     break
     if "bad bot" in mclower:
         await channel.send(
         "dang...")
+    fearlist = ["do not fear", "never fear", "don't fear", "dont fear", "fear not", "have no fear", "i can't fear", "i cannot fear"]
+    for x in fearlist:
+        if x == mclower:
+            await channel.send("fear is the mind killer...")
+            break
     if "give me a hand" in mclower:
         await channel.send(
         "https://pbs.twimg.com/media/C3YEwBBXUAE3EoQ.jpg")
@@ -282,12 +290,12 @@ async def on_message(message):
     if "love" == mclower:
         await channel.send(
             "is suicide")
-    # if "meant to be" in mclower:
-    #     await channel.send(
-    #         "https://www.facebook.com/magicmenlive/videos/magic-men"
-    #         "-live-florida-georgia-line-meant-to-be/2147632005458542/")
-    if "print time" == mclower:
+    if "if" in mclower and "meant to be" in mclower:
+        await channel.send("https://youtu.be/GihobUe-LSs")
+    if "print server time" == mclower:
         await channel.send(datetime.now())
+    if "print local time" == mclower:
+        await channel.send(datetime.now() - timedelta(hours=5))
     if "same sex" in mclower:
         await channel.send(file=File("/home/ubuntu/disbot/picfolder/dmx.png"))
     if "what is your purpose" in mclower:
@@ -937,8 +945,9 @@ async def cheer(ctx):
 async def qp(ctx):
     msg = ctx.message
     print(msg.content)
-    await msg.add_reaction('<:Jeff:601576645807046656>')
-    await msg.add_reaction('<:What:370701344232701952>')
+    if ctx.guild.id == 237397384676507651:
+        await msg.add_reaction('<:Jeff:601576645807046656>')
+        await msg.add_reaction('<:What:370701344232701952>')
 
 
 @bot.command()
