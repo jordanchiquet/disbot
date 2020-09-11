@@ -251,17 +251,19 @@ async def on_message(message):
             await channel.send(heycomputeresult)
     mclower = mclower.replace(".","")
     if "no" == mclower:
-        print("no happen")
-        conditionlist = ["destroy", "remove", "break", "delete", "undo", "dump", "discard", "quit", "stop", "banish", "cast", "leave", "fix", "obliterate",
-        "decimate", "blast", "terminate", "fire", "throw", "put it", "let go", "drop", "get rid", "give", "stop", "relent", "surrender"]
-        if len(chatLog) >= 2:
-            print("chat greatere")
-            for condition in conditionlist:
-                if condition in chatLog[-1]:
-                    print("condition met")
-                    await channel.send(
-                        "https://i.ytimg.com/vi/dI8wt5soxXE/maxresdefault.jpg")
-                    break
+        # print("no happen")
+        # conditionlist = ["destroy", "remove", "break", "delete", "undo", "dump", "discard", "quit", "stop", "banish", "cast", "leave", "fix", "obliterate",
+        # "decimate", "blast", "terminate", "fire", "throw", "put it", "let go", "drop", "get rid", "give", "stop", "relent", "surrender"]
+        # if len(chatLog) >= 2:
+        #     print("chat greatere")
+        #     for x in conditionlist:
+        #         print("got here 111")
+        #         print("chatlog[-2] is: " + chatLog[-2])
+        #         res = [x for x in conditionlist if(x in chatLog[-2]) or (x in chatLog[-1])] 
+        #         if res:
+        #             print("condition met")
+        await channel.send("https://i.ytimg.com/vi/dI8wt5soxXE/maxresdefault.jpg")
+                    # break
     if "bad bot" in mclower:
         await channel.send(
         "dang...")
