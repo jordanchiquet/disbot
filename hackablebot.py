@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
 
-testroot = "Users/jordanchiquet/personalandfinance/disbotren/test"
-
-
 import asyncio
 import codecs
 import csv
@@ -11,7 +8,7 @@ import datetime
 import discord
 import json
 import logging
-import os
+import os, os.path
 import mysql.connector
 import nltk
 import random
@@ -24,56 +21,70 @@ import urllib.parse
 import urllib.request
 import wikipediaapi #wikipedia-api
 from bs4 import BeautifulSoup
+from collections import OrderedDict
 from darksky.api import DarkSky, DarkSkyAsync #darksky_weather
 from darksky.types import languages, units, weather
 from datetime import datetime, timedelta
 from discord import File
 from discord.ext import commands, tasks
 from googleapiclient.discovery import build #google-api-python-client
-from google_images_download import google_images_download
-# from GoogleScraper import scrape_with_config, GoogleSearchError
+from GoogleScraper import scrape_with_config, GoogleSearchError
 from googlesearch import search #google
 from nltk.corpus import brown
 from urlextract import URLExtract
 from uszipcode import SearchEngine
 
-from modules.bingimageapi import bingimage
+
+from modules.bingimageapi import bingimage #azure-cognitiveservices-search-imagesearch
+from modules.wordcounter import wordcounter
+from modules.dice import dice
+from modules.dickshadow import executeoverlay #Pillow #numpy #whapi
+from modules.figlet import figgletizer 
+from modules.giphy import getgif
+from modules.googleimageapi import imageget
+from modules.graphmaker import getgraph
+from modules.heycomputer import heycomputer
+from modules.merriamapi import getmeaning
+from modules.pullrestart import pullrestart
+from modules.renardusers import renardusers
 from modules.timermod.timercl import timercl
 from modules.timermod.timeparser import timeparser
-from modules.renardusers import renardusers
-from modules.dice import dice
-from modules.definitionwebscrape import getdefinition
-from modules.dickshadow import executeoverlay
-# from modules.googleimageapi import bingimage
-from modules.heycomputer import heycomputer
 from modules.warzone import warzonestats
 from modules.weather import weatherget
-from modules.merriamapi import getmeaning
-# from modules.timer.timermonthpass import timermonthpass
-# from test.modules.timer.ogtimer import ogtimer
-# from test.modules.timer.timer import timercl
+from modules.wikihow import wikihow
+from modules.youtube import youtubesearch
+from modules.zooo import zooo
 
 
+messages = joined = 0
 nltk.download('brown')
-
 client = discord.Client()
-
-bot = commands.Bot(command_prefix=(',', 'jizz '), case_insensitive=True, description='super computer robot')
-
+bot = commands.Bot(command_prefix=',', case_insensitive=True, description='super computer robot')
 bot.remove_command('help')
+bot.remove_command('close')
+
 
 deletelog = {}
+commandRunningDict = {}
+chatLog = []
+
+
+async def updateserverstats():
+    await client.wait_until_ready()
+    global messages, joined
+
 
 @bot.event
 async def on_ready():
-    # timercheck.start()
+    timercheck.start()
+    commandRunningDictClear.start()
     print("logged in as")
     print(bot.user.name)
     print(bot.user.id)
     print(bot.latency)
     print("-----------------------------------")
     channel = bot.get_channel(600430089519497235)
-    embed = discord.Embed(title="Computer Online Mode:", description=" [ON] OFF ", color=0xee657)
+    embed = discord.Embed(title="Computer Online Mode:", description=" [ON] OFF ", color=0xee657) 
     await channel.send(embed=embed)
 
 
@@ -82,6 +93,8 @@ async def on_ready():
 async def on_message_delete(message):
     if message.id in deletelog:
         dellog = deletelog[message.id]
+        print("deleting msg")
+        print(dellog)
         await dellog.delete()
         del deletelog[message.id]
 
@@ -95,41 +108,165 @@ async def on_message_edit(before, after):
         ytresult = re.findall(r'href=\"\/watch\?v=(.{11})', html_cont.read().decode())
         delcmd = await edlog.edit(content=("http://youtube.com/watch?v=" + ytresult[0]))
         deletelog[after] = delcmd
+    if (after.content).startswith("."):
+        # edmessage = msgloginmem[before.id]
+        print('starting process cmd')
+        await bot.process_commands(after)
+
+
+@bot.event
+async def on_member_join(member):
+    global joined
+    joined += 1
+    if member.guild.id == 237397384676507651:
+        channel = bot.get_channel(649528092691529749)
+    if member.guild.id == 688494181727207478:
+        channel = bot.get_chanel(688494182691766404)
+    await channel.send("a pedophile has joined the chatroom")
+
+
+@tasks.loop(seconds=300.0)
+async def commandRunningDictClear():
+    print("clearing commandRunningDict (dict for belay order shit)")
+    commandRunningDict.clear()
+    chatLog.clear()
+
+
+@bot.event
+async def on_member_update(before, after):
+    if before.nick != after.nick:
+        try:
+            print("nick changed for user " + str(before.id) + " from " + before.nick + " to " + after.nick)
+        except:
+            print("user " + str(before.id) + " changed name from one there's no record of to " + after.nick)
+        nickcounterinit = wordcounter(before.id, before.server.id, after.nick, nicktally=True)
+        nickcounterinit.countprocessor()
 
 
 @bot.event
 async def on_message(message):
     if message.author == bot.user:
+        commandRunningDict[message.id] = message.content
+        print("bot command logged")
         return
+    else:
+        chatLog.append(message.content)
+    serverid = message.guild.id
+    channelid = message.channel.id
+    userid = message.author.id
+    authorfull = str(message.author)
+    author = authorfull.split("#")[0]
     channel = message.channel
+    print(message.author)
+    user = (str(message.author)).split("#")[0]
+    timeorig = (message.created_at - timedelta(hours=5))
     mclower = message.content.lower()
-    if mclower.startswith("hey") or mclower.startswith("hi") or mclower.startswith("hello") or mclower.startswith("hola"):
-        mclowersplit = mclower.split(" ")
-        if mclowersplit[1].startswith("comput") or mclowersplit[1] == ("compadre") or mclowersplit[1] == "machine" or mclowersplit[1] == "renard":
-            heycomputerinit = heycomputer(mclower)
-            heycomputeresult = heycomputerinit.heycomputerexecute()
-            print("heycomputeresult: [" + heycomputeresult + "]")
-            if heycomputeresult == "inv" or heycomputeresult is None:
-                await channel.send("a mistake was made... the computer have processed your message but could not... process")
+    mclower = mclower.replace("!","")
+    print("serverid: " + str(serverid))
+    # wordcounterinit = wordcounter(userid, serverid, user, mclower)
+    # wordcounteruni = wordcounter(userid, "uni", user, mclower)
+    # wordcounterinit.countprocessor()
+    # wordcounteruni.countprocessor()
+
+    if len(chatLog) >= 3: 
+        if chatLog[-1] == chatLog[-2] and chatLog[-2] == chatLog[-3]:
+            await channel.send(chatLog[-2])
+            chatLog.clear()
+    if not mclower.startswith(".") and ("belay that order" in mclower or "cancel that order" in mclower or "cancel that command" in mclower or "delete that timer" in mclower
+     or "cancel that timer" in mclower or "erase that timer" in mclower):
+        print("belay that in command, checking commandRunning Dict")
+        if  commandRunningDict != []:
+            print("dict is not empty")
+            deletionID = [*commandRunningDict.keys()][-1]
+            print("made it to first key acquire")
+            msgObj = await channel.fetch_message(deletionID)
+            commandMsgStr = commandRunningDict[deletionID]
+            print(commandMsgStr)
+            if "Timer set for " in commandMsgStr:
+                print("timer detected in command")
+                authorRegCheck = re.search("[a-zA-Z]+#[0-9]{4}", commandMsgStr)
+                if authorRegCheck.group() == str(message.author):
+                    print("belay order call was made by timer author")
+                    deltable = "timers"
+                else:
+                    await channel.send("I cannot do that sir, the timer is DNA-locked by Commander " + authorRegCheck.group() + ".")
+                    return
+            elif commandRunningDict[deletionID].startswith("Quote ") and " added by " in commandRunningDict[deletionID]:
+                print("quotes detected in command")
+                deltable = "quotes"
             else:
-                if heycomputeresult[0] == "~":
-                    heycomputeresult = "```" + heycomputeresult[1:] + "```"
+                await msgObj.delete()
+                await channel.send("TRANSPHASIC PAYLOAD DROPPED... MESSAGE OBLITERATED")
+                return
+            mydb = mysql.connector.connect(
+                host='18.216.39.250',
+                user='dbuser',
+                passwd='e4miqtng')
+            mycursor = mydb.cursor()
+            sql = "DELETE FROM renarddb." + deltable + "\nORDER BY id DESC LIMIT 1"
+            mycursor.execute(sql)
+            mydb.commit()
+            await msgObj.delete()
+            await channel.send("LAUNCHING " + deltable[:-1].upper() + " TORPEDOES")
+        else:
+            print("nothing to belay..")
+            await channel.send("Nothing to belay Sir.")
+    if mclower.startswith("hey") or mclower.startswith("hi") or mclower.startswith("hello") or mclower.startswith("hola") or mclower.startswith("ay") or mclower.startswith("ayo") or mclower.startswith("yo"):
+        mclowersplit = mclower.split(" ")
+        if mclowersplit[1].startswith("comput") or mclowersplit[1] == ("compadre") or mclowersplit[1] == "machine" or mclowersplit[1] == "renard" or mclowersplit[1] == "retard":
+            heycomputerinit = heycomputer(mclower, timeorig, userid, channelid, user)
+            heycomputeresult = heycomputerinit.execute()
+            print("heycomputeresult: [" + heycomputeresult + "]")
+            if heycomputeresult == "terminate":
+                await channel.send(file=File("/home/ubuntu/disbot/picfolder/terminate.png"))
+            elif heycomputeresult == "witness":
+                embed = discord.Embed(description="[He is risen](https://www.amazon.com/product-reviews/B0015DWLH6/ref=acr_dp_hist_5?ie=UTF8&filterByStar=five_star&reviewerType=all_reviews#reviews-filter-bar)", color=0xee657) 
+                embed.set_thumbnail(url="https://thepreachersword.files.wordpress.com/2013/05/prayer-jesus.jpg")
+                await channel.send(embed=embed)
+            elif heycomputeresult == "inv" or heycomputeresult is None:
+                await channel.send("a mistake was made... the computer have processed your message but could not... process")
+            elif heycomputeresult == "donothing":
+                return
+            else:
                 await channel.send(heycomputeresult)
         else:
             return
     if mclower.startswith("comput") or mclower.startswith("compadre") or mclower.startswith("machine") or mclower.startswith("renard"):
-        heycomputerinit = heycomputer(mclower)
-        heycomputeresult = heycomputerinit.heycomputerexecute()
+        heycomputerinit = heycomputer(mclower, timeorig, userid, channelid, user)
+        heycomputeresult = heycomputerinit.execute()
         print("heycomputeresult: [" + heycomputeresult + "]")
-        if heycomputeresult == "inv" or heycomputeresult is None:
+        if heycomputeresult == "terminate":
+            await channel.send(file=File("/home/ubuntu/disbot/picfolder/terminate.png"))
+        elif heycomputeresult == "witness":
+            embed = discord.Embed(description="[He is risen](https://www.amazon.com/product-reviews/B0015DWLH6/ref=acr_dp_hist_5?ie=UTF8&filterByStar=five_star&reviewerType=all_reviews#reviews-filter-bar)", color=0xee657) 
+            embed.set_thumbnail(url="https://thepreachersword.files.wordpress.com/2013/05/prayer-jesus.jpg")
+            await channel.send(embed=embed)
+        elif heycomputeresult == "inv" or heycomputeresult is None:
             await channel.send("a mistake was made... the computer have processed your message but could not... process")
+        elif heycomputeresult == "donothing":
+            return
         else:
             if heycomputeresult[0] == "~":
                 heycomputeresult = "```" + heycomputeresult[1:] + "```"
             await channel.send(heycomputeresult)
+    mclower = mclower.replace(".","")
+    if "no" == mclower:
+        conditionlist = ["destroy", "remove", "break", "delete", "undo", "dump", "discard", "quit", "stop", "banish", "cast", "leave", "fix", "obliterate",
+        "decimate", "blast", "terminate", "fire", "throw", "put it", "let go", "drop", "get rid", "give", "stop", "relent", "surrender"]
+        if len(chatLog) >= 2:
+            for x in conditionlist:
+                print("chatlog[-2] is: " + chatLog[-2])
+                if x in chatLog[-2]:
+                    await channel.send(file=File("/home/ubuntu/disbot/picfolder/no.jpg"))
+                    break
     if "bad bot" in mclower:
         await channel.send(
         "dang...")
+    fearlist = ["do not fear", "never fear", "don't fear", "dont fear", "fear not", "have no fear", "i can't fear", "i cannot fear"]
+    for x in fearlist:
+        if x == mclower:
+            await channel.send("fear is the mind killer...")
+            break
     if "give me a hand" in mclower:
         await channel.send(
         "https://pbs.twimg.com/media/C3YEwBBXUAE3EoQ.jpg")
@@ -139,76 +276,86 @@ async def on_message(message):
     if "holy fuck" == mclower:
         await channel.send(
         "Wi Tu Lo")
-    if "i get up" == mclower:
+    if "i get up" in mclower:
         await channel.send(
         "https://www.youtube.com/watch?v=qjm9QZT06ig")
     if "i see what you mean" in mclower:
         min = 1
-        max = 5
+        max = len
         icwhatumeanfile = random.randint(min, max)
-        await channel.send(file=File("/Users/jordanchiquet/personalandfinance/disbotren/test/test/icwhatumeanfolder/icwhatumeanfile" + str(icwhatumeanfile) + ".png"))
+        await channel.send(file=File("/home/ubuntu/disbot/picfolder/icwhatumeanfolder/icwhatumeanfile" + str(icwhatumeanfile) + ".png"))
     if "love" == mclower:
         await channel.send(
             "is suicide")
-    if ("love you" in mclower or
-    "love andrew" in mclower or
-    "love frank" in mclower or
-    "love joey" in mclower or
-    "love jordan" in mclower or
-    "love logan" in mclower or
-    "love seth" in mclower or
-    "love trev" in mclower or
-    "love tgras" in mclower or
-    "miss you" in mclower):
-        await channel.send(
-            "haha gay!")
-    if "meant to be" in mclower:
-        await channel.send(
-            "https://www.facebook.com/magicmenlive/videos/magic-men"
-            "-live-florida-georgia-line-meant-to-be/2147632005458542/")
-    if "remind me in" in mclower:
-        timertxt = mclower.split("remind me in ")[1]
-        timervars = timertxt.split(" ")
-        a = timervars[0]
-        b = timervars[1]
-        c = timervars[2]
-        d = timervars[4]
-        await timer(message, a, b, c, d)
-
-    if "print time" == mclower:
+    if "if" in mclower and "meant to be" in mclower:
+        await channel.send("https://youtu.be/GihobUe-LSs")
+    if "print server time" == mclower:
         await channel.send(datetime.now())
-    if "promotion" in mclower:
-        await channel.send(file=File("/Users/jordanchiquet/personalandfinance/disbotren/test/promotions.jpg"))
+    if "print local time" == mclower:
+        await channel.send(datetime.now() - timedelta(hours=5))
+    if "same sex" in mclower:
+        await channel.send(file=File("/home/ubuntu/disbot/picfolder/dmx.png"))
     if "what is your purpose" in mclower:
         await channel.send(
             "My purposes are input, output, processing, and storage.")
-    if "bye" in mclower:
+    if "byebye" in mclower or "bye bye" in mclower:
+        path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/byebyefolder").__next__()
         min = 1
-        max = 9
-        signfile = random.randint(min, max)
-        await channel.send(file=File("/Users/jordanchiquet/personalandfinance/disbotren/test/byebyefolder/byebye" + str(signfile) + ".png"))
+        max = len(files)
+        byefile = random.randint(min, max)
+        if byefile == 10:
+            filetype = ".gif"
+        else:
+            filetype = ".png"
+        await channel.send(file=File("/home/ubuntu/disbot/picfolder/byebyefolder/byebye" + str(byefile) + filetype))
+    if "yay" in mclower:
+        await channel.send(file=File("home/ubuntu/disbot/picfolder/pepocheer.gif"))
     if "your sign" in mclower:
+        path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/heresyoursignfolder").__next__()
         min = 1
-        max = 9
+        max = len(files)
         signfile = random.randint(min, max)
-        await channel.send(file=File("/Users/jordanchiquet/personalandfinance/disbotren/test/heresyoursignfolder/heresyoursign" + str(signfile) + ".png"))
-    if mclower.endswith("this bitch"):
-        word = mclower.split(" ")[-3]
-        print(word)
-        checkword = nltk.FreqDist(t for w, t in brown.tagged_words() if w.lower() == word)
-        checkwordres = checkword.most_common()
-        if "VB" in str(checkwordres):
-            min = 1
-            max = 32
-            bitchfile = random.randint(min, max)
-            await channel.send(file=File("/Users/jordanchiquet/personalandfinance/disbotren/test/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
-    if mclower.endswith("on this bitch"):
-        await channel.send(file=File("/Users/jordanchiquet/personalandfinance/disbotren/test/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
-    if mclower.endswith("this, bitch"):
+        await channel.send(file=File("/home/ubuntu/disbot/picfolder/heresyoursignfolder/heresyoursign" + str(signfile) + ".png"))
+    if "thanks obama" in mclower or "thx obama" in mclower or "ty obama" in mclower:
+        path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/thanksobama").__next__()
         min = 1
-        max = 32
+        max = len(files)
+        signfile = random.randint(min, max)
+        await channel.send(file=File("/home/ubuntu/disbot/picfolder/thanksobama/thanksobama" + str(signfile) + ".png"))
+    if mclower.endswith("this bitch"):
+        print("this bitch invoked")
+        if len(mclower.split(" ")) == 3:
+            print("length 3")
+            path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/bitchfolder").__next__()
+            min = 1
+            max = len(files)
+            bitchfile = random.randint(min, max)
+            print("attempting to send file: [" + str(bitchfile) + "]")
+            await channel.send(file=File("/home/ubuntu/disbot/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
+        else:
+            word = mclower.split(" ")[-3]
+            print(word)
+            checkword = nltk.FreqDist(t for w, t in brown.tagged_words() if w.lower() == word)
+            checkwordres = checkword.most_common()
+            if "VB" in str(checkwordres):
+                path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/bitchfolder").__next__()
+                min = 1
+                max = len(files)
+                bitchfile = random.randint(min, max)
+                await channel.send(file=File("/home/ubuntu/disbot/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
+    if mclower.endswith("this, bitch") or mclower.endswith("on this bitch") or mclower.endswith("run over this bitch"):
+        path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/bitchfolder").__next__()
+        min = 1
+        max = len(files)
         bitchfile = random.randint(min, max)
-        await channel.send(file=File("/Users/jordanchiquet/personalandfinance/disbotren/test/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
+        await channel.send(file=File("/home/ubuntu/disbot/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
+    if mclower == "speed me up":
+        await channel.send("https://youtu.be/dCuCpVPkWDY")
+    if mclower == "speed me down":
+        await channel.send("https://youtu.be/iALO4L166WU")
+    if "you gave a man an expensive gift" in mclower:
+        await channel.send(
+        "ghay!!")
     await bot.process_commands(message)
 
 
@@ -223,10 +370,12 @@ async def on_reaction_add(reaction, user):
     if reaction.emoji == '💬' and not user.bot:
         message = reaction.message
         channel = reaction.message.channel
+        serverid = reaction.message.guild.id
         ts = message.created_at - timedelta(hours=5)
         messageuser = message.author
         quote = message.content
-        sql = "INSERT INTO renarddb.quotes (user, quote, timestamp) VALUES (\"" + str(messageuser) + "\", \"" + str(quote) + "\", \"" + str(ts) + "\");"
+        sql = "INSERT INTO renarddb.quotes (user, quote, timestamp, serverid) VALUES (\"" + str(messageuser) + "\", \"" + str(quote) + "\", \"" + str(ts) + "\", \"" + str(serverid) + "\");"
+        print("sql query:\n" + sql)
         mycursor.execute(sql)
         mydb.commit()
         idquery = "SELECT id FROM renarddb.quotes WHERE timestamp = \"" + str(ts) + "\""
@@ -296,12 +445,12 @@ async def on_command_error(ctx,error):
 # ----------------- Commands ----------------- #
 # ---------------------------------------- #
 # admin and debug shit
-@bot.command()
-async def feedback(ctx):
-    fdbackmsg = ctx.message.content[10:]
-    admin = ctx.message.guild.owner
-    await discord.DMChannel.send(admin, fdbackmsg)
-    await ctx.send("feedback sent to creator")
+# @bot.command()
+# async def feedback(ctx):
+#     fdbackmsg = ctx.message.content[10:]
+#     admin = ctx.message.guild.owner
+#     await discord.DMChannel.send(admin, fdbackmsg)
+#     await ctx.send("feedback sent to creator")
 
 
 @bot.command()
@@ -311,15 +460,30 @@ async def chanid(ctx):
 
 @bot.command()
 async def datetest(ctx):
-    await ctx.send("datetime.now(): " + datetime.now() + "\n" + 
-                    "datetime.now().date: " + datetime.now().date)
+    await ctx.send("datetime.now(): " + str(datetime.now()) + "\n" + 
+                    "datetime.now().date(): " + str(datetime.now().date()))
+
 
 @bot.command()
-async def fb(ctx):
-    fdbackmsg = ctx.message.content[3:]
-    admin = ctx.message.guild.owner
-    await discord.DMChannel.send(admin, fdbackmsg)
-    await ctx.send("feedback sent to creator")
+async def graphtest(ctx, a):
+    if a is None:
+        await ctx.send("specify something to get data for dummy")
+    else:
+        print(getgraph(a))
+
+
+@bot.command()
+async def ding(ctx):
+    dong = str(bot.latency * 1000)
+    await ctx.send("dong!! " + dong[:2] + " ms")
+
+
+# @bot.command()
+# async def fb(ctx):
+#     fdbackmsg = ctx.message.content[3:]
+#     admin = ctx.message.guild.owner
+#     await discord.DMChannel.send(admin, fdbackmsg)
+#     await ctx.send("feedback sent to creator")
 
 
 @bot.command()
@@ -331,12 +495,6 @@ async def mtn(ctx):
 async def ping(ctx):
     pong = str(bot.latency * 1000)
     await ctx.send("pong!! " + pong[:2] + " ms")
-
-
-@bot.command()
-async def ding(ctx):
-    dong = str(bot.latency * 1000)
-    await ctx.send("dong!! " + dong[:2] + " ms")
 
 
 @bot.command()
@@ -358,6 +516,7 @@ async def timerdebug(ctx):
         else:
             await channel.send("<@!" + response[1] + "> Sir you must remember: \"" + response[2] + "\" | " + (response[4])[:-3])
 
+
 @bot.command()
 @commands.has_role("High Council of Emoji")
 async def close(ctx):
@@ -365,6 +524,11 @@ async def close(ctx):
     print("terminate request received")
     await client.close()
     await sys.exit()
+
+# @bot.command()
+# @commands.has_role("High Council of Emoji")
+# async def pull(ctx):
+#     pullrestart()
 
 
 @close.error
@@ -382,40 +546,6 @@ async def close_error(ctx, error):
         print("insufficient perms to terminate " + username + " " + str(userid))
 
 
-@bot.command()
-@commands.has_role("rebooter")
-async def reboot(ctx):
-    embed = discord.Embed(title="Computer Online Mode:", description=" ON [OFF] ", color=0xff0000)
-    await ctx.send(embed=embed)
-    print("terminate request received")
-    os.system ('echo e4miqtng | sudo systemctl restart disbotren.service')
-
-
-@bot.command()
-@commands.has_role("rebooter")
-async def piboot(ctx):
-    embed = discord.Embed(title="Computer Online Mode:", description=" ON [OFF] ", color=0xff0000)
-    await ctx.send(embed=embed)
-    print("terminate request received")
-    os.system ('echo e4miqtng | sudo -S reboot')
-
-
-@reboot.error
-async def reboot_error(ctx, error):
-    if isinstance(error, commands.CheckFailure):
-        username = ctx.message.author.display_name
-        userid = ctx.message.author.id
-        now = datetime.now()
-        response = [
-            "You do not have the clearance for that command... are you retarded?",
-            "You aren't a rebooter... this is why she left you dude.",
-            "Try that shit again and see who gets rebooted bitch ;)",
-            "It seems like there's a lot you don't know about rebooting this pi",
-        ]
-        await ctx.send(random.choice(response))
-        print(now + " insufficient perms to reboot " + username + " " + str(userid))
-
-
 # ---------------------------------------- #
 # documentation
 @bot.command()
@@ -425,8 +555,8 @@ async def help(ctx):
 
 @bot.command()
 async def vers(ctx):
-    embed = discord.Embed(title="ROBORENARD MK I", description="Gaming forever in paradise", color=0xee657)
-    embed.add_field(name="Version", value="0.81111cum")
+    embed = discord.Embed(title="ROBORENARD MK II", description="Gaming forever in paradise", color=0xee657)
+    embed.add_field(name="Version", value="0.123456789")
     await ctx.send(embed=embed)
 
 
@@ -447,13 +577,13 @@ async def timercheck():
             if response[2] == "":
                 await channel.send("<@!" + response[1] + "> Ringa ling dong, the time " + (response[5])[:19] + " has finally come!")
             else:
-                await channel.send("<@!" + response[1] + "> Sir you must remember: \"" + response[2] + "\" | " + (response[5])[:-3])
+                await channel.send("<@!" + response[1] + "> Sir you must remember: \"" + response[2] + "\" | " + (response[5])[:19])
         else:
             notifylist = response[4].split("|")
             if response[2] == "":
                 await channel.send("<@!" + response[1] + "> Ringa ling dong, the time " + (response[5])[:19] + " has finally come!")
             else:
-                await channel.send("<@!" + response[1] + "> Sir you must remember: \"" + response[2] + "\" | " + (response[5])[:-3])
+                await channel.send("<@!" + response[1] + "> Sir you must remember: \"" + response[2] + "\" | " + (response[5])[:19])
             for x in notifylist[:-1]:
                 await channel.send("<@!" + x + ">,  you too have been notified!")
 
@@ -463,7 +593,6 @@ async def timer(ctx, a: str = None, b: str = None, c: str = None, d: str = None)
     channel = ctx.channel.id
     msgcontent = ctx.message.content
     timeorig = (ctx.message.created_at - timedelta(hours=5))
-    # timeorig = (datetime.now())
     user = ctx.message.author.id
     timerinit = timercl(msgcontent, user, channel, timeorig, a, b, c, d)
     if a == "default":
@@ -478,18 +607,22 @@ async def timer(ctx, a: str = None, b: str = None, c: str = None, d: str = None)
             else:
                 print("this is writetime after sending from default write: [" + str(writetime) + "]")
                 timerinit = timercl(msgcontent, user, channel, timeorig, a, writetime, c, d)
+                print("init for default write ran")
                 timerinit.timerdefaultwrite()
                 await ctx.send("New default time for your calendar reminders written.")
     else:
-        response = await timerinit.timerfunc()
+        response = timerinit.timerfunc()
         if response == "user requested list":
             await ctx.send("list in development")
         else:
-            await ctx.send(response)
+            print(ctx.message.author)
+            await ctx.send(response + " | " + str(ctx.message.author))
+
 
 
 # ------------------------------------------------ #
 # random math
+
 @bot.command()
 async def add(ctx, a: int, b: int):
     await ctx.send(a + b)
@@ -546,15 +679,12 @@ async def coin(ctx):
 
 @bot.command()
 async def conch(ctx):
-    conchimg = (
-        "https://i.ytimg.com/vi/WAzGNbuu3LU/maxresdefault.jpg",
-        "https://pbs.twimg.com/profile_images/416370357743144960/xIpWXsBH.jpeg",
-        "http://i.imgur.com/b2IAcwY.jpg",
-        "https://i.ytimg.com/vi/-S6VvSoeeP4/maxresdefault.jpg",
-        "https://i.etsystatic.com/15079744/r/il/e26c07/1255333255/il_794xN.1255333255_epc0.jpg",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSyMXvA_Fxw_YfwtNGDdbP3YzW9TgYIHPQyNTQNaW7OTI3pEl-")
+    path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/conchfolder").__next__()
+    min = 1
+    max = len(files)
+    conchfile = random.randint(min, max)
     destiny = ("Yes", "No")
-    await ctx.send(random.choice(conchimg))
+    await ctx.send(file=File("/home/ubuntu/disbot/picfolder/conchfolder/conch" + str(conchfile) + ".png"))
     await ctx.send(random.choice(destiny))
 
 
@@ -570,15 +700,15 @@ async def drink(ctx):
     cheap = (
         "Bud Light",
         "Budweiser",
-        "https://youtu.be/_O89Y0VwdPs\n ICE COLD COORS LIGHT STRAIGHT FROM THE ROCKY MOUNTAINS",
+        "https://youtu.be/_O89Y0VwdPs \n ICE COLD COORS LIGHT STRAIGHT FROM THE ROCKY MOUNTAINS",
         "the champagne of beers",
         "Miller time....",
         "PBR"
         ""
     )
-    # expensive = (
-    #     "Squatters"
-    #  )
+    expensive = (
+        "Squatters"
+     )
     await ctx.send(random.choice(cheap))
 
 
@@ -589,12 +719,14 @@ async def eat(ctx):
         "Bay Leaf",
         "City Pork",
         "Curbside",
-        "Curry and Kabob",
+        "Curry N Kabob",
         "Duang Tuan",
+        "Dang's"
         "El Rancho",
         "Elsie's",
         "Fat Cow",
         "La Caretta",
+        "Lit",
         "Pluckers",
         "Serops",
         "Superior Grill",
@@ -637,17 +769,15 @@ async def enhance(ctx):
                 print("found messageid of last attachment positive message")
                 if attachmentlist[0].split("|")[1] == "attachment":
                     print("attempting to save attachment...")
-                    await message.attachments[0].save("E:/disbot/picfolder/shadowdir/providedbackground.png")
+                    await message.attachments[0].save("/home/ubuntu/disbot/picfolder/shadowdir/providedbackground.png")
                 else:
                     print("attempting to save embed...")
                     print(message.embeds[0].url)
-                    urllib.request.urlretrieve(message.embeds[0].url, "E:/disbot/picfolder/shadowdir/providedbackground.png")
-
-
+                    urllib.request.urlretrieve(message.embeds[0].url, "/home/ubuntu/disbot/picfolder/shadowdir/providedbackground.png")
     else:
         print("enhance message had one or more attachments")
-        await ctx.message.attachments[0].save("E:/disbot/picfolder/shadowdir/providedbackground.png")
-    shadowpath = ("E:/disbot/picfolder/shadowdir/providedbackground.png")
+        await ctx.message.attachments[0].save("/home/ubuntu/disbot/picfolder/shadowdir/providedbackground.png")
+    shadowpath = ("/home/ubuntu/disbot/picfolder/shadowdir/providedbackground.png")
     newfilepath = executeoverlay(shadowpath)
     if newfilepath == "inv":
         await ctx.send("some ting wong...")
@@ -663,16 +793,158 @@ async def fox(ctx):
 
 
 @bot.command()
+async def fuck(ctx, a: str = None):
+    serverid = ctx.guild.id
+    if a is None:
+        getgraph("fuckcount", serverid)
+    elif a == "total":
+        getgraph("fuckcount", serverid, True)
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
+
+
+@bot.command()
+async def south(ctx, a: str = None):
+    serverid = ctx.guild.id
+    if a is None:
+        getgraph("southcount", serverid)
+    elif a == "total":
+        getgraph("southcount", serverid, True)
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
+
+
+@bot.command()
+async def inanycase(ctx, a: str = None):
+    serverid = ctx.guild.id
+    if a is None:
+        getgraph("inanycase", serverid)
+    elif a == "total":
+        getgraph("inanycount", serverid, True)
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
+
+
+@bot.command()
+async def nicks(ctx):
+    serverid = ctx.guild.id
+    getgraph("nicknames", serverid, True)
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
+
+
+@bot.command()
+async def positive(ctx, a: str = None):
+    serverid = ctx.guild.id
+    if a is None:
+        getgraph("yescount", serverid)
+    elif a == "total":
+        getgraph("yescount", serverid, True)
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
+
+
+@bot.command()
+async def negative(ctx, a: str = None):
+    serverid = ctx.guild.id
+    if a is None:
+        getgraph("nocount", serverid)
+    elif a == "total":
+        getgraph("nocount", serverid, True)
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
+
+
+@bot.command()
+async def dude(ctx, a: str = None):
+    serverid = ctx.guild.id
+    if a is None:
+        getgraph("dudecount", serverid)
+    elif a == "total":
+        getgraph("dudecount", serverid, True)
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
+
+
+@bot.command()
+async def imgcount(ctx, a: str = None):
+    serverid = ctx.guild.id
+    if a is None:
+        getgraph("imgsearchcount", serverid)
+    elif a == "total":
+        getgraph("imgsearchcount", serverid, True)
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
+
+
+@bot.command()
+async def like(ctx, a: str = None):
+    serverid = ctx.guild.id
+    if a is None:
+        getgraph("likecount", serverid)
+    elif a == "total":
+        getgraph("likecount", serverid, True)
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
+
+
+@bot.command()
+async def count(ctx):
+    serverid = ctx.guild.id
+    getgraph("msgcount", serverid, True)
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
+
+
+@bot.command()
+async def words(ctx):
+    serverid = ctx.guild.id
+    getgraph("wordcount", serverid, True)
+    await ctx.send(file=File("graph.png"))
+    os.remove('graph.png')
+
+
+@bot.command()
+async def word(ctx):
+    words.invoke(ctx)
+
+
+@bot.command()
+async def figlet(ctx):
+    await ctx.send("```" + figgletizer(ctx.message.content[8:]) + "```")
+
+
+@bot.command()
+async def gun(ctx):
+    path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/bitchfolder").__next__()
+    min = 1
+    max = len(files)
+    bitchfile = random.randint(min, max)
+    await ctx.send(file=File("/home/ubuntu/disbot/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
+
+
+@bot.command()
 async def loon(ctx):
-    await ctx.send("https://www.youtube.com/watch?v=asXfA40uudo")
+    await ctx.send("https://youtu.be/asXfA40uudo")
+
+
+@bot.command()
+async def pepocheer(ctx):
+    await ctx.send(file=File("home/ubuntu/disbot/picfolder/pepocheer.gif"))
+
+
+@bot.command()
+async def cheer(ctx):
+    await pepocheer.invoke(ctx)
 
 
 @bot.command()
 async def qp(ctx):
     msg = ctx.message
     print(msg.content)
-    await msg.add_reaction('<:Jeff:601576645807046656>')
-    await msg.add_reaction('<:What:370701344232701952>')
+    if ctx.guild.id == 237397384676507651:
+        await msg.add_reaction('<:Jeff:601576645807046656>')
+        await msg.add_reaction('<:What:370701344232701952>')
 
 
 @bot.command()
@@ -682,9 +954,10 @@ async def quote(ctx, a: str = None, b: str = None):
     user='dbuser',
     passwd='e4miqtng')
     mycursor = mydb.cursor(buffered=True)
+    serverid = ctx.guild.id
     if a is None:
         qlist = []
-        sql = "SELECT * FROM renarddb.quotes"
+        sql = "SELECT * FROM renarddb.quotes WHERE serverid LIKE \"" + str(serverid) + "\""
         mycursor.execute(sql)
         for x in mycursor:
             qlist.append(x)
@@ -724,19 +997,26 @@ async def quote(ctx, a: str = None, b: str = None):
             await ctx.send("quote not found dog")
     
     if a == "del":
-        print("user wants to delete a quote: [" + a + "]")
-        sql = "SELECT * FROM renarddb.quotes WHERE id LIKE " + a
+        if b is None or not b.isdigit(): 
+            print("user provided no delete value")
+            await ctx.send("Provide a quote to delete!!")
+            return
+        print("user wants to delete a quote: [" + b + "]")
+        sql = "SELECT * FROM renarddb.quotes WHERE id LIKE " + b
         mycursor.execute(sql)
         for x in mycursor:
-            delsql = "DELETE FROM renarddb.quotes WHERE id LIKE " + a 
+            delsql = "DELETE FROM renarddb.quotes WHERE id LIKE " + b
             mycursor.execute(delsql)
             mydb.commit()
-            await ctx.send("Quote " + a + "erased from the archive memory :).")
+            await ctx.send("Quote " + b + " erased from the archive memory :).")
         else:
             await ctx.send("WTF i can't FUCKING find that one!?!?!?!?!")
     
     if a == "list":
-        await ctx.send("list in development >_<")
+        if ctx.guild.id == 237397384676507651:
+            await ctx.send("http://18.216.39.250:3000/")
+        else:
+            await ctx.send("quote list for your server still WIP")
 
 
 @bot.command()
@@ -746,7 +1026,7 @@ async def q(ctx):
 
 @bot.command()
 async def xfile(ctx):
-    xfiletxt = "/Users/jordanchiquet/personalandfinance/disbotren/test/xfile.txt"
+    xfiletxt = "/home/ubuntu/disbot/xfile.txt"
     xfileline = open(xfiletxt).read().splitlines()
     xfileres = random.choice(xfileline)
     extractor = URLExtract()
@@ -756,12 +1036,7 @@ async def xfile(ctx):
 
 @bot.command()
 async def zoo(ctx):
-    zootxt = "/Users/jordanchiquet/personalandfinance/disbotren/test/zoo.txt"
-    zooline = open(zootxt).read().splitlines()
-    zoores = random.choice(zooline)
-    extractor = URLExtract()
-    for url in extractor.gen_urls(str(zoores)):
-        await ctx.send("HAVE YOU BEEN DRINKKIN DANIMAALLS...\n" + url)
+        await ctx.send("HAVE YOU BEEN DRINKKIN DANIMAALLS...\n" + zooo())
 
 
 # ------------------------------------------------- #
@@ -775,8 +1050,27 @@ gsource = build("customsearch", 'v1', developerKey=gapi).cse()
 async def d(ctx):
     print("d called")
     meaning = getmeaning(ctx.message.content[3:])
-    delcmd = await ctx.send(meaning)
-    deletelog[ctx.message.id] = delcmd
+    if meaning == "inv":
+        print("got inv")
+        delcmd = await ctx.send(file=File("/home/ubuntu/disbot/picfolder/archivememory.png"))
+        deletelog[ctx.message.id] = delcmd
+    else:    
+        delcmd = await ctx.send(meaning)
+        deletelog[ctx.message.id] = delcmd
+
+
+@bot.command()
+async def define(ctx):
+    print("define called")
+    meaning = getmeaning(ctx.message.content[8:])
+    if meaning == "inv":
+        print("got inv")
+        delcmd = await ctx.send(file=File("/home/ubuntu/disbot/picfolder/archivememory.png"))
+        deletelog[ctx.message.id] = delcmd
+    else:    
+        delcmd = await ctx.send(meaning)
+        deletelog[ctx.message.id] = delcmd
+
 
 
 @bot.command()
@@ -794,77 +1088,35 @@ async def g(ctx):
         
 
 @bot.command()
-async def gifold(ctx):
-    imgquery = ctx.message.content[5:]
-    response = google_images_download.googleimagesdownload()
-    arguments = {"keywords":imgquery,"limit":1,"no_download":True,"format":"gif"}
-    imgresult = response.download(arguments)
-    print("gifresult: [" + str(imgresult) + "]")
-    if "[]" in str(imgresult):
-        delcmd = await ctx.send("Sorry player... gif is none")
-        deletelog[ctx.message.id] = delcmd
-    extractor = URLExtract()
-    for url in extractor.gen_urls(str(imgresult)):
-        if "fbsbx" in url:
-            delcmd = await ctx.send(url)
-            deletelog[ctx.message.id] = delcmd
-        else:
-            embeddableurl = url.split("?")[0]
-            delcmd = await ctx.send(embeddableurl)
-            deletelog[ctx.message.id] = delcmd
+async def gif(ctx, a: str = None, b: str = None):
+    reptilelist = ["lizard", "gecko", "reptile", "geico"]
+    geckotriggers = ["lizard dance", "gecko dance"]
+    if b is not None:
+        if (a.startswith("danc") and b in str(reptilelist)) or (b.startswith("danc") and a in str(reptilelist)):
+            delcmd = await ctx.send(file=File("/home/ubuntu/disbot/picfolder/gecko_dance.gif"))
+            return
+    gifquery = ctx.message.content[5:]
+    delcmd = await ctx.send(imageget("animated" + gifquery, filetype="gif"))
+    deletelog[ctx.message.id] = delcmd
+
+@bot.command()
+async def how(ctx):
+    howquery = ctx.message.content[5:]
+    delcmd = await ctx.send(wikihow(howquery))
+    deletelog[ctx.message.id] = delcmd
 
 
 @bot.command()
 async def img(ctx):
     imgquery = ctx.message.content[5:]
-    delcmd = await ctx.send(bingimage(imgquery))
+    delcmd = await ctx.send(imageget(imgquery))
     deletelog[ctx.message.id] = delcmd
-
-
-@bot.command()
-async def imgtwo(ctx):
-    rawresult = gsource.list(q=ctx.message.content[8:], searchType='image',
-                            cx='016515025707600383118:gqogcmpp7ka').execute()
-    try:
-        firstresult = rawresult['items'][1]
-        imgresult = firstresult['link']
-        delcmd = await ctx.send(imgresult)
-        deletelog[ctx.message.id] = delcmd
-    except KeyError:
-        delcmd = await ctx.send("how you say? not any image find for that image")
-        deletelog[ctx.message.id] = delcmd
-
-@bot.command()
-async def imgold(ctx):
-    imgquery = ctx.message.content[8:]
-    response = google_images_download.googleimagesdownload()
-    arguments = {"keywords":imgquery,"limit":1,"no_download":True}
-    imgresult = response.download(arguments)
-    extractor = URLExtract()
-    if "[]" in str(imgresult):
-        delcmd = await ctx.send("how you say? not any image find for that image")
-        deletelog[ctx.message.id] = delcmd
-    for url in extractor.gen_urls(str(imgresult)):
-        delcmd = await ctx.send(url)
-        deletelog[ctx.message.id] = delcmd
 
 
 @bot.command()
 async def ing(ctx):
     await img.invoke(ctx)
 
-
-@bot.command()
-async def rev(ctx):
-    await ctx.send("Working on it...")
-    revquery = ctx.message.attachments[0].url
-    response = google_images_download.googleimagesdownload()
-    arguments = {"similar_images": revquery,"limit":1,"no_download":True}
-    revresult = response.download(arguments)
-    extractor = URLExtract()
-    for url in extractor.gen_urls(str(revresult)):
-        await ctx.send("Found this:\n" + url)
- 
 
 @bot.command()
 async def sky(ctx):
@@ -880,7 +1132,7 @@ async def sky(ctx):
     splitone = str(image[1]).split("src=")[1]
     splittwo = splitone.split(" ")[0]
     await ctx.send(splittwo.replace("\"", ""))
- 
+
 
 @bot.command()
 async def spell(ctx):
@@ -894,7 +1146,8 @@ async def spell(ctx):
     except KeyError:
         delcmd = await ctx.send("knowledge of that spell is forbidden...")
         deletelog[ctx.message.id] = delcmd
-
+ 
+ 
 @bot.command()
 async def ud(ctx):
     udrequest = ctx.message.content[4:]
@@ -942,9 +1195,12 @@ async def w(ctx, a: str = None, b: str = None):
 
 @bot.command()
 async def war(ctx, a: str = None, b: str = None):
+    print("war were declared")
     userid = ctx.message.author.id
+    authorfull = str(ctx.message.author)
+    username = authorfull.split("#")[0]
     if a is None:
-        battlenetcheckinit = renardusers(userid, "battlenet")
+        battlenetcheckinit = renardusers(userid, "battlenet", serverid="uni")
         print("warzone reached users class")
         battlenetcheck = battlenetcheckinit.userread()
         print("battlenetcheck: [" + str(battlenetcheck) +"]")
@@ -952,21 +1208,35 @@ async def war(ctx, a: str = None, b: str = None):
             await ctx.send("No user found! Use \".war register battlenettagwithnumbersignandnumbers\"")
         else:
             battlenettag = battlenetcheck[0]
+            numberlen = len(battlenettag.split("#")[1])
             print("battlecheck[0] was not None, continuing")
-            warzoneresponse = warzonestats(str(battlenetcheck[0]))
+            if numberlen == 4 or numberlen == 5:
+                platform = "battle"
+            if numberlen == 7:
+                platform = "uno"
+            warzoneresponse = warzonestats(str(battlenetcheck[0]), platform)
     elif a == "register" or a == "reg":
-        battlenetcheckinit = renardusers(userid, "battlenet", b)  
+        battlenetcheckinit = renardusers(userid, "battlenet", b, username, "uni")  
         print("warzone reached users class")
         battlenetcheckinit.userwrite()
         print("warzone wrote battlenet tag: [" + a + "]")
         await ctx.send("new gamertag stored")
     else:
         battlenettag = a
-        warzoneresponse = warzonestats(a)
+        numberlen = len(battlenettag.split("#")[1])
+        if numberlen == 4 or numberlen == 5:
+            platform = "battle"
+        if numberlen == 7:
+            platform = "uno"
+        warzoneresponse = warzonestats(a, platform)
     if warzoneresponse == "inv":
         print("got inv")
         await ctx.send(file=File("/home/ubuntu/disbot/picfolder/archivememory.png"))
     else:
+        if platform == "uno":
+            platformfullurl = "atvi"
+        else:
+            platformfullurl = "battlenet"
         warstats = warzoneresponse.split("|")
         level = warstats[0]
         kills = warstats[1]
@@ -974,18 +1244,23 @@ async def war(ctx, a: str = None, b: str = None):
         suicides = warstats[3]
         ratio = warstats[4]
         wins = warstats[5]
-        top10 = warstats[6]
-        games = warstats[7]
-        embed = discord.Embed(title=battlenettag.split("#")[0] + " Level " + level, color=0x00badf)
+        top5 = warstats[6]
+        top10 = warstats[7]
+        games = warstats[8]
+        namebeforenumber = battlenettag.split("#")[0]
+        numberaftername = battlenettag.split("#")[1]
+        embed = discord.Embed(title = namebeforenumber + " Level " + level, 
+                            description ="[more stats...](https://cod.tracker.gg/warzone/profile/" + platformfullurl + "/" + namebeforenumber + "%23" + numberaftername + "/overview)", 
+                            color = 0x00badf)
         embed.set_thumbnail(url="https://i.insider.com/55a3e234eab8eab243028ac8?width=300&format=jpeg&auto=webp")
         embed.add_field(name="KILLS", value=kills)
         embed.add_field(name="DEATHS", value=deaths)
         embed.add_field(name="K/D", value=ratio)
         embed.add_field(name="WINS", value=wins + " (" + str(int(wins)*100/int(games))[:4] + "%)")
+        embed.add_field(name="TOP 5", value=top5 + " (" + str(int(top5)*100/int(games))[:4] + "%)")
         embed.add_field(name="TOP 10", value=top10 + " (" + str(int(top10)*100/int(games))[:4] + "%)")
         embed.add_field(name="GAMES", value=games)
         await ctx.send(embed=embed)
-
 
 
 @bot.command()
@@ -1004,10 +1279,7 @@ async def wiki(ctx):
 
 @bot.command()
 async def yt(ctx):
-    ytquery = urllib.parse.urlencode({"search_query" : ctx.message.content[4:]})
-    html_cont = urllib.request.urlopen("http://youtube.com/results?"+ytquery)
-    ytresult = re.findall(r'href=\"\/watch\?v=(.{11})', html_cont.read().decode())
-    delcmd = await ctx.send("https://youtu.be/" + ytresult[0])
+    delcmd = await ctx.send(youtubesearch(ctx.message.content[4:]))
     deletelog[ctx.message.id] = delcmd
 
 

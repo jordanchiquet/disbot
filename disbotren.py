@@ -251,30 +251,23 @@ async def on_message(message):
             await channel.send(heycomputeresult)
     mclower = mclower.replace(".","")
     if "no" == mclower:
-        # print("no happen")
-        # conditionlist = ["destroy", "remove", "break", "delete", "undo", "dump", "discard", "quit", "stop", "banish", "cast", "leave", "fix", "obliterate",
-        # "decimate", "blast", "terminate", "fire", "throw", "put it", "let go", "drop", "get rid", "give", "stop", "relent", "surrender"]
-        # if len(chatLog) >= 2:
-        #     print("chat greatere")
-        #     for x in conditionlist:
-        #         print("got here 111")
-        #         print("chatlog[-2] is: " + chatLog[-2])
-        #         res = [x for x in conditionlist if(x in chatLog[-2]) or (x in chatLog[-1])] 
-        #         if res:
-        #             print("condition met")
-        await channel.send("https://i.ytimg.com/vi/dI8wt5soxXE/maxresdefault.jpg")
-                    # break
+        conditionlist = ["destroy", "remove", "break", "delete", "undo", "dump", "discard", "quit", "stop", "banish", "cast", "leave", "fix", "obliterate",
+        "decimate", "blast", "terminate", "fire", "throw", "put it", "let go", "drop", "get rid", "give", "stop", "relent", "surrender"]
+        if len(chatLog) >= 2:
+            for x in conditionlist:
+                print("chatlog[-2] is: " + chatLog[-2])
+                if x in chatLog[-2]:
+                    await channel.send(file=File("/home/ubuntu/disbot/picfolder/no.jpg"))
+                    break
     if "bad bot" in mclower:
-        await channel.send(
-        "dang...")
+        await channel.send("dang...")
     fearlist = ["do not fear", "never fear", "don't fear", "dont fear", "fear not", "have no fear", "i can't fear", "i cannot fear"]
     for x in fearlist:
         if x == mclower:
             await channel.send("fear is the mind killer...")
             break
     if "give me a hand" in mclower:
-        await channel.send(
-        "https://pbs.twimg.com/media/C3YEwBBXUAE3EoQ.jpg")
+        await channel.send("https://pbs.twimg.com/media/C3YEwBBXUAE3EoQ.jpg")
     if "good bot" == mclower:
         await channel.send(
         "thanks")
@@ -1093,7 +1086,13 @@ async def g(ctx):
         
 
 @bot.command()
-async def gif(ctx):
+async def gif(ctx, a: str = None, b: str = None):
+    reptilelist = ["lizard", "gecko", "reptile", "geico"]
+    geckotriggers = ["lizard dance", "gecko dance"]
+    if b is not None:
+        if (a.startswith("danc") and b in str(reptilelist)) or (b.startswith("danc") and a in str(reptilelist)):
+            delcmd = await ctx.send(file=File("/home/ubuntu/disbot/picfolder/gecko_dance.gif"))
+            return
     gifquery = ctx.message.content[5:]
     delcmd = await ctx.send(imageget("animated" + gifquery, filetype="gif"))
     deletelog[ctx.message.id] = delcmd
