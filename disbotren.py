@@ -1091,7 +1091,7 @@ async def gif(ctx, a: str = None, b: str = None):
     geckotriggers = ["lizard dance", "gecko dance"]
     if b is not None:
         if (a.startswith("danc") and b in str(reptilelist)) or (b.startswith("danc") and a in str(reptilelist)):
-            delcmd = await ctx.send(file=File("/home/ubuntu/disbot/picfolder/gecko_dance.gif"))
+            await ctx.send(file=File("/home/ubuntu/disbot/picfolder/gecko_dance.gif"))
             return
     gifquery = ctx.message.content[5:]
     delcmd = await ctx.send(imageget("animated" + gifquery, filetype="gif"))
