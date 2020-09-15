@@ -310,6 +310,8 @@ async def on_message(message):
         await channel.send(file=File("/home/ubuntu/disbot/picfolder/byebyefolder/byebye" + str(byefile) + filetype))
     if "yay" in mclower:
         await channel.send(file=File("home/ubuntu/disbot/picfolder/pepocheer.gif"))
+    if "stop right there" in mclower or "criminal scum" in mclower:
+        await channel.send(file=File("home/ubuntu/disbot/picfolder/stoprightthere.jpg"))
     if "your sign" in mclower:
         path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/heresyoursignfolder").__next__()
         min = 1
@@ -445,12 +447,12 @@ async def on_command_error(ctx,error):
 # ----------------- Commands ----------------- #
 # ---------------------------------------- #
 # admin and debug shit
-# @bot.command()
-# async def feedback(ctx):
-#     fdbackmsg = ctx.message.content[10:]
-#     admin = ctx.message.guild.owner
-#     await discord.DMChannel.send(admin, fdbackmsg)
-#     await ctx.send("feedback sent to creator")
+@bot.command()
+async def feedback(ctx):
+    fdbackmsg = ctx.message.content[10:]
+    jordan = bot.get_user(191688156427321344)
+    await jordan.send(fdbackmsg)
+    await ctx.send("feedback sent to creator")
 
 
 @bot.command()
@@ -478,12 +480,12 @@ async def ding(ctx):
     await ctx.send("dong!! " + dong[:2] + " ms")
 
 
-# @bot.command()
-# async def fb(ctx):
-#     fdbackmsg = ctx.message.content[3:]
-#     admin = ctx.message.guild.owner
-#     await discord.DMChannel.send(admin, fdbackmsg)
-#     await ctx.send("feedback sent to creator")
+@bot.command()
+async def fb(ctx):
+    fdbackmsg = ctx.message.content[3:]
+    jordan = bot.get_user(191688156427321344)
+    await jordan.send(fdbackmsg)
+    await ctx.send("feedback sent to creator")
 
 
 @bot.command()
@@ -1096,8 +1098,12 @@ async def gif(ctx, a: str = None, b: str = None):
             await ctx.send(file=File("/home/ubuntu/disbot/picfolder/gecko_dance.gif"))
             return
     gifquery = ctx.message.content[5:]
+    if gifquery == "cgi dancing lizard":
+        await ctx.send(file=File("/home/ubuntu/disbot/picfolder/gecko_dance.gif"))
+        return
     delcmd = await ctx.send(imageget("animated" + gifquery, filetype="gif"))
     deletelog[ctx.message.id] = delcmd
+
 
 @bot.command()
 async def how(ctx):
