@@ -349,6 +349,7 @@ async def on_message(message):
         await channel.send("https://youtu.be/dCuCpVPkWDY")
     if mclower == "speed me down":
         await channel.send("https://youtu.be/iALO4L166WU")
+    await bot.process_commands(message)
 
 
 @bot.event
