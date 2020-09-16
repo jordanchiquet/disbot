@@ -226,11 +226,11 @@ async def on_message(message):
             elif heycomputeresult == "inv" or heycomputeresult is None:
                 await channel.send("a mistake was made... the computer have processed your message but could not... process")
             elif heycomputeresult == "donothing":
-                return
+                await channel.send("wat")
             else:
                 await channel.send(heycomputeresult)
         else:
-            return
+            print("computer not after greeting")
     if mclower.startswith("comput") or mclower.startswith("compadre") or mclower.startswith("machine") or mclower.startswith("renard"):
         heycomputerinit = heycomputer(mclower, timeorig, userid, channelid, user)
         heycomputeresult = heycomputerinit.execute()
@@ -358,6 +358,7 @@ async def on_message(message):
     if "you gave a man an expensive gift" in mclower:
         await channel.send(
         "ghay!!")
+
     youcomingremoves = {"?": "", "g": ""}
     mcloweryoucoming = mclower
     for i, j in youcomingremoves.items():
