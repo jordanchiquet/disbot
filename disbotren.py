@@ -350,8 +350,10 @@ async def on_message(message):
     if mclower == "speed me down":
         await channel.send("https://youtu.be/iALO4L166WU")
     youcomingremoves = ["?", "g"]
-    for x in youcomingremoves:
-        mcloweryoucoming = mclower.replace(x, "")
+    youcomingremoves = {"?": "", "g": ""}
+    mcloweryoucoming = mclower
+    for i, j in youcomingremoves.items():
+        mcloweryoucoming = mcloweryoucoming.replace(i, j)
     if mcloweryoucoming.endswith("u comin"):
         await channel.send(file=File("/home/ubuntu/disbot/picfolder/youcomin.png"))
     await bot.process_commands(message)

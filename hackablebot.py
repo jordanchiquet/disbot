@@ -358,6 +358,14 @@ async def on_message(message):
     if "you gave a man an expensive gift" in mclower:
         await channel.send(
         "ghay!!")
+    youcomingremoves = {"?": "", "g": ""}
+    mcloweryoucoming = mclower
+    for i, j in youcomingremoves.items():
+        mcloweryoucoming = mcloweryoucoming.replace(i, j)
+    print(mcloweryoucoming)
+    print(mclower)
+    if mcloweryoucoming.endswith("u comin"):
+        await channel.send(file=File("/home/ubuntu/disbot/picfolder/youcomin.png"))
     await bot.process_commands(message)
 
 
