@@ -381,7 +381,7 @@ async def on_reaction_add(reaction, user):
         idquery = "SELECT id FROM renarddb.quotes WHERE timestamp = \"" + str(ts) + "\""
         mycursor.execute(idquery)
         for x in mycursor:
-            await channel.send ("Quote " + str(x[0]) + " added by " + str(user) + ".")
+            await channel.send ("Quote " + str(x[0]) + " added by " + (str(user)).split("#")[0] + ".")
     elif reaction.emoji == Gib:
         message = reaction.message
         ts = message.created_at - timedelta(hours=5)
