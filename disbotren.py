@@ -367,6 +367,7 @@ async def on_reaction_add(reaction, user):
     passwd='e4miqtng')
     mycursor = mydb.cursor(buffered=True)
     Gib = bot.get_emoji(410972413036331008)
+
     if reaction.emoji == '💬' and not user.bot:
         message = reaction.message
         channel = reaction.message.channel
@@ -382,7 +383,7 @@ async def on_reaction_add(reaction, user):
         mycursor.execute(idquery)
         for x in mycursor:
             await channel.send ("Quote " + str(x[0]) + " added by " + (str(user)).split("#")[0] + ".")
-    elif reaction.emoji == Gib:
+    elif reaction.emoji == Gib or reaction.emoji == '✋':
         message = reaction.message
         ts = message.created_at - timedelta(hours=5)
         print(str(ts))
