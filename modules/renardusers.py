@@ -89,6 +89,13 @@ class renardusers:
         self.mydb.commit()
         print("write successful")
         return("write successful")
+
+    
+    def userappend(self):
+        print("starting userappend for server " + self.servername + " for field " + self.field + " with value " + self.param + " where user like " + str(self.userid))
+        mycursor = self.mydb.cursor()
+        sql = "UPDATE renarddb." + self.servername + "SET " + self.field + "=CONCAT(" + self.field + ", \'|" + self.param + "|\') WHERE userid LIKE \'" + self.userid + "\';"
+
     
     def userintwrite(self):
         mycursor = self.mydb.cursor()

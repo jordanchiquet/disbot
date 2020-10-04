@@ -16,6 +16,7 @@ import re
 import requests
 import ssl
 import sys
+import tenorpy
 import threading
 import urllib.parse
 import urllib.request
@@ -1110,8 +1111,14 @@ async def gif(ctx, a: str = None, b: str = None):
     if gifquery == "cgi dancing lizard":
         await ctx.send(file=File("/home/ubuntu/disbot/picfolder/gecko_dance.gif"))
         return
-    delcmd = await ctx.send(imageget("animated" + gifquery, filetype="gif"))
+    t = tenorpy.Tenor()
+    x = t.search("cat")
+    jsonsample = x.json()
+    with open('E:/dognuts.json', 'w') as outfile:
+        json.dumps(jsonsample, outfile, indent=4)
+    delcmd = await ctx.send(t.search(gifquery))
     deletelog[ctx.message.id] = delcmd
+
 
 
 @bot.command()

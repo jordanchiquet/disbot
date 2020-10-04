@@ -16,6 +16,7 @@ import re
 import requests
 import ssl
 import sys
+import tenorpy #tenorpy
 import threading
 import urllib.parse
 import urllib.request
@@ -946,6 +947,9 @@ async def qp(ctx):
     if ctx.guild.id == 237397384676507651:
         await msg.add_reaction('<:Jeff:601576645807046656>')
         await msg.add_reaction('<:What:370701344232701952>')
+    elif ctx.guild.id == 688494181727207478:
+        await msg.add_reaction('<:3578_dewit:695735256631738419>')
+        await msg.add_reaction('<:5480_PutinRages:695735613407887452>')
 
 
 @bot.command()
@@ -1093,14 +1097,19 @@ async def gif(ctx, a: str = None, b: str = None):
     reptilelist = ["lizard", "gecko", "reptile", "geico"]
     geckotriggers = ["lizard dance", "gecko dance"]
     if b is not None:
+        b = b.lower()
         if (a.startswith("danc") and b in str(reptilelist)) or (b.startswith("danc") and a in str(reptilelist)):
             await ctx.send(file=File("/home/ubuntu/disbot/picfolder/gecko_dance.gif"))
             return
+        elif b.replace(" ", "") == "pepocheer":
+            await ctx.send(file=File("home/ubuntu/disbot/picfolder/pepocheer.gif"))
     gifquery = ctx.message.content[5:]
     if gifquery == "cgi dancing lizard":
         await ctx.send(file=File("/home/ubuntu/disbot/picfolder/gecko_dance.gif"))
         return
-    delcmd = await ctx.send(imageget("animated" + gifquery, filetype="gif"))
+    t = tenorpy.Tenor()
+
+    delcmd = await ctx.send(t.search(gifquery))
     deletelog[ctx.message.id] = delcmd
 
 
