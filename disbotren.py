@@ -16,7 +16,7 @@ import re
 import requests
 import ssl
 import sys
-import tenorpy #tenorpy
+# import tenorpy #tenorpy
 import threading
 import urllib.parse
 import urllib.request
