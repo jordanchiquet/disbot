@@ -50,6 +50,7 @@ from modules.pullrestart import pullrestart
 from modules.renardusers import renardusers
 from modules.timermod.timercl import timercl
 from modules.timermod.timeparser import timeparser
+from modules.todo import renardtodo
 from modules.warzone import warzonestats
 from modules.weather import weatherget
 from modules.wikihow import wikihow
@@ -1034,6 +1035,44 @@ async def quote(ctx, a: str = None, b: str = None):
 @bot.command()
 async def q(ctx):
     await quote.invoke(ctx)
+
+
+@bot.command()
+async def todo(ctx, a: str = None, b: str = None, c: str = None):
+    print("todo was called")
+    userid = ctx.message.author.id
+    authorfull = str(ctx.message.author)
+    username = authorfull.split("#")[0]
+    todotext = "placeholder"
+    getlist = False
+    markcomplete = False
+    taskint = 0
+    print("got here")
+    if a is None:
+        print("todolist a was none")
+        getlist = True
+    elif a == "complete" or a == "done" or a == "finished" or a == "mark" or a == "del" or a == "delete" or a == "remove" or a == "slash" or a == "cross":
+        print("user trying to complete task")
+        if b is None:
+            await ctx.send ("huh? which task are we crossing off boss?")
+        elif not b.isdigit() or c is not None:
+            print("user used a completion keyword and some non number after or c was not None")
+            todotext = ctx.message.content[6:]
+        elif c is None:
+            taskint = int(b) - 1
+            print("taskint: " + str(taskint))
+            markcomplete = True
+    else:
+        todotext = ctx.message.content[6:]
+    print("made it to init for todo with getlist as " + str(getlist))
+    todoinit = renardtodo(userid, username, todotext, getlist, markcomplete, taskint)
+    print("bouuta try todomain")
+    todoresult = todoinit.todomain()
+    print("bouuta try send todo result to channel")
+    print(str(todoresult))
+    await ctx.send(todoresult)
+
+
 
 
 @bot.command()

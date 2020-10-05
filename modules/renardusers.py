@@ -5,12 +5,13 @@ import mysql.connector
 
 class renardusers:
     
-    def __init__(self, userid, field, param : str = None, username: str = None, serverid = None):
+    def __init__(self, userid, field, param : str = None, username: str = None, serverid = None, piperemoveint: int = 0):
         print("users initiated")
-        self.userid = userid
+        self.userid = str(userid)
         self.field = field
         self.param = param
         self.username = username
+        self.piperemoveint = piperemoveint
         if serverid is None:
             print("serverid was None, moving on")
         elif serverid == 688494181727207478:
@@ -94,7 +95,27 @@ class renardusers:
     def userappend(self):
         print("starting userappend for server " + self.servername + " for field " + self.field + " with value " + self.param + " where user like " + str(self.userid))
         mycursor = self.mydb.cursor()
-        sql = "UPDATE renarddb." + self.servername + "SET " + self.field + "=CONCAT(" + self.field + ", \'|" + self.param + "|\') WHERE userid LIKE \'" + self.userid + "\';"
+        sql = "UPDATE renarddb." + self.servername + "users " "SET " + self.field + "=CONCAT(ifnull(" + self.field + ", \"\"), \'" + self.param + "|\') WHERE user LIKE \'" + str(self.userid) + "\';"
+        # UPDATE renarddb.universalusers SET todo=CONCAT(ifnull(todo, ''), 'my first task|') WHERE user LIKE '191688156427321344';
+        print("WRITESQL: [" + sql + "]")
+        mycursor.execute(sql)
+        self.mydb.commit()
+        print("write successful")
+        return("write successful")
+    
+    def userpiperemove(self):
+        print("starting userpiperemove for server " + self.servername + " for field " + self.field + " where user like " + str(self.userid))
+        getpipes = self.userread()
+        pipelist = getpipes[0].split("|")
+        print("pipelist: " + str(pipelist))
+        del(pipelist[self.piperemoveint])
+        newpipestr = "|".join(pipelist)
+        sql = "INSERT INTO renarddb." + self.servername + "users(user," + self.field + ",username) VALUES (" + str(self.userid) + ",\"" + newpipestr + "\",\"" + self.username + "\") ON DUPLICATE KEY UPDATE " + self.field + " = \"" + newpipestr + "\", username = \"" + self.username + "\";"
+        print("WRITESQL: [" + sql + "]")
+        mycursor = self.mydb.cursor()
+        mycursor.execute(sql)
+        self.mydb.commit()
+
 
     
     def userintwrite(self):
