@@ -1048,13 +1048,33 @@ async def todo(ctx, a: str = None, b: str = None, c: str = None):
         print("user trying to complete task")
         if b is None:
             await ctx.send ("huh? which task are we crossing off boss?")
-        elif not b.isdigit() or c is not None:
+        elif (not b.isdigit() and "|" not in b) or c is not None:
             print("user used a completion keyword and some non number after or c was not None")
             todotext = ctx.message.content[6:]
         elif c is None:
-            taskint = int(b) - 1
-            print("taskint: " + str(taskint))
-            markcomplete = True
+            if "|" in b:
+                tasklist = b.split("|")
+                taskstr = str(tasklist)
+                taskstrreplace = {"\'": "", ",": "", " ": "", "[": "", "]": ""}
+                for i, j in taskstrreplace.items():
+                    taskstr = taskstr.replace(i, j)
+                print("taskstr:" + taskstr)
+                if not taskstr.isdigit():
+                    await ctx.send("sum ting wong")
+                    return
+                else:
+                    for task in tasklist:
+                        taskint = int(task) - 1
+                        markcomplete = True
+                        todoinit = renardtodo(userid, username, todotext, getlist, markcomplete, taskint)
+                        todoinit.todomain()
+                        newlist = todoinit.gettodolist()
+                    await ctx.send("Tasks complete! Your new list: " + newlist)
+                    return
+            else:
+                taskint = int(b) - 1
+                print("taskint: " + str(taskint))
+                markcomplete = True
     else:
         todotext = ctx.message.content[6:]
     print("made it to init for todo with getlist as " + str(getlist))
