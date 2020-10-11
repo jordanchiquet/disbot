@@ -1053,6 +1053,7 @@ async def todo(ctx, a: str = None, b: str = None, c: str = None):
             todotext = ctx.message.content[6:]
         elif c is None:
             if "|" in b:
+                print("yoyo 0")
                 tasklist = b.split("|")
                 taskstr = str(tasklist)
                 taskstrreplace = {"\'": "", ",": "", " ": "", "[": "", "]": ""}
@@ -1063,12 +1064,26 @@ async def todo(ctx, a: str = None, b: str = None, c: str = None):
                     await ctx.send("sum ting wong")
                     return
                 else:
+                    print("yoyo 1")
+                    taskintlist = []
                     for task in tasklist:
-                        taskint = int(task) - 1
+                        print("yoyo 2")
+                        taskintconvert = int(task)
+                        taskintlist.append(taskintconvert)
+                    iterations = len(taskintlist)
+                    while iterations > 0:
+                        print("iteratingtasknum")
+                        hightask = max(taskintlist)
+                        print("hightask: " + str(hightask))
+                        taskint = hightask - 1
+                        # we are only removing the top tasks and ignoring others here.. but why 
                         markcomplete = True
                         todoinit = renardtodo(userid, username, todotext, getlist, markcomplete, taskint)
                         todoinit.todomain()
-                        newlist = todoinit.gettodolist()
+                        taskintlist.remove(hightask)
+                        print("taskintlist after removal: " + str(taskintlist))
+                        iterations -= 1
+                    newlist = todoinit.gettodolist()
                     await ctx.send("Tasks complete! Your new list: " + newlist)
                     return
             else:
