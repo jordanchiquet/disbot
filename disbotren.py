@@ -1076,7 +1076,6 @@ async def todo(ctx, a: str = None, b: str = None, c: str = None):
                         hightask = max(taskintlist)
                         print("hightask: " + str(hightask))
                         taskint = hightask - 1
-                        # we are only removing the top tasks and ignoring others here.. but why 
                         markcomplete = True
                         todoinit = renardtodo(userid, username, todotext, getlist, markcomplete, taskint)
                         todoinit.todomain()
