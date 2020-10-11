@@ -1053,33 +1053,40 @@ async def todo(ctx, a: str = None, b: str = None, c: str = None):
         getlist = True
     elif a == "complete" or a == "done" or a == "finished" or a == "mark" or a == "del" or a == "delete" or a == "remove" or a == "slash" or a == "cross":
         print("user trying to complete task")
+        dashpipematch = ["|", "-"]
         if b is None:
             await ctx.send ("huh? which task are we crossing off boss?")
-        elif (not b.isdigit() and "|" not in b) or c is not None:
+        elif (not b.isdigit() and not any(x in b for x in dashpipematch)) or c is not None:
             print("user used a completion keyword and some non number after or c was not None")
             todotext = ctx.message.content[6:]
         elif c is None:
-            if "|" in b:
+            if "|" in b or "-" in b:
                 print("yoyo 0")
                 tasklist = b.split("|")
                 taskstr = str(tasklist)
-                taskstrreplace = {"\'": "", ",": "", " ": "", "[": "", "]": "",}
+                taskstrreplace = {"\'": "", ",": "", " ": "", "[": "", "]": "", "-": ""}
                 for i, j in taskstrreplace.items():
                     taskstr = taskstr.replace(i, j)
                 print("taskstr:" + taskstr)
                 if not taskstr.isdigit():
                     await ctx.send("sum ting wong")
                     return
-            # elif "-" in b:
-
                 else:
-                    print("yoyo 1")
                     taskintlist = []
-                    for task in tasklist:
-                        print("yoyo 2")
-                        taskintconvert = int(task)
-                        taskintlist.append(taskintconvert)
+                    if "|" in b:
+                        print("yoyo 1")
+                        for task in tasklist:
+                            print("yoyo 2")
+                            taskintconvert = int(task)
+                            taskintlist.append(taskintconvert)
+                    elif "-" in b: 
+                        print("yoyo ma")
+                        for i in range(int(b[0]), int(b.split("-")[1])):
+                            taskintlist.append(i)
+                        taskintlist.append(int(b.split("-")[1]))
                     iterations = len(taskintlist)
+                    if iterations > 3:
+                        await ctx.send("one moment please")
                     while iterations > 0:
                         print("iteratingtasknum")
                         hightask = max(taskintlist)
