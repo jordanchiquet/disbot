@@ -1203,7 +1203,7 @@ async def how(ctx):
 @bot.command()
 async def img(ctx, a: str = None):
     imgquery = ctx.message.content[5:]
-    if "spoil" == a or "spoiler" == a:
+    if "spoil," == a or "spoiler," == a:
         imgquery = ctx.message.content[5:]
         delcmd = await ctx.send("||" + imageget(imgquery) + "||")
         deletelog[ctx.message.id] = delcmd
