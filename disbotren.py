@@ -1225,7 +1225,7 @@ async def sky(ctx):
     print(image[1])
     splitone = str(image[1]).split("src=")[1]
     splittwo = splitone.split(" ")[0]
-    delcmd = await ctx.send(splittwo.replace("\"", "") + "https://earthsky.org/tonight")
+    delcmd = await ctx.send(splittwo.replace("\"", "") + " \nhttps://earthsky.org/tonight")
     deletelog[ctx.message.id] = delcmd
 
 
