@@ -1209,7 +1209,7 @@ async def img(ctx, a: str = None):
         deletelog[ctx.message.id] = delcmd
     else:
         imgquery = ctx.message.content[5:]
-        delcmd = await ctx.send("||" + imageget(imgquery) + "||")
+        delcmd = await ctx.send(imageget(imgquery))
         deletelog[ctx.message.id] = delcmd
 
 
