@@ -35,10 +35,10 @@ class timercl:
         channel = self.channel
         msgcontent = self.msgcontent
         cmdmsgcontent = msgcontent[7:]
-        now = datetime.now()
-        nowdate = str(datetime.now().day)
-        nowhour = str(datetime.now().hour)
-        nowminute = str(datetime.now().minute)
+        now = datetime.now() - timedelta(hours=5)
+        nowdate = str(now.day)
+        nowhour = str(now.hour)
+        nowminute = str(now.minute)
         # nowmonth = str(datetime.now().month)
         timedigit = ''
         timeorig = self.timeorig
