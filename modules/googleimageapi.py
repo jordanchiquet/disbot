@@ -13,7 +13,7 @@ def imageget(query, filetype: str = None):
 
     tryint = 0
     imglink = resultiterator(rawresult, tryint)
-    while imglink.endswith(".svg") or imglink.endswith("&get_thumbnail=1") or "lookaside.fbsbx" in imglink:
+    while imglink.endswith(".svg") or imglink.endswith("&get_thumbnail=1") or "lookaside.fbsbx" in imglink or imglink.startswith("x-raw-image") or "justshannen" in imglink:
         print("non-discord supported image in link [" + imglink + "] ; iterating")
         tryint = tryint + 1
         imglink = resultiterator(rawresult, tryint) #+ " (result " + str(tryint + 1) +")"
