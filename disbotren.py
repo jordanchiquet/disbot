@@ -1044,11 +1044,11 @@ async def todo(ctx, a: str = None, b: str = None, c: str = None):
     if a is None:
         print("todolist a was none")
         getlist = True
-    elif a == "complete" or a == "done" or a == "finished" or a == "mark" or a == "del" or a == "delete" or a == "remove" or a == "slash" or a == "cross":
+    elif a == "complete" or a == "done" or a == "finished" or a == "mark" or a == "del" or a == "delete" or a == "remove" or a == "slash" or a == "cross" or a == "scratch":
         print("user trying to complete task")
         dashpipematch = ["|", "-"]
         if b is None:
-            await ctx.send ("huh? which task are we crossing off boss?")
+            await ctx.send ("huh? which task are we" + a + " off boss?")
         elif (not b.isdigit() and not any(x in b for x in dashpipematch)) or c is not None:
             print("user used a completion keyword and some non number after or c was not None")
             todotext = ctx.message.content[6:]
