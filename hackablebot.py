@@ -1212,11 +1212,10 @@ async def gif(ctx, a: str = None, b: str = None):
         await ctx.send(file=File("/home/ubuntu/disbot/picfolder/gecko_dance.gif"))
         return
     t = tenorpy.Tenor()
-    x = t.search("cat")
-    jsonsample = x.json()
-    with open('E:/dognuts.json', 'w') as outfile:
-        json.dumps(jsonsample, outfile, indent=4)
-    delcmd = await ctx.send(t.search(gifquery))
+    await ctx.send("result recorded in console")
+    result = t.search(gifquery)
+    gifurl = result["results"][0]["itemurl"]
+    delcmd = await ctx.send(gifurl)
     deletelog[ctx.message.id] = delcmd
 
 

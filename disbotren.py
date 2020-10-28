@@ -16,7 +16,7 @@ import re
 import requests
 import ssl
 import sys
-# import tenorpy #tenorpy
+import tenorpy #tenorpy
 import threading
 import urllib.parse
 import urllib.request
@@ -1195,19 +1195,17 @@ async def gif(ctx, a: str = None, b: str = None):
     reptilelist = ["lizard", "gecko", "reptile", "geico"]
     geckotriggers = ["lizard dance", "gecko dance"]
     if b is not None:
-        b = b.lower()
         if (a.startswith("danc") and b in str(reptilelist)) or (b.startswith("danc") and a in str(reptilelist)):
             await ctx.send(file=File("/home/ubuntu/disbot/picfolder/gecko_dance.gif"))
             return
-        elif b.replace(" ", "") == "pepocheer":
-            await ctx.send(file=File("home/ubuntu/disbot/picfolder/pepocheer.gif"))
     gifquery = ctx.message.content[5:]
     if gifquery == "cgi dancing lizard":
         await ctx.send(file=File("/home/ubuntu/disbot/picfolder/gecko_dance.gif"))
         return
-    # t = tenorpy.Tenor()
-
-    delcmd = await ctx.send(getgif(gifquery))
+    t = tenorpy.Tenor()
+    result = t.search(gifquery)
+    gifurl = result["results"][0]["itemurl"]
+    delcmd = await ctx.send(gifurl)
     deletelog[ctx.message.id] = delcmd
 
 
