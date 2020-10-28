@@ -1,4 +1,5 @@
 from modules.bingimageapi import bingimage
+from modules.getquote import getquote
 from modules.giphy import getgif
 from modules.googleimageapi import imageget
 from modules.googleapi import googleget
@@ -53,6 +54,9 @@ class heycomputer:
             return(self.remindexecute())
         elif self.msglist[0] == "who":
             return(self.whoexecute())
+        elif intentparams[1] == "1":
+            if "richard" in self.msgcontent and "quote" in self.msgcontent:
+                return("wasquote|" + (getquote(user="Valrite")))
         otherparse = self.otherparse()
         if otherparse != "foundnone":
             return(otherparse)

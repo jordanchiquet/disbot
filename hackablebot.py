@@ -225,6 +225,15 @@ async def on_message(message):
                 embed = discord.Embed(description="[He is risen](https://www.amazon.com/product-reviews/B0015DWLH6/ref=acr_dp_hist_5?ie=UTF8&filterByStar=five_star&reviewerType=all_reviews#reviews-filter-bar)", color=0xee657) 
                 embed.set_thumbnail(url="https://thepreachersword.files.wordpress.com/2013/05/prayer-jesus.jpg")
                 await channel.send(embed=embed)
+            elif "|" in heycomputeresult:
+                embedlist = heycomputeresult.split("|")
+                if embedlist[0] == "wasquote":
+                    qid = embedlist[1]
+                    name = embedlist[2]
+                    qtxt = embedlist[3]
+                    date = embedlist[4]
+                    embed = discord.Embed(title=qtxt, description=("Quote #" + str(qid) + " by " + name + " - " + date[:16]), color=0x800080)
+                    await channel.send(embed=embed)
             elif heycomputeresult == "inv" or heycomputeresult is None:
                 await channel.send("a mistake was made... the computer have processed your message but could not... process")
             elif heycomputeresult == "donothing":
@@ -243,6 +252,15 @@ async def on_message(message):
             embed = discord.Embed(description="[He is risen](https://www.amazon.com/product-reviews/B0015DWLH6/ref=acr_dp_hist_5?ie=UTF8&filterByStar=five_star&reviewerType=all_reviews#reviews-filter-bar)", color=0xee657) 
             embed.set_thumbnail(url="https://thepreachersword.files.wordpress.com/2013/05/prayer-jesus.jpg")
             await channel.send(embed=embed)
+        elif "|" in heycomputeresult:
+            embedlist = heycomputeresult.split("|")
+            if embedlist[0] == "wasquote":
+                qid = embedlist[1]
+                name = embedlist[2]
+                qtxt = embedlist[3]
+                date = embedlist[4]
+                embed = discord.Embed(title=qtxt, description=("Quote #" + str(qid) + " by " + name + " - " + date[:16]), color=0x800080)
+                await channel.send(embed=embed)
         elif heycomputeresult == "inv" or heycomputeresult is None:
             await channel.send("a mistake was made... the computer have processed your message but could not... process")
         elif heycomputeresult == "donothing":
