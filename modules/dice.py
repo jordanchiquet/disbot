@@ -38,6 +38,8 @@ class dice:
             print("number of dice did not pass digit check")
             return("That's not how I roll brother...")
         if "+" in rolltext:
+            if rolltext.count("+") > 1:
+                return("That's not how I roll brother...")
             numsplit1 = rolltext.split("d")[1]
             d = numsplit1.split("+")[0]
             modifier = numsplit1.split("+")[1]
