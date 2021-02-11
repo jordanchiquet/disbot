@@ -28,7 +28,7 @@ class dice:
     
 
     def roll(self):
-        rolltext = self.rolltext
+        rolltext = (self.rolltext).lower()
         mult = rolltext.split("d")[0]
         addsub = True
         if mult.isdigit():

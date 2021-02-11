@@ -1,8 +1,11 @@
 from datetime import datetime
 from datetime import timedelta
 
-
 nowmonth = str(datetime.now().month)
+if nowmonth == "10":
+    print("nowmonth is october, doing nothing")
+else:
+    nowmonth = nowmonth.replace("0", "")
 nowdate = str(datetime.now().day)
 
 
@@ -16,7 +19,10 @@ class dateslashparser:
         if (month == "04" or
             month == "06" or
             month == "09" or
-            month == "11"):
+            month == "11" or
+            month == "4" or
+            month == "6" or 
+            month == "9"):
             print("month was a 30 month")
             if int(date) == 31:
                 print("date was 31 for a 30 day month, returning invalid")
@@ -66,6 +72,8 @@ class dateslashparser:
                 print("month was not October, replacing any zeros that might exist")
                 mathmonth = month.replace("0", "")
                 print("mathmonth: " + mathmonth)
+            else: 
+                mathmonth = month
             if int(mathmonth) < int(nowmonth):
                 print("month in timer was less than current month, timer defaulting to next year")
                 year = (datetime.now().year + 1)

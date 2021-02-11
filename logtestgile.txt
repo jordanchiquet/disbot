@@ -1,0 +1,10 @@
+INFO: /02/03/2021 07:29:35 Logging test: 0
+INFO: /02/03/2021 07:29:35 Logging test: 1
+INFO: /02/03/2021 07:29:35 Logging test: 2
+INFO: /02/03/2021 07:29:35 Logging test: 3
+INFO: /02/03/2021 07:29:35 Logging test: 4
+INFO: /02/03/2021 07:29:35 Logging test: 5
+INFO: /02/03/2021 07:29:35 Logging test: 6
+INFO: /02/03/2021 07:29:35 Logging test: 7
+INFO: /02/03/2021 07:29:35 Logging test: 8
+INFO: /02/03/2021 07:29:35 Logging test: 9

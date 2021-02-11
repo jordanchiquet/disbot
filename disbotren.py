@@ -57,6 +57,7 @@ from modules.wikihow import wikihow
 from modules.youtube import youtubesearch
 from modules.zooo import zooo
 
+sys.stdout = open('logfile.txt', 'w')
 
 messages = joined = 0
 nltk.download('brown')
