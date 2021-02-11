@@ -3,14 +3,14 @@ import random
 class dice:
     def __init__(self, a, b: str = None):
         if b is None:
-            self.rolltext = a
+            self.rolltext = a.lower()
             self.adv = None
         else:
             if a[0].isdigit():
-                self.rolltext = a
+                self.rolltext = (a.replace(",", "")).lower()
                 self.adv = b
             else:
-                self.rolltext = b
+                self.rolltext = (b.replace(",","")).lower()
                 self.adv = a
 
 
@@ -28,7 +28,7 @@ class dice:
     
 
     def roll(self):
-        rolltext = (self.rolltext).lower()
+        rolltext = self.rolltext
         mult = rolltext.split("d")[0]
         addsub = True
         if mult.isdigit():
@@ -38,8 +38,6 @@ class dice:
             print("number of dice did not pass digit check")
             return("That's not how I roll brother...")
         if "+" in rolltext:
-            if rolltext.count("+") > 1:
-                return("That's not how I roll brother...")
             numsplit1 = rolltext.split("d")[1]
             d = numsplit1.split("+")[0]
             modifier = numsplit1.split("+")[1]

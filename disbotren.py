@@ -661,9 +661,32 @@ async def mul(ctx, a: int, b: int):
 
 
 @bot.command()
-async def roll(ctx, a, b: str = None):
-    rollinit = dice(a, b)
-    await ctx.send(rollinit.roller())
+async def roll(ctx, a, b: str = None, c: str = None, d: str = None, e: str = None):
+    print("dice initiated")
+    if b is None or not b[0].isdigit():
+        print("dice is one roll, with or without adv")
+        rollinit0 = dice(a, b)
+        rollresult = rollinit0.roller()
+    else:
+        rollinit0 = dice(a)
+        print("rollinit0 has launched")
+        rollinit1 = dice (b)
+        print("rollinit1 has launched")
+        rollresult = rollinit0.roller() + "\n" + rollinit1.roller()
+        if c is not None:
+            rollinit2 = dice(c)
+            print("rollinit2 has launched")
+            rollresult = rollresult + "\n" + rollinit2.roller()
+        if d is not None:
+            rollinit3 = dice(d)
+            print("rollinit3 has launched")
+            rollresult = rollresult + "\n" + rollinit3.roller()
+        if e is not None:
+            rollinit4 = dice(e)
+            print("rollinit4 launched")
+            rollresult = rollresult + "\n" + rollinit4.roller()
+    print("rollresult: [" + rollresult + "]")
+    await ctx.send(rollresult)
 
 
 @roll.error
