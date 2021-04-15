@@ -16,6 +16,7 @@ def warzonestats(user, platform):
         trackerurl = "https://my.callofduty.com/api/papi-client/stats/cod/v1/title/mw/platform/" + platform + "/gamer/" + user.split("#")[0] + "%23" + user.split("#")[1] + "/profile/type/mp"
         response = loginsession.get(url = trackerurl)
         print("got warzonestats response")
+        print(response)
         warzonejson = response.json()
         level = str(warzonejson["data"]["level"]).split(".")[0]
         kills = str(warzonejson["data"]["lifetime"]["mode"]["br"]["properties"]["kills"]).split(".")[0]

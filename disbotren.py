@@ -272,14 +272,13 @@ async def on_message(message):
             await channel.send(heycomputeresult)
     mclower = mclower.replace(".","")
     if "no" == mclower:
-        conditionlist = ["destroy", "remove", "break", "delete", "undo", "dump", "discard", "quit", "stop", "banish", "cast", "leave", "fix", "obliterate",
-        "decimate", "blast", "terminate", "fire", "throw", "put it", "let go", "drop", "get rid", "give", "stop", "relent", "surrender"]
-        if len(chatLog) >= 2:
-            for x in conditionlist:
-                print("chatlog[-2] is: " + chatLog[-2])
-                if x in chatLog[-2]:
-                    await channel.send(file=File("/home/ubuntu/disbot/picfolder/no.jpg"))
-                    break
+        # conditionlist = ["destroy", "remove", "break", "delete", "undo", "dump", "discard", "quit", "stop", "banish", "cast", "leave", "fix", "obliterate",
+        # "decimate", "blast", "terminate", "fire", "throw", "put it", "let go", "drop", "get rid", "give", "stop", "relent", "surrender"]
+        # if len(chatLog) >= 2:
+        #     for x in conditionlist:
+        #         print("chatlog[-2] is: " + chatLog[-2])
+        #         if x in chatLog[-2]:
+        await channel.send(file=File("/home/ubuntu/disbot/picfolder/no.jpg"))
     if "bad bot" in mclower:
         await channel.send("dang...")
     fearlist = ["do not fear", "never fear", "don't fear", "dont fear", "fear not", "have no fear", "i can't fear", "i cannot fear"]
@@ -1360,7 +1359,7 @@ async def war(ctx, a: str = None, b: str = None):
                 platform = "uno"
             warzoneresponse = warzonestats(str(battlenetcheck[0]), platform)
     elif a == "register" or a == "reg":
-        battlenetcheckinit = renardusers(userid, "battlenet", b, username, "uni")  
+        battlenetcheckinit = renardusers(userid, "battlenet", b, username, "uno")  
         print("warzone reached users class")
         battlenetcheckinit.userwrite()
         print("warzone wrote battlenet tag: [" + a + "]")
@@ -1372,6 +1371,7 @@ async def war(ctx, a: str = None, b: str = None):
             platform = "battle"
         if numberlen == 7:
             platform = "uno"
+            print("got uno")
         warzoneresponse = warzonestats(a, platform)
     if warzoneresponse == "inv":
         print("got inv")

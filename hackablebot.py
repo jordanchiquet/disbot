@@ -1374,6 +1374,7 @@ async def war(ctx, a: str = None, b: str = None):
         if numberlen == 4 or numberlen == 5:
             platform = "battle"
         if numberlen == 7:
+            print("got uno")
             platform = "uno"
         warzoneresponse = warzonestats(a, platform)
     if warzoneresponse == "inv":

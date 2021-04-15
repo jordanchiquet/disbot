@@ -1,39 +1,12 @@
 logged in as
 RoboRenard
 598924849058021393
-0.057779200000000586
+0.06546180000000001
 -----------------------------------
-Timer check starting... [2021-02-03 14:35:43.565780]
+Timer check starting... [2021-02-16 16:22:55.417830]
 clearing commandRunningDict (dict for belay order shit)
 bot command logged
-Timer check starting... [2021-02-03 14:35:48.567625]
-Timer check starting... [2021-02-03 14:35:53.568059]
-The Cuckinator#7217
-serverid: 688494181727207478
-users initiated
-renard users called from endowed server
-users initiated
-renard users called from endowed server
-users initiated
-renard users called for universal table
-users initiated
-renard users called for universal table
-Timer check starting... [2021-02-03 14:36:00.347456]
-Timer check starting... [2021-02-03 14:36:03.579332]
-Timer check starting... [2021-02-03 14:36:08.570551]
-Timer check starting... [2021-02-03 14:36:13.575420]
-tombodied#5270
-serverid: 688494181727207478
-users initiated
-renard users called from endowed server
-users initiated
-renard users called from endowed server
-users initiated
-renard users called for universal table
-users initiated
-renard users called for universal table
-Timer check starting... [2021-02-03 14:36:20.443028]
-slomojoe#2412
+Jordan#1887
 serverid: 237397384676507651
 users initiated
 renard users called from renmemorial server
@@ -43,3 +16,17 @@ users initiated
 renard users called for universal table
 users initiated
 renard users called for universal table
+war were declared
+got uno
+starting warzonestats with provided user: [tombodied#7388573]
+got xsrf: [WuxlC-iX96otcrHol1WcHIZmMShTlyKMwhwkJnElqb_Hy-7npCPvyvMx4Xqi6I-1]
+got inv
+Timer check starting... [2021-02-16 16:23:30.867535]
+Timer check starting... [2021-02-16 16:23:31.411409]
+bot command logged
+Jordan#1887
+serverid: 237397384676507651
+users initiated
+renard users called from renmemorial server
+users initiated
+renard users called from renmemorial server
