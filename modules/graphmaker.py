@@ -15,14 +15,13 @@ def getgraph(column, serverid, rawcount: bool = False):
         columnmembervalues = []
         columnnumvalues = []
         msgcountnumvalues = []
-        print("fail 1")
         for x in graphdatarawcolumn:
             columnmembervalues.append(x[0])
             columnnumvalues.append(x[1])
         for x in graphdatarawmsgcount:
             msgcountnumvalues.append(x[1])
-        print("failing here")
         ratiovalues = list(np.array(columnnumvalues) / np.array(msgcountnumvalues))
+        ratiovalues[ratiovalues != 0]
         finaldata = createtuple(columnmembervalues, ratiovalues)
     # print(graphdataraw
     # column)

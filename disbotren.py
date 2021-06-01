@@ -734,9 +734,9 @@ async def conch(ctx):
 
 @bot.command()
 async def dog(ctx):
-    dogr = requests.get('https://dog.ceo/api/breeds/image/random')
-    dogf = str(dogr.json()['message'])
-    await ctx.send(dogf)
+    dogr = requests.get('fhttps://dog.ceo/api/breeds/image/random')
+    dogf = str(dogr.json(f)['message'])
+    await ctx.send(dogf)f
 
 
 @bot.command()
@@ -761,6 +761,7 @@ async def eat(ctx):
     any = (
         "Albasha",
         "Bay Leaf",
+        "Burgersmith",
         "City Pork",
         "Curbside",
         "Curry N Kabob",
@@ -771,6 +772,7 @@ async def eat(ctx):
         "Fat Cow",
         "La Caretta",
         "Lit",
+        "Mooyah",
         "Pluckers",
         "Serops",
         "Superior Grill",
@@ -841,7 +843,7 @@ async def fuck(ctx, a: str = None):
     serverid = ctx.guild.id
     if a is None:
         getgraph("fuckcount", serverid)
-    elif a == "total":
+    elif a == "total" or a == "count":
         getgraph("fuckcount", serverid, True)
     await ctx.send(file=File("graph.png"))
     os.remove('graph.png')
