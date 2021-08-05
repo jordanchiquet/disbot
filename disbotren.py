@@ -71,6 +71,9 @@ deletelog = {}
 commandRunningDict = {}
 chatLog = []
 
+now = datetime.now() - timedelta(hours=5)
+
+print(now.today.wee)
 
 async def updateserverstats():
     await client.wait_until_ready()
@@ -123,8 +126,8 @@ async def on_member_join(member):
     joined += 1
     if member.guild.id == 237397384676507651:
         channel = bot.get_channel(649528092691529749)
-    if member.guild.id == 688494181727207478:
-        channel = bot.get_chanel(688494182691766404)
+    elif member.guild.id == 688494181727207478:
+        channel = bot.get_channel(767847844039753789)
     await channel.send("a pedophile has joined the chatroom")
 
 
@@ -585,6 +588,12 @@ async def vers(ctx):
 # practical functions
 
 @tasks.loop(seconds=5.0)
+async def daycheck():
+    isFriday = False 
+    return
+
+
+@tasks.loop(seconds=5.0)
 async def timercheck():
     timercheckinit = timercl("msgcontent", "user", "channel", "timeorig")
     response = timercheckinit.timercheck()
@@ -736,7 +745,7 @@ async def conch(ctx):
 async def dog(ctx):
     dogr = requests.get('fhttps://dog.ceo/api/breeds/image/random')
     dogf = str(dogr.json(f)['message'])
-    await ctx.send(dogf)f
+    await ctx.send(dogf)
 
 
 @bot.command()
