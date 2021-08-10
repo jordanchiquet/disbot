@@ -13,6 +13,7 @@ import mysql.connector
 import nltk
 import random
 import re
+from pyasn1.type.univ import Boolean
 import requests
 import ssl
 import sys
@@ -72,8 +73,17 @@ commandRunningDict = {}
 chatLog = []
 
 now = datetime.now() - timedelta(hours=5)
+today = (datetime.today())
+dayint = (today.weekday())
 
-print(now.today.wee)
+isMonday = False
+isTuesday = False
+isWednesday = False
+isThursday = False
+isFriday = False
+isSaturday = False
+isSunday = False
+
 
 async def updateserverstats():
     await client.wait_until_ready()
@@ -587,9 +597,77 @@ async def vers(ctx):
 # ------------------------------------------- #
 # practical functions
 
+async def dayboolinator(day=int, onoff=Boolean):
+    if day == 0:
+        isMonday = True
+        isTuesday = False
+        isWednesday = False
+        isThursday = False
+        isFriday = False
+        isSaturday = False
+        isSunday = False
+        return
+    elif day == 1:
+        isMonday = False
+        isTuesday = True
+        isWednesday = False
+        isThursday = False
+        isFriday = False
+        isSaturday = False
+        isSunday = False
+        return
+    elif day == 2:
+        isMonday = False
+        isTuesday = False
+        isWednesday = True
+        isThursday = False
+        isFriday = False
+        isSaturday = False
+        isSunday = False
+        return
+    elif day == 3:
+        isMonday = False
+        isTuesday = False
+        isWednesday = False
+        isThursday = True
+        isFriday = False
+        isSaturday = False
+        isSunday = False
+        return
+    elif day == 4:
+        isMonday = False
+        isTuesday = False
+        isWednesday = False
+        isThursday = False
+        isFriday = True
+        isSaturday = False
+        isSunday = False
+        return
+    elif day == 5:
+        isMonday = False
+        isTuesday = False
+        isWednesday = False
+        isThursday = False
+        isFriday = False
+        isSaturday = True
+        isSunday = False
+        return
+    elif day == 6:
+        isMonday = False
+        isTuesday = False
+        isWednesday = False
+        isThursday = False
+        isFriday = False
+        isSaturday = False
+        isSunday = True
+        return
+
+
 @tasks.loop(seconds=5.0)
 async def daycheck():
     isFriday = False 
+    if dayint == 4:
+        isFriday = True
     return
 
 

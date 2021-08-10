@@ -20,6 +20,9 @@ class renardusers:
         elif serverid == 237397384676507651:
             print("renard users called from renmemorial server")
             self.servername = "renmemorial"
+        elif serverid == 838594342812647426:
+            print("renard users called from mindfreax")
+            self.servername = "mindfreax"
         elif serverid == "uni":
             print("renard users called for universal table")
             self.servername = "universal"
