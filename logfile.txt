@@ -1,32 +1,4 @@
 logged in as
-RoboRenard
-598924849058021393
-0.06546180000000001
+0.05720849999999977
 -----------------------------------
-Timer check starting... [2021-02-16 16:22:55.417830]
-clearing commandRunningDict (dict for belay order shit)
 bot command logged
-Jordan#1887
-serverid: 237397384676507651
-users initiated
-renard users called from renmemorial server
-users initiated
-renard users called from renmemorial server
-users initiated
-renard users called for universal table
-users initiated
-renard users called for universal table
-war were declared
-got uno
-starting warzonestats with provided user: [tombodied#7388573]
-got xsrf: [WuxlC-iX96otcrHol1WcHIZmMShTlyKMwhwkJnElqb_Hy-7npCPvyvMx4Xqi6I-1]
-got inv
-Timer check starting... [2021-02-16 16:23:30.867535]
-Timer check starting... [2021-02-16 16:23:31.411409]
-bot command logged
-Jordan#1887
-serverid: 237397384676507651
-users initiated
-renard users called from renmemorial server
-users initiated
-renard users called from renmemorial server

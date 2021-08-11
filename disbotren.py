@@ -59,10 +59,9 @@ from modules.wordcounter import wordcounter
 from modules.youtube import youtubesearch
 from modules.zooo import zooo
 
-sys.stdout = open('logfile.txt', 'w')
+# sys.stdout = open('logfile.txt', 'w')
 
 messages = joined = 0
-nltk.download('brown')
 client = discord.Client()
 bot = commands.Bot(command_prefix='.', case_insensitive=True, description='super computer robot')
 bot.remove_command('help')
@@ -75,7 +74,6 @@ commandRunningDict = {}
 chatLog = []
 
 now = datetime.now() - timedelta(hours=5)
-today = (datetime.today())
 
 
 
@@ -89,11 +87,11 @@ async def on_ready():
     timercheck.start()
     daycheck.start()
     commandRunningDictClear.start()
-    print("logged in as")
-    print(bot.user.name)
-    print(bot.user.id)
+    print("Renard Boot")
     print(bot.latency)
+    print(now)
     print("-----------------------------------")
+    nltk.download('brown')
     channel = bot.get_channel(600430089519497235)
     embed = discord.Embed(title="Computer Online Mode:", description=" [ON] OFF ", color=0xee657) 
     await channel.send(embed=embed)
@@ -592,17 +590,36 @@ async def vers(ctx):
 # ------------------------------------------- #
 # practical functions
 
-@tasks.loop(minutes=30)
+@tasks.loop(seconds=60.0)
 async def daycheck():
-    dayint = (today.weekday())
+    print("here")
+    dayint = (now.weekday())
     poptime = now.replace(hour=6, minute=0)
+    renardgenchannel = bot.get_channel(649528092691529749)
+    renardtestchannel = bot.get_channel(600430089519497235)
+    freaxchannel = bot.get_channel(838594477093945364)
     if not daydonecheck(dayint) and now > poptime:
+        print("made it to dayint check after verifying F daydonecheck and poptime with dayint " + str(dayint))
         if dayint == 2: 
-            await renardgenchannel.send("this is a test message")
+            (print("we made it this far"))
+            daydoneset(dayint)
+            await renardgenchannel.send("WAKE UP FOR WW WEDNESDAY \n `this is a test feature`")
+            await renardgenchannel.send(file=File("/home/ubuntu/disbot/picfolder/weekfolder/wednesday/wetwillywednesday1.png"))
+            await freaxchannel.send("WAKE UP FOR WW WEDNESDAY \n `this is a test feature`")
+            await freaxchannel.send(file=File("/home/ubuntu/disbot/picfolder/weekfolder/wednesday/wetwillywednesday2.png"))
+            # await renardtestchannel.send("WAKE UP FOR WW WEDNESDAY \n `this is a test feature`")
+            # await renardtestchannel.send(file=File("/home/ubuntu/disbot/picfolder/weekfolder/wednesday/wetwillywednesday1.png"))
+            print("test daydone message fire")
+        if dayint == 3:
+            print("thursday trigger")
+            await renardtestchannel.send("super thursday")
+            daydoneset(dayint)
         if dayint == 4:
             await renardgenchannel.send("WAKE THE FUCK UP ITS FUNKE MNUEKE FRIDAY")
+            daydoneset(dayint)
         else:
             return
+        print("made to daydoneset in daycheck")
         daydoneset(dayint)
                 
 
@@ -611,6 +628,7 @@ async def daycheck():
 
 @tasks.loop(seconds=5.0)
 async def timercheck():
+    print("timercheck started")
     timercheckinit = timercl("msgcontent", "user", "channel", "timeorig")
     response = timercheckinit.timercheck()
     if response is None:
