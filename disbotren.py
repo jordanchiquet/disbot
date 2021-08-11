@@ -759,7 +759,7 @@ async def conch(ctx):
 @bot.command()
 async def dog(ctx):
     dogr = requests.get('fhttps://dog.ceo/api/breeds/image/random')
-    dogf = str(dogr.json(f)['message'])
+    dogf = str(dogr.json()['message'])
     await ctx.send(dogf)
 
 
