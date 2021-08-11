@@ -87,6 +87,7 @@ async def updateserverstats():
 @bot.event
 async def on_ready():
     timercheck.start()
+    daycheck.start()
     commandRunningDictClear.start()
     print("logged in as")
     print(bot.user.name)
