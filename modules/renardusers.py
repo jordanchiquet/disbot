@@ -53,7 +53,7 @@ class renardusers:
             sql = "INSERT INTO renarddb." + self.servername + "users (user) VALUES (%s)"
             val = [self.userid]
             mycursor.execute(sql, val)
-            mydb.commit()
+            self.mydb.commit()
             print("user " + self.userid + " registered.")
             return("user " + self.userid + " registered.")
         else:
