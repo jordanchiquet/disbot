@@ -8,7 +8,7 @@ class getstock:
 
     def getcurrentprice(self):
         print("getting current stock price")
-        print(yfinance.)
+        print(yfinance)
     
 
 getstockinit = getstock("amc")

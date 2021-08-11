@@ -38,7 +38,7 @@ from uszipcode import SearchEngine
 
 
 from modules.bingimageapi import bingimage #azure-cognitiveservices-search-imagesearch
-from modules.wordcounter import wordcounter
+from modules.daydone import daydoneset, daydonecheck
 from modules.dice import dice
 from modules.dickshadow import executeoverlay #Pillow #numpy #whapi
 from modules.figlet import figgletizer 
@@ -55,6 +55,7 @@ from modules.todo import renardtodo
 from modules.warzone import warzonestats
 from modules.weather import weatherget
 from modules.wikihow import wikihow
+from modules.wordcounter import wordcounter
 from modules.youtube import youtubesearch
 from modules.zooo import zooo
 
@@ -67,6 +68,7 @@ bot = commands.Bot(command_prefix='.', case_insensitive=True, description='super
 bot.remove_command('help')
 bot.remove_command('close')
 
+renardgenchannel = bot.get_channel(649528092691529749)
 
 deletelog = {}
 commandRunningDict = {}
@@ -74,15 +76,7 @@ chatLog = []
 
 now = datetime.now() - timedelta(hours=5)
 today = (datetime.today())
-dayint = (today.weekday())
 
-isMonday = False
-isTuesday = False
-isWednesday = False
-isThursday = False
-isFriday = False
-isSaturday = False
-isSunday = False
 
 
 async def updateserverstats():
@@ -597,78 +591,21 @@ async def vers(ctx):
 # ------------------------------------------- #
 # practical functions
 
-async def dayboolinator(day=int, onoff=Boolean):
-    if day == 0:
-        isMonday = True
-        isTuesday = False
-        isWednesday = False
-        isThursday = False
-        isFriday = False
-        isSaturday = False
-        isSunday = False
-        return
-    elif day == 1:
-        isMonday = False
-        isTuesday = True
-        isWednesday = False
-        isThursday = False
-        isFriday = False
-        isSaturday = False
-        isSunday = False
-        return
-    elif day == 2:
-        isMonday = False
-        isTuesday = False
-        isWednesday = True
-        isThursday = False
-        isFriday = False
-        isSaturday = False
-        isSunday = False
-        return
-    elif day == 3:
-        isMonday = False
-        isTuesday = False
-        isWednesday = False
-        isThursday = True
-        isFriday = False
-        isSaturday = False
-        isSunday = False
-        return
-    elif day == 4:
-        isMonday = False
-        isTuesday = False
-        isWednesday = False
-        isThursday = False
-        isFriday = True
-        isSaturday = False
-        isSunday = False
-        return
-    elif day == 5:
-        isMonday = False
-        isTuesday = False
-        isWednesday = False
-        isThursday = False
-        isFriday = False
-        isSaturday = True
-        isSunday = False
-        return
-    elif day == 6:
-        isMonday = False
-        isTuesday = False
-        isWednesday = False
-        isThursday = False
-        isFriday = False
-        isSaturday = False
-        isSunday = True
-        return
-
-
-@tasks.loop(seconds=5.0)
+@tasks.loop(minutes=30)
 async def daycheck():
-    isFriday = False 
-    if dayint == 4:
-        isFriday = True
-    return
+    dayint = (today.weekday())
+    poptime = now.replace(hour=6, minute=0)
+    if not daydonecheck(dayint) and now > poptime:
+        if dayint == 2: 
+            await renardgenchannel.send("this is a test message")
+        if dayint == 4:
+            await renardgenchannel.send("WAKE THE FUCK UP ITS FUNKE MNUEKE FRIDAY")
+        else:
+            return
+        daydoneset(dayint)
+                
+
+
 
 
 @tasks.loop(seconds=5.0)
