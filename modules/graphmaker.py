@@ -16,6 +16,8 @@ def getgraph(column, serverid, rawcount: bool = False):
         columnnumvalues = []
         msgcountnumvalues = []
         for x in graphdatarawcolumn:
+            if x[1] == 0:
+                graphdatarawcolumn.remove(x)
             columnmembervalues.append(x[0])
             columnnumvalues.append(x[1])
         for x in graphdatarawmsgcount:
