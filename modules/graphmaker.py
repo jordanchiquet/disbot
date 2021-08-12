@@ -16,17 +16,13 @@ def getgraph(column, serverid, rawcount: bool = False):
         columnnumvalues = []
         msgcountnumvalues = []
         for x in graphdatarawcolumn:
-            if not x[1]:
-                graphdatarawcolumn.remove(x)
-            columnmembervalues.append(x[0])
-            columnnumvalues.append(x[1])
+                columnmembervalues.append(x[0])
+                columnnumvalues.append(x[1])
         for x in graphdatarawmsgcount:
             msgcountnumvalues.append(x[1])
         ratiovalues = list(np.array(columnnumvalues) / np.array(msgcountnumvalues))
         ratiovalues[ratiovalues != 0]
         finaldata = createtuple(columnmembervalues, ratiovalues)
-    # print(graphdataraw
-    # column)
     columns = ("", column)
     graphdata = pd.DataFrame.from_records(finaldata, columns = columns)
     graphdata.plot(x = "", y = column, kind = "bar")

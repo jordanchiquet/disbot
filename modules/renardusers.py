@@ -74,7 +74,7 @@ class renardusers:
 
     def getgraphdata(self):
         mycursor = self.mydb.cursor()
-        sql = "SELECT username, " + self.field + " FROM renarddb." + self.servername + "users"
+        sql = "SELECT username, " + self.field + " FROM renarddb." + self.servername + "users WHERE " + self.field + " > 0"
         mycursor.execute(sql)
         graphresults = []
         for x in mycursor:
