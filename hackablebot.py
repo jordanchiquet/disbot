@@ -100,6 +100,51 @@ async def on_message_delete(message):
         await dellog.delete()
         del deletelog[message.id]
 
+@bot.command()
+async def cyberwar(ctx, a, b: str = None):
+    if ctx.author.id == 191688156427321344:
+        print("got jordan")
+        if b == "fire":
+            if a == "open":
+                cyberWarfareLoop.start(ctx.channel.id)
+            elif a == "cease":
+                print("got to cease")
+                cyberWarfareLoop.stop()
+                print("got ebyond cancel and nothing happen")
+    else:
+        await ctx.send("did you really think that would work")
+
+
+@tasks.loop(seconds=5.0)
+async def cyberWarfareLoop(cyberwarchannelid: int = None):
+    print("cyberwarfare engaged")
+    freaxchannel = bot.get_channel(cyberwarchannelid)
+    await freaxchannel.send("```* g o a t s e x * g o a t s e x * g o a t s e x *\n"
+                                "g                                               g\n" 
+                                "o /     \             \            /    \       o\n"
+                                "a|       |             \          |      |      a\n"
+                                "t|       `.             |         |       :     t\n"
+                                "s`        |             |        \|       |     s\n"
+                                "e \       | /       /  \\\   --__ \\       :    e\n"
+                                "x  \      \/   _--~~          ~--__| \     |    x\n"  
+                                "*   \      \_-~                    ~-_\    |    *\n"
+                                "g    \_     \        _.--------.______\|   |    g\n"
+                                "o      \     \______// _ ___ _ (_(__>  \   |    o\n"
+                                "a       \   .  C ___)  ______ (_(____>  |  /    a\n"
+                                "t       /\ |   C ____)/      \ (_____>  |_/     t\n"
+                                "s      / /\|   C_____)       |  (___>   /  \    s\n"
+                                "e     |   (   _C_____)\______/  // _/ /     \   e\n"
+                                "x     |    \  |__   \\_________// (__/       |  x\n"
+                                "*    | \    \____)   `----   --'             |  *\n"
+                                "g    |  \_          ___\       /_          _/ | g\n"
+                                "o   |              /    |     |  \            | o\n"
+                                "a   |             |    /       \  \           | a\n"
+                                "t   |          / /    |         |  \           |t\n"
+                                "s   |         / /      \__/\___/    |          |s\n"
+                                "e  |           /        |    |       |         |e\n"
+                                "x  |          |         |    |       |         |x\n"
+                                "* g o a t s e x * g o a t s e x * g o a t s e x *```")
+
 
 @bot.event
 async def on_message_edit(before, after):

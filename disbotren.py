@@ -140,6 +140,51 @@ async def commandRunningDictClear():
     commandRunningDict.clear()
     chatLog.clear()
 
+@bot.command()
+async def cyberwar(ctx, a, b: str = None):
+    if ctx.author.id == 191688156427321344:
+        print("got jordan")
+        if b == "fire":
+            if a == "open":
+                cyberWarfareLoop.start(ctx.channel.id)
+            elif a == "cease":
+                print("got to cease")
+                cyberWarfareLoop.stop()
+                print("got ebyond cancel and nothing happen")
+    else:
+        await ctx.send("did you really think that would work")
+
+
+@tasks.loop(seconds=5.0)
+async def cyberWarfareLoop(cyberwarchannelid: int = None):
+    print("cyberwarfare engaged")
+    freaxchannel = bot.get_channel(cyberwarchannelid)
+    await freaxchannel.send("```* g o a t s e x * g o a t s e x * g o a t s e x *\n"
+                                "g                                               g\n" 
+                                "o /     \             \            /    \       o\n"
+                                "a|       |             \          |      |      a\n"
+                                "t|       `.             |         |       :     t\n"
+                                "s`        |             |        \|       |     s\n"
+                                "e \       | /       /  \\\   --__ \\       :    e\n"
+                                "x  \      \/   _--~~          ~--__| \     |    x\n"  
+                                "*   \      \_-~                    ~-_\    |    *\n"
+                                "g    \_     \        _.--------.______\|   |    g\n"
+                                "o      \     \______// _ ___ _ (_(__>  \   |    o\n"
+                                "a       \   .  C ___)  ______ (_(____>  |  /    a\n"
+                                "t       /\ |   C ____)/      \ (_____>  |_/     t\n"
+                                "s      / /\|   C_____)       |  (___>   /  \    s\n"
+                                "e     |   (   _C_____)\______/  // _/ /     \   e\n"
+                                "x     |    \  |__   \\_________// (__/       |  x\n"
+                                "*    | \    \____)   `----   --'             |  *\n"
+                                "g    |  \_          ___\       /_          _/ | g\n"
+                                "o   |              /    |     |  \            | o\n"
+                                "a   |             |    /       \  \           | a\n"
+                                "t   |          / /    |         |  \           |t\n"
+                                "s   |         / /      \__/\___/    |          |s\n"
+                                "e  |           /        |    |       |         |e\n"
+                                "x  |          |         |    |       |         |x\n"
+                                "* g o a t s e x * g o a t s e x * g o a t s e x *```")
+
 
 @bot.event
 async def on_member_update(before, after):
@@ -583,14 +628,14 @@ async def help(ctx):
 @bot.command()
 async def vers(ctx):
     embed = discord.Embed(title="ROBORENARD MK II", description="Gaming forever in paradise", color=0xee657)
-    embed.add_field(name="Version", value="0.123456789")
+    embed.add_field(name="Version", value="1.3")
     await ctx.send(embed=embed)
 
 
 # ------------------------------------------- #
 # practical functions
 
-@tasks.loop(seconds=60.0)
+@tasks.loop(seconds=300.0)
 async def daycheck():
     print("here")
     dayint = (now.weekday())
@@ -1053,6 +1098,10 @@ async def quote(ctx, a: str = None, b: str = None):
         mycursor.execute(sql)
         for x in mycursor:
             qlist.append(x)
+        if ctx.channel.id != 649528092691529749:
+            for x in qlist:
+                if "nigger" in str(x):
+                    qlist.remove(x)
         quoteunparsed = random.choice(qlist)
         print("made randome choice: [" + str(quoteunparsed) + "]")
         qid = quoteunparsed[0]
@@ -1101,12 +1150,16 @@ async def quote(ctx, a: str = None, b: str = None):
             mycursor.execute(delsql)
             mydb.commit()
             await ctx.send("Quote " + b + " erased from the archive memory :).")
+            return
         else:
             await ctx.send("WTF i can't FUCKING find that one!?!?!?!?!")
     
     if a == "list":
         if ctx.guild.id == 237397384676507651:
-            await ctx.send("http://18.216.39.250:3000/")
+            if ctx.channel.id == 649528092691529749:
+                await ctx.send("http://18.216.39.250:3000/")
+            else:
+                await ctx.send("ask your mother")
         else:
             await ctx.send("quote list for your server still WIP")
 
