@@ -5,12 +5,11 @@ import numpy as np
 
 def getgraph(column, serverid, rawcount: bool = False):
     usersinit = renardusers(1, column, serverid=serverid)
-    totalcountinit = renardusers(1, "wordcount", serverid=serverid)
     graphdatarawcolumn = usersinit.getgraphdata()
     if rawcount:
         finaldata = graphdatarawcolumn
     if not rawcount:
-        graphdatarawmsgcount = totalcountinit.getgraphdata()
+        graphdatarawmsgcount = usersinit.getwordcount()
         print(graphdatarawmsgcount)
         columnmembervalues = []
         columnnumvalues = []
@@ -26,6 +25,7 @@ def getgraph(column, serverid, rawcount: bool = False):
     columns = ("", column)
     graphdata = pd.DataFrame.from_records(finaldata, columns = columns)
     graphdata.plot(x = "", y = column, kind = "bar")
+    print("got this far")
     plt.tight_layout()
     plt.savefig('graph.png')
     # return(graphdata)

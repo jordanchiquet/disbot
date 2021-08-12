@@ -71,6 +71,15 @@ class renardusers:
             print("read result: [" + str(x) + "]")
             return(x)
     
+    def getwordcount(self):
+        mycursor = self.mydb.cursor()
+        sql = "SELECT username, wordcount FROM renarddb." + self.servername + "users WHERE " + self.field + " > 0"
+        mycursor.execute(sql)
+        wordcountresults = []
+        for x in mycursor:
+            print(x)
+            wordcountresults.append(x)
+        return(wordcountresults)
 
     def getgraphdata(self):
         mycursor = self.mydb.cursor()
