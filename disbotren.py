@@ -140,6 +140,7 @@ async def commandRunningDictClear():
     commandRunningDict.clear()
     chatLog.clear()
 
+
 @bot.command()
 async def cyberwar(ctx, a, b: str = None):
     if ctx.author.id == 191688156427321344:

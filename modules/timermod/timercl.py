@@ -376,6 +376,23 @@ class timercl:
                 print("timedigt not none from notnomonth")
                 return(timernote + "|" + timedigit + "|notimeparse|" + dateparse)
 
+
+    def thirtycheck(self):
+        currentmonth = str(datetime.now().month)
+        if (currentmonth == "4" or
+            currentmonth == "6" or
+            currentmonth == "9" or
+            currentmonth == "11"):
+            return 30
+        elif currentmonth == "2":
+            currentyearint = int(datetime.now().year)
+            if (currentyearint % 4) != 0 and (currentyearint % 400) !=0:
+                return 28
+            else:
+                return 29
+        else:
+            return 31
+
     def timerold(self, msgcontent, timeorig, a, b, c: str = None, d: str = None):
         print("timerold started")
         print("this is the timeorig we getting [" + timeorig +"]")
@@ -384,8 +401,14 @@ class timercl:
             print("a is digit, continuing")
             timeval1raw = float(a)
             unit1 = b.lower()
-            if unit1.startswith("m"):
+            if unit1.startswith("mi") or unit1 == "m":
                 timeval1 = timeval1raw
+            elif unit1.startswith("mo"):
+                if timeval1raw == 1.0:
+                    daymulti = 1440 * (self.thirtycheck())
+                else:
+                    daymulti = 1440 * 30
+                timeval1 = timeval1raw * daymulti
             elif unit1.startswith("h"):
                 print("sanity can confirm hour")
                 timeval1 = timeval1raw * 60
