@@ -1,0 +1,146 @@
+Web Queries:
+.d
+Gets merriam-webster result
+
+.g
+Google search
+
+.gif
+Gif search
+
+.how
+wikihow search
+
+.img
+Google image search
+
+.sky
+Returns night sky for today
+
+.spell
+DnD fifth edition spell search
+
+.ud
+Urbandictionary search.
+
+.wiki
+Guess
+
+.yt
+Youtube search.
+
+
+
+Tools:
+
+.timer
+Sets a timer. Format is ".timer 2 h 30 m pizza in oven"
+Second time parameter ("30 m" in this example) is optional.
+
+.add 
+addition - format is ".add number1 number2"
+
+.div
+division - format is ".div number 1 number2"
+
+.mul
+multiplication - format is ".mul number1 number2"
+
+.roll
+Dice roller, mostly for DnD. This one has a few options. Here's an example of how it's used:
+".roll 2d20+5" This will roll 2 20-sided dice and then add 5 at the end. 
+".roll 3d100+4 adv" This will roll 3 100-sided dice, add 4 to the total, then do it all over again a second time, and return whichever result is higher. (Advantage roll)
+".roll 3d6 dis" This will roll 3 6-sided dice, add nothing to the total, then do it again a second time and return whichever result is lower. (Disadvantage roll)
+
+.sub
+subtraction - format is ".sub number1 number2"
+
+
+
+Random Shit:
+.bird
+Returns a random bird image.
+Also:
+.cat 
+.dog
+.fox
+
+.coin
+Flips a coin.
+
+.conch
+Ask the conch a yes or no question - like an 8ball.
+
+.drink
+Returns a random beer.
+
+.eat 
+Returns a random mid-price Baton Rouge restaurant. If you aren't in Baton Rouge, you may want to skip this one. 
+
+.enhance
+Enhances the last photo found in the channel.
+
+.gun
+trigger warning
+
+.loon
+Returns the call of the common loon :)
+
+.quote
+Returns a random quote from the server. Add quotes by reacting to a message with the :speech_baloon: emoticon. 
+Remove the reaction within 5 minutes to delete the quote. Otherwise use ".quote del quoteidhere" to delete. 
+
+.war
+Gets stats for a PC Warzone player. Use ".war username#numbershere" to get them ad hoc.
+Use ".war reg username#numbershere" to register a battlenet name to you. After that just use ".war" to get your own stats. 
+
+.xfile
+Returns random article from 4chan /x/
+
+.zoo
+danimals :)
+
+.sky
+Returns night sky for today
+
+
+
+
+Graphs:
+These are graphs that track message content in the channel. Actual message content is not recorded in anyway, (I'm not the government) but certain phrases trigger an incrementing tally. 
+By default, these will return a ratio showing your count of the phrase in question vs your total word count. 
+Example: ".fuck" will return a bar graph that shows which users say "fuck" the most compared to their total word count. 
+If you would rather see a total count of how many times users have said "fuck" you can add "total" as an optional argument, e.g. ".fuck total". 
+
+.fuck 
+Returns count of the word fuck 
+
+.south
+Returns count for use of southern colloquialisms, double negatives, etc.
+
+.inanycase
+Returns count of the phrase "in any case"
+
+.positive
+Returns count positive/affirmative words and phrases
+
+.negative
+Returns count of negative words and phrases
+
+.dude
+Returns count of "dude"
+
+.like
+Returns count of "like"
+
+.nicks
+Returns graph showing who changes nicknames the most
+
+.imgcount
+Returns graph of who searches the most images
+
+.count
+Returns total message count
+
+.words
+Returns total words count

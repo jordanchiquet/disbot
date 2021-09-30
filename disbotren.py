@@ -29,6 +29,7 @@ from darksky.types import languages, units, weather
 from datetime import datetime, timedelta
 from discord import File
 from discord.ext import commands, tasks
+# from discord_slash import SlashCommand,SlashContext
 from googleapiclient.discovery import build #google-api-python-client
 from GoogleScraper import scrape_with_config, GoogleSearchError
 from googlesearch import search #google
@@ -60,6 +61,14 @@ from modules.youtube import youtubesearch
 from modules.zooo import zooo
 
 # sys.stdout = open('logfile.txt', 'w')
+
+
+logger = logging.getLogger('discord')
+logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
+
 
 messages = joined = 0
 client = discord.Client()
@@ -196,6 +205,32 @@ async def on_member_update(before, after):
             print("user " + str(before.id) + " changed name from one there's no record of to " + after.nick)
         nickcounterinit = wordcounter(before.id, before.server.id, after.nick, nicktally=True)
         nickcounterinit.countprocessor()
+
+msgCache = {} #blank dict for coupling ids with message content
+
+@bot.event
+async def on_message(message):
+    msgCache[message.id] = message.content #adds message content value to message.id key
+    channel = message.channel 
+    if message.author != bot.user: #verifies it isnt bothering to keep dictionary for itself
+        messageContent = message.content.lower() #converts string to lower case to avoid case conflict
+        if "love fucking my 18 year old stepsister" in messageContent:
+            msgCache[message.id] = message.content #adds message content value to message.id key
+            deleteID = [*msgCache.keys()][-1] 
+            deleteObj = await channel.fetch_message(deleteID)
+            await deleteObj.delete()
+            await channel.send("stepsister too old")
+
+@bot.event
+async def on_message(message):
+    channel = message.channel 
+    messageContent = message.content.lower()
+    if "love fucking my 18 year old stepsister" in messageContent:
+        deleteObj = await channel.fetch_message(message.id)
+        await deleteObj.delete()
+        await channel.send("stepsister too old")
+
+
 
 
 @bot.event
@@ -444,12 +479,18 @@ async def on_reaction_add(reaction, user):
     serverid = reaction.message.guild.id
     ts = message.created_at - timedelta(hours=5)
     messageuser = message.author
+    messageuserid = messageuser.id
     reactionuser = user.id
     emotecountinit = wordcounter(reactionuser, serverid, str(user), reacttally=True)
     emotecountinit.countprocessor()
     if reaction.emoji == '💬' and not user.bot:
         quote = message.content
-        sql = "INSERT INTO renarddb.quotes (user, quote, timestamp, serverid) VALUES (\"" + str(messageuser) + "\", \"" + str(quote) + "\", \"" + str(ts) + "\", \"" + str(serverid) + "\");"
+        dupecheck = "SELECT id FROM renarddb.quotes WHERE quote LIKE \"" + quote + "\""
+        mycursor.execute(dupecheck)
+        for x in mycursor:
+            await channel.send("this quote already exist as quote " + str(x[0]) + "!")
+            return
+        sql = "INSERT INTO renarddb.quotes (user, quote, timestamp, serverid, userid) VALUES (\"" + str(messageuser) + "\", \"" + str(quote) + "\", \"" + str(ts) + "\", \"" + str(serverid) + "\", \"" + str(messageuserid) + "\");"
         print("sql query:\n" + sql)
         mycursor.execute(sql)
         mydb.commit()
@@ -571,9 +612,18 @@ async def ping(ctx):
 
 
 @bot.command()
-async def strcheck(ctx):
-    print("strcheck: " + ctx.message.content[10:])
-    await ctx.send("```" + ctx.message.content[10:] + "```")
+async def strcheck(ctx, a):
+    if a == "raw":
+        usablestr = ((ctx.message.content).split(a))[1]
+        if usablestr[0] == " ":
+            usablestr = usablestr[0:]
+        await ctx.send(usablestr)
+    elif a is None:
+        usablestr = "no string to check detected"
+    else:
+        usablestr = "```" + ctx.message.content[10:] + "```"
+    print("strcheck: " + usablestr)
+    await ctx.send(usablestr)
 
 
 @bot.command()
@@ -920,6 +970,17 @@ async def enhance(ctx):
         await ctx.send(file=File(newfilepath))
 
 
+# @bot.command()
+# async def football(ctx, a):
+#     print("placeholder")
+#     if a == "submit":
+#         if ctx.message.author.id == 191688156427321344:
+#             usable = (ctx.message.content.split[a]).replace(" ","")
+#             sublist = usable.split(",")
+#         else:
+#             ctx.send("youve notten permission to to this")
+
+
 @bot.command()
 async def fox(ctx):
     foxr = requests.get('https://randomfox.ca/floof/')
@@ -1101,7 +1162,7 @@ async def quote(ctx, a: str = None, b: str = None):
             qlist.append(x)
         if ctx.channel.id != 649528092691529749:
             for x in qlist:
-                if "nigger" in str(x):
+                if "nigger" in str(x) or "faggot" in str(x):
                     qlist.remove(x)
         quoteunparsed = random.choice(qlist)
         print("made randome choice: [" + str(quoteunparsed) + "]")
@@ -1129,7 +1190,15 @@ async def quote(ctx, a: str = None, b: str = None):
             name = result[1]
             qtxt = result[2]
             date = result[3]
-            if len(qtxt) > 256:
+            if (len(qtxt) > 256 or 
+            ".bmp" in qtxt or
+            ".gif" in qtxt or
+            ".jpg" in qtxt or
+            ".jpeg" in qtxt or
+            ".png" in qtxt or 
+            ".webm" in qtxt or
+            ".webp" in qtxt or
+            ("<:" in qtxt and ">" in qtxt) ):
                 await ctx.send("\"" + qtxt + "\" | " + name + " | " + date[:16] + " | ID:" + str(qid))
                 return
             else:
@@ -1144,14 +1213,21 @@ async def quote(ctx, a: str = None, b: str = None):
             await ctx.send("Provide a quote to delete!!")
             return
         print("user wants to delete a quote: [" + b + "]")
-        sql = "SELECT * FROM renarddb.quotes WHERE id LIKE " + b
+        role = discord.utils.get(ctx.guild.roles, name="High Council of Emoji")
+        sql = "SELECT userid FROM renarddb.quotes WHERE id LIKE " + b
         mycursor.execute(sql)
         for x in mycursor:
-            delsql = "DELETE FROM renarddb.quotes WHERE id LIKE " + b
-            mycursor.execute(delsql)
-            mydb.commit()
-            await ctx.send("Quote " + b + " erased from the archive memory :).")
-            return
+            print(x)
+            # if user id etc ('sdsds',)
+            if int(x[0]) != ctx.message.author.id and role not in ctx.message.author.roles:
+                await ctx.send("only admins can remove other people's quotes!")
+                return
+            else:
+                delsql = "DELETE FROM renarddb.quotes WHERE id LIKE " + b
+                mycursor.execute(delsql)
+                mydb.commit()
+                await ctx.send("Quote " + b + " erased from the archive memory :).")
+                return
         else:
             await ctx.send("WTF i can't FUCKING find that one!?!?!?!?!")
     
