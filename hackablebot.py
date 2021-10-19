@@ -720,7 +720,13 @@ async def roll(ctx, a, b: str = None, c: str = None, d: str = None, e: str = Non
     if b is None or not b[0].isdigit():
         print("dice is one roll, with or without adv")
         rollinit0 = dice(a, b)
-        rollresult = rollinit0.roller()
+        if a.startswith("ab"):
+            rollresult = rollinit0.abilityroller()
+        else:
+            rollresult = rollinit0.roller()
+    elif a.startswith("ab"):
+        rollinit0 = dice(a,b)
+        rollresult = rollinit0.abilityroller()
     else:
         rollinit0 = dice(a)
         print("rollinit0 has launched")
