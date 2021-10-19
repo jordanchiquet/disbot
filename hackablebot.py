@@ -40,6 +40,7 @@ from modules.bingimageapi import bingimage #azure-cognitiveservices-search-image
 from modules.wordcounter import wordcounter
 from modules.dice import dice
 from modules.dickshadow import executeoverlay #Pillow #numpy #whapi
+from modules.facebookvidgrabber import embedgrabber
 from modules.figlet import figgletizer 
 from modules.giphy import getgif
 from modules.googleimageapi import imageget
@@ -208,6 +209,9 @@ async def on_message(message):
     user = (str(message.author)).split("#")[0]
     timeorig = (message.created_at - timedelta(hours=5))
     mclower = message.content.lower()
+    if ("facebook.com" in mclower) and ("https://" in mclower) and ("video" in mclower):
+        print("found it was an attempt to use facebook video")
+        await channel.send("computer think that's a facebook video? attempting to get embed link automatically... \n" + embedgrabber(mclower))
     mclower = mclower.replace("!","")
     print("serverid: " + str(serverid))
     # wordcounterinit = wordcounter(userid, serverid, user, mclower)
@@ -424,6 +428,7 @@ async def on_message(message):
         await channel.send(
         "ghay!!")
 
+
     youcomingremoves = {"?": "", "g": ""}
     mcloweryoucoming = mclower
     for i, j in youcomingremoves.items():
@@ -432,6 +437,7 @@ async def on_message(message):
     print(mclower)
     if mcloweryoucoming.endswith("u comin"):
         await channel.send(file=File("/home/ubuntu/disbot/picfolder/youcomin.png"))
+
     await bot.process_commands(message)
 
 
