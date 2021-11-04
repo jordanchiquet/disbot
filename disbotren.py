@@ -29,6 +29,7 @@ from darksky.types import languages, units, weather
 from datetime import datetime, timedelta
 from discord import File
 from discord.ext import commands, tasks
+# from discord_slash import SlashCommand,SlashContext
 from googleapiclient.discovery import build #google-api-python-client
 from GoogleScraper import scrape_with_config, GoogleSearchError
 from googlesearch import search #google
@@ -41,6 +42,7 @@ from modules.bingimageapi import bingimage #azure-cognitiveservices-search-image
 from modules.daydone import daydoneset, daydonecheck
 from modules.dice import dice
 from modules.dickshadow import executeoverlay #Pillow #numpy #whapi
+from modules.facebookvidgrabber import embedgrabber
 from modules.figlet import figgletizer 
 from modules.giphy import getgif
 from modules.googleimageapi import imageget
@@ -60,6 +62,14 @@ from modules.youtube import youtubesearch
 from modules.zooo import zooo
 
 # sys.stdout = open('logfile.txt', 'w')
+
+
+logger = logging.getLogger('discord')
+logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
+
 
 messages = joined = 0
 client = discord.Client()
@@ -141,6 +151,52 @@ async def commandRunningDictClear():
     chatLog.clear()
 
 
+@bot.command()
+async def cyberwar(ctx, a, b: str = None):
+    if ctx.author.id == 191688156427321344:
+        print("got jordan")
+        if b == "fire":
+            if a == "open":
+                cyberWarfareLoop.start(ctx.channel.id)
+            elif a == "cease":
+                print("got to cease")
+                cyberWarfareLoop.stop()
+                print("got ebyond cancel and nothing happen")
+    else:
+        await ctx.send("did you really think that would work")
+
+
+@tasks.loop(seconds=5.0)
+async def cyberWarfareLoop(cyberwarchannelid: int = None):
+    print("cyberwarfare engaged")
+    freaxchannel = bot.get_channel(cyberwarchannelid)
+    await freaxchannel.send("```* g o a t s e x * g o a t s e x * g o a t s e x *\n"
+                                "g                                               g\n" 
+                                "o /     \             \            /    \       o\n"
+                                "a|       |             \          |      |      a\n"
+                                "t|       `.             |         |       :     t\n"
+                                "s`        |             |        \|       |     s\n"
+                                "e \       | /       /  \\\   --__ \\       :    e\n"
+                                "x  \      \/   _--~~          ~--__| \     |    x\n"  
+                                "*   \      \_-~                    ~-_\    |    *\n"
+                                "g    \_     \        _.--------.______\|   |    g\n"
+                                "o      \     \______// _ ___ _ (_(__>  \   |    o\n"
+                                "a       \   .  C ___)  ______ (_(____>  |  /    a\n"
+                                "t       /\ |   C ____)/      \ (_____>  |_/     t\n"
+                                "s      / /\|   C_____)       |  (___>   /  \    s\n"
+                                "e     |   (   _C_____)\______/  // _/ /     \   e\n"
+                                "x     |    \  |__   \\_________// (__/       |  x\n"
+                                "*    | \    \____)   `----   --'             |  *\n"
+                                "g    |  \_          ___\       /_          _/ | g\n"
+                                "o   |              /    |     |  \            | o\n"
+                                "a   |             |    /       \  \           | a\n"
+                                "t   |          / /    |         |  \           |t\n"
+                                "s   |         / /      \__/\___/    |          |s\n"
+                                "e  |           /        |    |       |         |e\n"
+                                "x  |          |         |    |       |         |x\n"
+                                "* g o a t s e x * g o a t s e x * g o a t s e x *```")
+
+
 @bot.event
 async def on_member_update(before, after):
     if before.nick != after.nick:
@@ -150,6 +206,32 @@ async def on_member_update(before, after):
             print("user " + str(before.id) + " changed name from one there's no record of to " + after.nick)
         nickcounterinit = wordcounter(before.id, before.server.id, after.nick, nicktally=True)
         nickcounterinit.countprocessor()
+
+msgCache = {} #blank dict for coupling ids with message content
+
+@bot.event
+async def on_message(message):
+    msgCache[message.id] = message.content #adds message content value to message.id key
+    channel = message.channel 
+    if message.author != bot.user: #verifies it isnt bothering to keep dictionary for itself
+        messageContent = message.content.lower() #converts string to lower case to avoid case conflict
+        if "love fucking my 18 year old stepsister" in messageContent:
+            msgCache[message.id] = message.content #adds message content value to message.id key
+            deleteID = [*msgCache.keys()][-1] 
+            deleteObj = await channel.fetch_message(deleteID)
+            await deleteObj.delete()
+            await channel.send("stepsister too old")
+
+@bot.event
+async def on_message(message):
+    channel = message.channel 
+    messageContent = message.content.lower()
+    if "love fucking my 18 year old stepsister" in messageContent:
+        deleteObj = await channel.fetch_message(message.id)
+        await deleteObj.delete()
+        await channel.send("stepsister too old")
+
+
 
 
 @bot.event
@@ -170,6 +252,9 @@ async def on_message(message):
     user = (str(message.author)).split("#")[0]
     timeorig = (message.created_at - timedelta(hours=5))
     mclower = message.content.lower()
+    if ("facebook.com" in mclower) and ("https://" in mclower) and ("video" in mclower):
+        print("found it was an attempt to use facebook video")
+        await channel.send("computer think that's a facebook video? attempting to get embed link automatically... \n" + embedgrabber(mclower))
     mclower = mclower.replace("!","")
     print("serverid: " + str(serverid))
     wordcounterinit = wordcounter(userid, serverid, user, mclower)
@@ -181,6 +266,31 @@ async def on_message(message):
         if chatLog[-1] == chatLog[-2] and chatLog[-2] == chatLog[-3]:
             await channel.send(chatLog[-2])
             chatLog.clear()
+    if mclower.startswith(".del"):
+        quoteid = mclower.split(" ")[2]
+        quoteid = quoteid.replace("#","")
+        print("user wants to delete a quote: [" + quoteid + "]")
+        role = discord.utils.get(message.guild.roles, name="High Council of Emoji")
+        sql = "SELECT userid FROM renarddb.quotes WHERE id LIKE " + quoteid
+        mydb = mysql.connector.connect(
+        host='18.216.39.250',
+        user='dbuser',
+        passwd='e4miqtng')
+        mycursor = mydb.cursor(buffered=True)
+        serverid = message.guild.id
+        mycursor.execute(sql)
+        for x in mycursor:
+            print(x)
+            # if user id etc ('sdsds',)
+            if int(x[0]) != message.author.id and role not in message.author.roles:
+                await channel.send("only admins can remove other people's quotes!")
+                return
+            else:
+                delsql = "DELETE FROM renarddb.quotes WHERE id LIKE " + quoteid
+                mycursor.execute(delsql)
+                mydb.commit()
+                await channel.send("Quote " + quoteid + " erased from the archive memory :).")
+                return
     if not mclower.startswith(".") and ("belay that order" in mclower or "cancel that order" in mclower or "cancel that command" in mclower or "delete that timer" in mclower
      or "cancel that timer" in mclower or "erase that timer" in mclower):
         print("belay that in command, checking commandRunning Dict")
@@ -382,6 +492,8 @@ async def on_message(message):
         mcloweryoucoming = mcloweryoucoming.replace(i, j)
     if mcloweryoucoming.endswith("u comin"):
         await channel.send(file=File("/home/ubuntu/disbot/picfolder/youcomin.png"))
+    if "facebook.com" in mclower and ("video" in mclower or "story" in mclower):
+        await channel.send("computer think that's a facebook video? attempting to get embed link automatically... \n" + embedgrabber(mclower))
     await bot.process_commands(message)
 
 
@@ -398,12 +510,18 @@ async def on_reaction_add(reaction, user):
     serverid = reaction.message.guild.id
     ts = message.created_at - timedelta(hours=5)
     messageuser = message.author
+    messageuserid = messageuser.id
     reactionuser = user.id
     emotecountinit = wordcounter(reactionuser, serverid, str(user), reacttally=True)
     emotecountinit.countprocessor()
     if reaction.emoji == '💬' and not user.bot:
         quote = message.content
-        sql = "INSERT INTO renarddb.quotes (user, quote, timestamp, serverid) VALUES (\"" + str(messageuser) + "\", \"" + str(quote) + "\", \"" + str(ts) + "\", \"" + str(serverid) + "\");"
+        dupecheck = "SELECT id FROM renarddb.quotes WHERE quote LIKE \"" + quote + "\""
+        mycursor.execute(dupecheck)
+        for x in mycursor:
+            await channel.send("this quote already exist as quote " + str(x[0]) + "!")
+            return
+        sql = "INSERT INTO renarddb.quotes (user, quote, timestamp, serverid, userid) VALUES (\"" + str(messageuser) + "\", \"" + str(quote) + "\", \"" + str(ts) + "\", \"" + str(serverid) + "\", \"" + str(messageuserid) + "\");"
         print("sql query:\n" + sql)
         mycursor.execute(sql)
         mydb.commit()
@@ -525,9 +643,18 @@ async def ping(ctx):
 
 
 @bot.command()
-async def strcheck(ctx):
-    print("strcheck: " + ctx.message.content[10:])
-    await ctx.send("```" + ctx.message.content[10:] + "```")
+async def strcheck(ctx, a):
+    if a == "raw":
+        usablestr = ((ctx.message.content).split(a))[1]
+        if usablestr[0] == " ":
+            usablestr = usablestr[0:]
+        await ctx.send(usablestr)
+    elif a is None:
+        usablestr = "no string to check detected"
+    else:
+        usablestr = "```" + ctx.message.content[10:] + "```"
+    print("strcheck: " + usablestr)
+    await ctx.send(usablestr)
 
 
 @bot.command()
@@ -583,14 +710,14 @@ async def help(ctx):
 @bot.command()
 async def vers(ctx):
     embed = discord.Embed(title="ROBORENARD MK II", description="Gaming forever in paradise", color=0xee657)
-    embed.add_field(name="Version", value="0.123456789")
+    embed.add_field(name="Version", value="1.3")
     await ctx.send(embed=embed)
 
 
 # ------------------------------------------- #
 # practical functions
 
-@tasks.loop(seconds=60.0)
+@tasks.loop(seconds=300.0)
 async def daycheck():
     print("here")
     dayint = (now.weekday())
@@ -708,7 +835,13 @@ async def roll(ctx, a, b: str = None, c: str = None, d: str = None, e: str = Non
     if b is None or not b[0].isdigit():
         print("dice is one roll, with or without adv")
         rollinit0 = dice(a, b)
-        rollresult = rollinit0.roller()
+        if a.startswith("ab"):
+            rollresult = rollinit0.abilityroller()
+        else:
+            rollresult = rollinit0.roller()
+    elif a.startswith("ab"):
+        rollinit0 = dice(a,b)
+        rollresult = rollinit0.abilityroller()
     else:
         rollinit0 = dice(a)
         print("rollinit0 has launched")
@@ -872,6 +1005,17 @@ async def enhance(ctx):
         await ctx.send("some ting wong...")
     else:
         await ctx.send(file=File(newfilepath))
+
+
+# @bot.command()
+# async def football(ctx, a):
+#     print("placeholder")
+#     if a == "submit":
+#         if ctx.message.author.id == 191688156427321344:
+#             usable = (ctx.message.content.split[a]).replace(" ","")
+#             sublist = usable.split(",")
+#         else:
+#             ctx.send("youve notten permission to to this")
 
 
 @bot.command()
@@ -1053,6 +1197,10 @@ async def quote(ctx, a: str = None, b: str = None):
         mycursor.execute(sql)
         for x in mycursor:
             qlist.append(x)
+        if ctx.channel.id != 649528092691529749:
+            for x in qlist:
+                if "nigger" in str(x) or "faggot" in str(x):
+                    qlist.remove(x)
         quoteunparsed = random.choice(qlist)
         print("made randome choice: [" + str(quoteunparsed) + "]")
         qid = quoteunparsed[0]
@@ -1079,7 +1227,15 @@ async def quote(ctx, a: str = None, b: str = None):
             name = result[1]
             qtxt = result[2]
             date = result[3]
-            if len(qtxt) > 256:
+            if (len(qtxt) > 256 or 
+            ".bmp" in qtxt or
+            ".gif" in qtxt or
+            ".jpg" in qtxt or
+            ".jpeg" in qtxt or
+            ".png" in qtxt or 
+            ".webm" in qtxt or
+            ".webp" in qtxt or
+            ("<:" in qtxt and ">" in qtxt) ):
                 await ctx.send("\"" + qtxt + "\" | " + name + " | " + date[:16] + " | ID:" + str(qid))
                 return
             else:
@@ -1094,19 +1250,30 @@ async def quote(ctx, a: str = None, b: str = None):
             await ctx.send("Provide a quote to delete!!")
             return
         print("user wants to delete a quote: [" + b + "]")
-        sql = "SELECT * FROM renarddb.quotes WHERE id LIKE " + b
+        role = discord.utils.get(ctx.guild.roles, name="High Council of Emoji")
+        sql = "SELECT userid FROM renarddb.quotes WHERE id LIKE " + b
         mycursor.execute(sql)
         for x in mycursor:
-            delsql = "DELETE FROM renarddb.quotes WHERE id LIKE " + b
-            mycursor.execute(delsql)
-            mydb.commit()
-            await ctx.send("Quote " + b + " erased from the archive memory :).")
+            print(x)
+            # if user id etc ('sdsds',)
+            if int(x[0]) != ctx.message.author.id and role not in ctx.message.author.roles:
+                await ctx.send("only admins can remove other people's quotes!")
+                return
+            else:
+                delsql = "DELETE FROM renarddb.quotes WHERE id LIKE " + b
+                mycursor.execute(delsql)
+                mydb.commit()
+                await ctx.send("Quote " + b + " erased from the archive memory :).")
+                return
         else:
             await ctx.send("WTF i can't FUCKING find that one!?!?!?!?!")
     
     if a == "list":
         if ctx.guild.id == 237397384676507651:
-            await ctx.send("http://18.216.39.250:3000/")
+            if ctx.channel.id == 649528092691529749:
+                await ctx.send("http://18.216.39.250:3000/")
+            else:
+                await ctx.send("ask your mother")
         else:
             await ctx.send("quote list for your server still WIP")
 

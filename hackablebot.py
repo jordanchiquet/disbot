@@ -40,6 +40,7 @@ from modules.bingimageapi import bingimage #azure-cognitiveservices-search-image
 from modules.wordcounter import wordcounter
 from modules.dice import dice
 from modules.dickshadow import executeoverlay #Pillow #numpy #whapi
+from modules.facebookvidgrabber import embedgrabber
 from modules.figlet import figgletizer 
 from modules.giphy import getgif
 from modules.googleimageapi import imageget
@@ -99,6 +100,51 @@ async def on_message_delete(message):
         print(dellog)
         await dellog.delete()
         del deletelog[message.id]
+
+@bot.command()
+async def cyberwar(ctx, a, b: str = None):
+    if ctx.author.id == 191688156427321344:
+        print("got jordan")
+        if b == "fire":
+            if a == "open":
+                cyberWarfareLoop.start(ctx.channel.id)
+            elif a == "cease":
+                print("got to cease")
+                cyberWarfareLoop.stop()
+                print("got ebyond cancel and nothing happen")
+    else:
+        await ctx.send("did you really think that would work")
+
+
+@tasks.loop(seconds=5.0)
+async def cyberWarfareLoop(cyberwarchannelid: int = None):
+    print("cyberwarfare engaged")
+    freaxchannel = bot.get_channel(cyberwarchannelid)
+    await freaxchannel.send("```* g o a t s e x * g o a t s e x * g o a t s e x *\n"
+                                "g                                               g\n" 
+                                "o /     \             \            /    \       o\n"
+                                "a|       |             \          |      |      a\n"
+                                "t|       `.             |         |       :     t\n"
+                                "s`        |             |        \|       |     s\n"
+                                "e \       | /       /  \\\   --__ \\       :    e\n"
+                                "x  \      \/   _--~~          ~--__| \     |    x\n"  
+                                "*   \      \_-~                    ~-_\    |    *\n"
+                                "g    \_     \        _.--------.______\|   |    g\n"
+                                "o      \     \______// _ ___ _ (_(__>  \   |    o\n"
+                                "a       \   .  C ___)  ______ (_(____>  |  /    a\n"
+                                "t       /\ |   C ____)/      \ (_____>  |_/     t\n"
+                                "s      / /\|   C_____)       |  (___>   /  \    s\n"
+                                "e     |   (   _C_____)\______/  // _/ /     \   e\n"
+                                "x     |    \  |__   \\_________// (__/       |  x\n"
+                                "*    | \    \____)   `----   --'             |  *\n"
+                                "g    |  \_          ___\       /_          _/ | g\n"
+                                "o   |              /    |     |  \            | o\n"
+                                "a   |             |    /       \  \           | a\n"
+                                "t   |          / /    |         |  \           |t\n"
+                                "s   |         / /      \__/\___/    |          |s\n"
+                                "e  |           /        |    |       |         |e\n"
+                                "x  |          |         |    |       |         |x\n"
+                                "* g o a t s e x * g o a t s e x * g o a t s e x *```")
 
 
 @bot.event
@@ -163,6 +209,9 @@ async def on_message(message):
     user = (str(message.author)).split("#")[0]
     timeorig = (message.created_at - timedelta(hours=5))
     mclower = message.content.lower()
+    if ("facebook.com" in mclower) and ("https://" in mclower) and ("video" in mclower):
+        print("found it was an attempt to use facebook video")
+        await channel.send("computer think that's a facebook video? attempting to get embed link automatically... \n" + embedgrabber(mclower))
     mclower = mclower.replace("!","")
     print("serverid: " + str(serverid))
     # wordcounterinit = wordcounter(userid, serverid, user, mclower)
@@ -379,6 +428,7 @@ async def on_message(message):
         await channel.send(
         "ghay!!")
 
+
     youcomingremoves = {"?": "", "g": ""}
     mcloweryoucoming = mclower
     for i, j in youcomingremoves.items():
@@ -387,6 +437,7 @@ async def on_message(message):
     print(mclower)
     if mcloweryoucoming.endswith("u comin"):
         await channel.send(file=File("/home/ubuntu/disbot/picfolder/youcomin.png"))
+
     await bot.process_commands(message)
 
 
@@ -675,7 +726,13 @@ async def roll(ctx, a, b: str = None, c: str = None, d: str = None, e: str = Non
     if b is None or not b[0].isdigit():
         print("dice is one roll, with or without adv")
         rollinit0 = dice(a, b)
-        rollresult = rollinit0.roller()
+        if a.startswith("ab"):
+            rollresult = rollinit0.abilityroller()
+        else:
+            rollresult = rollinit0.roller()
+    elif a.startswith("ab"):
+        rollinit0 = dice(a,b)
+        rollresult = rollinit0.abilityroller()
     else:
         rollinit0 = dice(a)
         print("rollinit0 has launched")

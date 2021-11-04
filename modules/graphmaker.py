@@ -5,29 +5,27 @@ import numpy as np
 
 def getgraph(column, serverid, rawcount: bool = False):
     usersinit = renardusers(1, column, serverid=serverid)
-    totalcountinit = renardusers(1, "wordcount", serverid=serverid)
     graphdatarawcolumn = usersinit.getgraphdata()
     if rawcount:
         finaldata = graphdatarawcolumn
     if not rawcount:
-        graphdatarawmsgcount = totalcountinit.getgraphdata()
+        graphdatarawmsgcount = usersinit.getwordcount()
         print(graphdatarawmsgcount)
         columnmembervalues = []
         columnnumvalues = []
         msgcountnumvalues = []
         for x in graphdatarawcolumn:
-            columnmembervalues.append(x[0])
-            columnnumvalues.append(x[1])
+                columnmembervalues.append(x[0])
+                columnnumvalues.append(x[1])
         for x in graphdatarawmsgcount:
             msgcountnumvalues.append(x[1])
         ratiovalues = list(np.array(columnnumvalues) / np.array(msgcountnumvalues))
         ratiovalues[ratiovalues != 0]
         finaldata = createtuple(columnmembervalues, ratiovalues)
-    # print(graphdataraw
-    # column)
     columns = ("", column)
     graphdata = pd.DataFrame.from_records(finaldata, columns = columns)
     graphdata.plot(x = "", y = column, kind = "bar")
+    print("got this far")
     plt.tight_layout()
     plt.savefig('graph.png')
     # return(graphdata)
