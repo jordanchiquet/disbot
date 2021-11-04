@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 2021-11-04 00:13:43,858:WARNING:discord.client: PyNaCl is not installed, voice will NOT be supported
 2021-11-04 00:13:43,907:DEBUG:discord.client: on_ready has successfully been registered as an event
 2021-11-04 00:13:43,907:DEBUG:discord.client: on_message_delete has successfully been registered as an event
@@ -46,6 +47,8 @@ Traceback (most recent call last):
     await self.coro(*args, **kwargs)
   File "e:/Renard/disbot/disbotren.py", line 760, in timercheck
 =======
+=======
+>>>>>>> 6396f7da16faa8936aa3f47e33fc2a7cc484e75a
 2021-10-19 15:51:13,399:WARNING:discord.client: PyNaCl is not installed, voice will NOT be supported
 2021-10-19 15:51:13,433:DEBUG:discord.client: on_ready has successfully been registered as an event
 2021-10-19 15:51:13,433:DEBUG:discord.client: on_message_delete has successfully been registered as an event
@@ -92,6 +95,9 @@ Traceback (most recent call last):
   File "C:\Users\jorda\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.8_qbz5n2kfra8p0\LocalCache\local-packages\Python38\site-packages\discord\ext\tasks\__init__.py", line 73, in _loop
     await self.coro(*args, **kwargs)
   File "e:/Renard/disbot/disbotren.py", line 735, in timercheck
+<<<<<<< HEAD
+>>>>>>> 6396f7da16faa8936aa3f47e33fc2a7cc484e75a
+=======
 >>>>>>> 6396f7da16faa8936aa3f47e33fc2a7cc484e75a
     response = timercheckinit.timercheck()
   File "e:\Renard\disbot\modules\timermod\timercl.py", line 481, in timercheck
@@ -101,6 +107,7 @@ Traceback (most recent call last):
   File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.8_3.8.2800.0_x64__qbz5n2kfra8p0\lib\_strptime.py", line 349, in _strptime
     raise ValueError("time data %r does not match format %r" %
 ValueError: time data '29 22:00:00.000000.000000' does not match format '%Y-%m-%d %H:%M:%S.%f'
+<<<<<<< HEAD
 <<<<<<< HEAD
 2021-11-04 00:13:47,775:DEBUG:discord.client: Dispatching event socket_raw_receive
 2021-11-04 00:13:47,775:DEBUG:discord.gateway: For Shard ID None: WebSocket Event: {'t': 'MESSAGE_CREATE', 's': 4, 'op': 0, 'd': {'type': 0, 'tts': False, 'timestamp': '2021-11-04T05:13:47.465000+00:00', 'referenced_message': None, 'pinned': False, 'mentions': [], 'mention_roles': [], 'mention_everyone': False, 'member': {'roles': [], 'mute': False, 'joined_at': '2019-07-15T20:07:08.811000+00:00', 'hoisted_role': None, 'deaf': False}, 'id': '905686244246290432', 'flags': 0, 'embeds': [{'type': 'rich', 'title': 'Computer Online Mode:', 'description': '[ON] OFF', 'color': 976471}], 'edited_timestamp': None, 'content': '', 'components': [], 'channel_id': '600430089519497235', 'author': {'username': 'RoboRenard', 'public_flags': 0, 'id': '598924849058021393', 'discriminator': '5566', 'bot': True, 'avatar': '2045bc1abd243007aae433b3ac612d6a'}, 'attachments': [], 'guild_id': '237397384676507651'}}
@@ -146,6 +153,8 @@ ValueError: time data '29 22:00:00.000000.000000' does not match format '%Y-%m-%
 2021-11-04 00:14:50,209:INFO:discord.client: Cleaning up after 6 tasks.
 2021-11-04 00:14:50,398:INFO:discord.client: Closing the event loop.
 =======
+=======
+>>>>>>> 6396f7da16faa8936aa3f47e33fc2a7cc484e75a
 2021-10-19 15:51:17,082:DEBUG:discord.http: POST https://discordapp.com/api/v7/channels/600430089519497235/messages with {"embed":{"color":976471,"type":"rich","description":" [ON] OFF ","title":"Computer Online Mode:"}} has returned 200
 2021-10-19 15:51:17,082:DEBUG:discord.http: POST https://discordapp.com/api/v7/channels/600430089519497235/messages has received {'id': '900123983045853234', 'type': 0, 'content': '', 'channel_id': '600430089519497235', 'author': {'id': '598924849058021393', 'username': 'RoboRenard', 'avatar': '6f9f730ed1e126018500ebcc4a1ec708', 'discriminator': '5566', 'public_flags': 0, 'bot': True}, 'attachments': [], 'embeds': [{'type': 'rich', 'title': 'Computer Online Mode:', 'description': '[ON] OFF', 'color': 976471}], 'mentions': [], 'mention_roles': [], 'pinned': False, 'mention_everyone': False, 'tts': False, 'timestamp': '2021-10-19T20:51:21.053000+00:00', 'edited_timestamp': None, 'flags': 0, 'components': [], 'referenced_message': None}
 2021-10-19 15:51:17,082:DEBUG:discord.client: Dispatching event socket_raw_receive
@@ -172,4 +181,7 @@ ValueError: time data '29 22:00:00.000000.000000' does not match format '%Y-%m-%
 2021-10-19 15:51:32,023:INFO:discord.client: Cleaning up tasks.
 2021-10-19 15:51:32,023:INFO:discord.client: Cleaning up after 6 tasks.
 2021-10-19 15:51:32,222:INFO:discord.client: Closing the event loop.
+<<<<<<< HEAD
+>>>>>>> 6396f7da16faa8936aa3f47e33fc2a7cc484e75a
+=======
 >>>>>>> 6396f7da16faa8936aa3f47e33fc2a7cc484e75a
