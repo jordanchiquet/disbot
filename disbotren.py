@@ -273,7 +273,7 @@ async def on_message(message):
         role = discord.utils.get(message.guild.roles, name="High Council of Emoji")
         sql = "SELECT userid FROM renarddb.quotes WHERE id LIKE " + quoteid
         mydb = mysql.connector.connect(
-        host='18.216.39.250',
+        host='3.144.163.74',
         user='dbuser',
         passwd='e4miqtng')
         mycursor = mydb.cursor(buffered=True)
@@ -318,7 +318,7 @@ async def on_message(message):
                 await channel.send("TRANSPHASIC PAYLOAD DROPPED... MESSAGE OBLITERATED")
                 return
             mydb = mysql.connector.connect(
-                host='18.216.39.250',
+                host='3.144.163.74',
                 user='dbuser',
                 passwd='e4miqtng')
             mycursor = mydb.cursor()
@@ -500,7 +500,7 @@ async def on_message(message):
 @bot.event
 async def on_reaction_add(reaction, user):
     mydb = mysql.connector.connect(
-    host='18.216.39.250',
+    host='3.144.163.74',
     user='dbuser',
     passwd='e4miqtng')
     mycursor = mydb.cursor(buffered=True)
@@ -558,7 +558,7 @@ async def on_reaction_add(reaction, user):
 @bot.event
 async def on_reaction_remove(reaction, user):
     mydb = mysql.connector.connect(
-    host='18.216.39.250',
+    host='3.144.163.74',
     user='dbuser',
     passwd='e4miqtng')
     mycursor = mydb.cursor(buffered=True)
@@ -1186,7 +1186,7 @@ async def qp(ctx):
 @bot.command()
 async def quote(ctx, a: str = None, b: str = None):
     mydb = mysql.connector.connect(
-    host='18.216.39.250',
+    host='3.144.163.74',
     user='dbuser',
     passwd='e4miqtng')
     mycursor = mydb.cursor(buffered=True)
@@ -1271,7 +1271,7 @@ async def quote(ctx, a: str = None, b: str = None):
     if a == "list":
         if ctx.guild.id == 237397384676507651:
             if ctx.channel.id == 649528092691529749:
-                await ctx.send("http://18.216.39.250:3000/")
+                await ctx.send("http://3.144.163.74:3000/")
             else:
                 await ctx.send("ask your mother")
         else:

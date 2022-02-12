@@ -4,7 +4,7 @@ import random
 
 def getquote(user: str = None, id: str = None):
     mydb = mysql.connector.connect(
-    host='18.216.39.250',
+    host='3.144.163.74',
     user='dbuser',
     passwd='e4miqtng')
     mycursor = mydb.cursor(buffered=True)

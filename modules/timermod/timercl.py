@@ -290,7 +290,7 @@ class timercl:
                     timepop = datestr + " " + timedigit + ":00.000000"
         print("timepop: [" + timepop + "]")
         mydb = mysql.connector.connect(
-            host='18.216.39.250',
+            host='3.144.163.74',
             user='dbuser',
             passwd='e4miqtng')
         mycursor = mydb.cursor()
@@ -466,7 +466,7 @@ class timercl:
         checknow = datetime.now() - timedelta(hours=5)
         print("Timer check starting... [" + str(checknow) + "]")
         mydb = mysql.connector.connect(
-            host='18.216.39.250',
+            host='3.144.163.74',
             user='dbuser',
             passwd='e4miqtng')
         mycursor = mydb.cursor(buffered=True)

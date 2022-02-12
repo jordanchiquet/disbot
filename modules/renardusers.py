@@ -29,7 +29,7 @@ class renardusers:
         else:
             print("something wrong with serverid in users module chief")
         self.mydb = mysql.connector.connect(
-        host='18.216.39.250',
+        host='3.144.163.74',
         user='dbuser',
         passwd='e4miqtng')     
     
@@ -138,7 +138,7 @@ class renardusers:
 
     def sqltest(self, user):
         mydb = mysql.connector.connect(
-        host='18.216.39.250',
+        host='3.144.163.74',
         user='dbuser',
         passwd='e4miqtng')
         mycursor = mydb.cursor()
