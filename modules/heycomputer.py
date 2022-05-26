@@ -1,4 +1,3 @@
-from modules.bingimageapi import bingimage
 from modules.getquote import getquote
 from modules.giphy import getgif
 from modules.googleimageapi import imageget
@@ -177,7 +176,7 @@ class heycomputer:
         if filetype == "gif":
             return(getgif(imgquery))
         else:
-            print("starting bingimage with query: [" + imgquery + "]")
+            print("starting image search with query: [" + imgquery + "]")
             return(imageget(imgquery, filetype))
     
 

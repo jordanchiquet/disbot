@@ -1,44 +1,42 @@
 #!/usr/bin/env python3
 
+#TODO: pipdependencies script
+#TODO: venv on aws
 
 import asyncio
 import codecs
 import csv
 import datetime
-import discord
+import discord #discord
 import json
 import logging
 import os, os.path
-import mysql.connector
-import nltk
+import mysql.connector #mysql-connector-python 
+import nltk #nltk
 import random
 import re
-from pyasn1.type.univ import Boolean
+from pyasn1.type.univ import Boolean #pyasn1
 import requests
 import ssl
 import sys
-import tenorpy #tenorpy
+# import tenorpy #tenorpy TODO: deprecated... net to switch to TenGiphPy for gifs
 import threading
 import urllib.parse
 import urllib.request
 import wikipediaapi #wikipedia-api
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup #bs4
 from collections import OrderedDict
-from darksky.api import DarkSky, DarkSkyAsync #darksky_weather
-from darksky.types import languages, units, weather
 from datetime import datetime, timedelta
 from discord import File
 from discord.ext import commands, tasks
 # from discord_slash import SlashCommand,SlashContext
 from googleapiclient.discovery import build #google-api-python-client
-from GoogleScraper import scrape_with_config, GoogleSearchError
+# from GoogleScraper import scrape_with_config, GoogleSearchError TODO: am i even using this
 from googlesearch import search #google
 from nltk.corpus import brown
-from urlextract import URLExtract
-from uszipcode import SearchEngine
+from urlextract import URLExtract #urlextract
 
 
-from modules.bingimageapi import bingimage #azure-cognitiveservices-search-imagesearch
 from modules.daydone import daydoneset, daydonecheck
 from modules.dice import dice
 from modules.dickshadow import executeoverlay #Pillow #numpy #whapi
@@ -55,7 +53,6 @@ from modules.timermod.timercl import timercl
 from modules.timermod.timeparser import timeparser
 from modules.todo import renardtodo
 from modules.warzone import warzonestats
-from modules.weather import weatherget
 from modules.wikihow import wikihow
 from modules.wordcounter import wordcounter
 from modules.youtube import youtubesearch
@@ -1427,6 +1424,8 @@ async def g(ctx):
 
 @bot.command()
 async def gif(ctx, a: str = None, b: str = None):
+    #TODO: upgrade to TenGiphPy
+    await ctx.send("this command is being upgraded, please be patient with jordan")
     reptilelist = ["lizard", "gecko", "reptile", "geico"]
     geckotriggers = ["lizard dance", "gecko dance"]
     if b is not None:
@@ -1520,32 +1519,6 @@ async def ud_error(ctx, error):
     if isinstance(error, commands.CommandInvokeError):
         delcmd = await ctx.send("I CANT FIND THIS WORD SOMEBODY HELP ME")
         deletelog[ctx.message.id] = delcmd
-
-
-@bot.command()
-async def w(ctx, a: str = None, b: str = None):
-    userid = ctx.message.author.id
-    reg = False
-    if a == "set" or a == "reg" or a == "register":
-        reg = True
-        userzip = b
-        await ctx.send(weatherget(userid, userzip, reg))
-    else:
-        userzip = a
-        result = (weatherget(userid, userzip, reg))
-        if "|" in result:
-            results = (weatherget(userid, userzip, reg).split("|"))
-            city = results[0]
-            wsum = results[1]
-            wtemp = results[2]
-            wfeel = results[3]
-            wfore = results[4]
-            embed = discord.Embed(title=city, description=wsum + ", "+ wtemp + "\n" +
-                                    "Feels like: " + wfeel, color=0x800080)
-            embed.add_field(name="Forecast:", value=wfore)
-            await ctx.send(embed=embed)
-        else:
-            await ctx.send(result)
 
 
 @bot.command()
