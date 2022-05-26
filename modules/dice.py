@@ -68,7 +68,10 @@ class dice:
         if modifier == 0:
             return(str(addsum) + " " + str(reslist) + "|" + d)
         else:
-            return(str(addsum) + " " + str(reslist) + " " + strmodifier + " " + modifier + "|" + d)
+            modaddendum =(" " + strmodifier + " *" + modifier + "*")
+            resliststr = str(reslist).replace("]", "")
+            returnstr = ("**" + str(addsum) + "**  " + resliststr + modaddendum + "]")
+            return(returnstr + "|" + d)
 
 
     def roller(self):
