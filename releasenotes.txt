@@ -1,0 +1,2 @@
+- altered syntax of dice roll returns for readability 
+- removed deprecated packages and code

@@ -1,0 +1,132 @@
+        #with open('d:/renard/disbot/dognuts.json', 'w', encoding='utf-8') as f:
+         #   json.dump(gifurl, f, ensure_ascii=False, indent=4)
+
+
+
+final sql error to end the night:
+ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/run/mysqld/mysqld.sock' (2)
+
+         
+ /var/lib/mysql/ 
+
+1. "sudo nano /etc/mysql/mariadb.cnf" (this file) to set global defaults,
+# 2. "sudo nano /etc/mysql/conf.d/*.cnf" to set global options.
+# 3. "sudo nano /etc/mysql/mariadb.conf.d/*.cnf" to set MariaDB-only options.
+# 4. "sudo nano ~/.my.cnf" to set user-specific options.
+
+[client-server]
+port=3306
+socket=/var/lib/mysql-backup/mysql.sock
+
+[mysqld]
+datadir=/var/lib/mysql-backup/
+socket=/var/lib/mysql-backup/mysql.sock
+
+[client]
+port=3306
+socket=/var/lib/mysql-backup/mysql.sock
+# Import all .cnf files from configuration directory
+!includedir /etc/mysql/conf.d/
+!includedir /etc/mysql/mariadb.conf.d/
+
+
+!includedir /etc/mysql/conf.d/
+!includedir /etc/mysql/mariadb.conf.d/
+
+/etc/mysql/mysql.conf.d/mysqld.cnf
+
+edit log
+
+1 - /etc/mysql/conf.d/mysql.cnf added 
+        "datadir=/var/lib/mysql-backup/
+        socket=/var/lib/mysql-backup/mysql.sock"
+        under [mysql]
+
+2 - /etc/init/mysql.conf added
+        "| --init-file /etc/mysql/mariadb.cnf"
+         under mysqld function before "}" close
+
+3. /etc/mysql/conf.d/mysql.cnf removed
+        "datadir" line from under [mysql]
+
+4. /etc/apparmor.d/usr.sbin.mysqld added NEXT DAY REMOVED
+        "/run/mysqld/mysql.pid rw,
+        /run/mysqld/mysqld.sock rw,"
+        to bottom of file
+
+5. /etc/mysql/mariadb.cnf changed sock location to var/run/mysqld/mysqld.sock
+
+
+!includedir /etc/mysql/conf.d/
+!includedir /etc/mysql/mariadb.conf.d/
+
+mv -vi /var/lib/mysql/tc.log /root
+
+
+stat: No such file or directory
+Can't stat pages-ibdata1/FIL_PAGE_INDEX/0000000000000000.page
+
+
+
+0000000000000194.page
+
+
+sudo cp /undrop/mysql-backup/renarddb/quotes.ibd /var/lib/mysql/renarddb
+
+pages-quotes.ibd/FIL_PAGE_INDEX/0000000000000194.page
+
+/undrop/undrop-for-innodb/pages-quotes.ibd/FIL_PAGE_TYPE_BLOB/0000000000000004.page
+
+/undrop/quotes.sql
+
+
+/undrop/mysql-backup/renarddb/quotes.ibd
+
+sudo ./c_parser -V -f pages-quotes.ibd/FIL_PAGE_INDEX/0000000000000194.page -t quotes2.sql -b  pages-quotes.ibd/FIL_PAGE_TYPE_BLOB > quotes 2> quotes.sql
+
+sudo rm quotes && sudo rm quotes.sql
+
+
+ERROR 1808 (HY000): Schema mismatch (Clustered index validation failed. Because the .cfg file is missing, table definition of the IBD file could be different.
+
+
+CREATE TABLE `quotes`(
+        `id` INT NOT NULL,
+        `user` VARCHAR(45),
+        `quote` VARCHAR(1024),
+        `timestamp` VARCHAR(45),
+        `serverid` VARCHAR(64),
+        `userid` VARCHAR(64) NOT NULL,
+        PRIMARY KEY (`id`)
+); ENGINE=I
+
+
+CREATE TABLE `quotes`(
+        `id` INT NOT NULL,
+        `user` VARCHAR(45) CHARACTER SET 'latin1' COLLATE 'latin1_swedish_ci',
+        `quote` VARCHAR(1024) CHARACTER SET 'latin1' COLLATE 'latin1_swedish_ci',
+        `timestamp` VARCHAR(45) CHARACTER SET 'latin1' COLLATE 'latin1_swedish_ci',
+        `serverid` VARCHAR(64) CHARACTER SET 'latin1' COLLATE 'latin1_swedish_ci',
+        `userid` VARCHAR(64) CHARACTER SET 'latin1' COLLATE 'latin1_swedish_ci' NOT NULL,
+        PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+UTF8MB4
+
+
+LOAD DATA LOCAL INFILE '/undrop/quotes' REPLACE INTO TABLE `quotes` CHARACTER SET UTF8 FIELDS TERMINATED BY '\t' OPTIONALLY ENCLOSED BY '"' LINES STARTING BY 'quotes\t' (`id`, `user`, `quote`, `timestamp`, `serverid`, `userid`);
+
+
+SET FOREIGN_KEY_CHECKS=0;
+LOAD DATA LOCAL INFILE '/undrop/undrop-for-innodb/quotes4' REPLACE INTO TABLE `quotes` CHARACTER SET UTF8 FIELDS TERMINATED BY '\t' OPTIONALLY ENCLOSED BY '"' LINES STARTING BY 'quotes\t' (`id`, `user`, `quote`, `timestamp`, `serverid`, `userid`);
+
+SET FOREIGN_KEY_CHECKS=0;
+LOAD DATA LOCAL INFILE '/undrop/undrop-for-innodb/quotes5' REPLACE INTO TABLE `quotes` CHARACTER SET UTF8 FIELDS TERMINATED BY '\t' OPTIONALLY ENCLOSED BY '"' LINES STARTING BY 'quotes\t' (`id`, `user`, `quote`, `timestamp`, `serverid`, `userid`);
+
+SET FOREIGN_KEY_CHECKS=0;
+LOAD DATA LOCAL INFILE '/undrop/undrop-for-innodb/quotes5' REPLACE INTO TABLE `quotes` CHARACTER SET UTF8 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES STARTING BY '/n' (`id`, `user`, `quote`, `timestamp`, `serverid`, `userid`);
+
+
+ExecStart=/usr/bin/npm start /home/ubuntu/disbot/web/app.js
+
+tar -xf node-v16.15.1.tar.gz

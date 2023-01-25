@@ -1,0 +1,9 @@
+hackablebot Boot
+ping: [0.05940659996122122]
+2022-08-01 09:19:31.357854
+-----------------------------------
+clearing commandRunningDict (dict for belay order shit)
+bot command logged
+Jordan#1887
+serverid: 237397384676507651
+bot command logged

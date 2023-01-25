@@ -1,0 +1,23 @@
+2022-10-23 01:45:07,735:WARNING:discord.client: PyNaCl is not installed, voice will NOT be supported
+2022-10-23 01:45:07,736:DEBUG:discord.client: on_ready has successfully been registered as an event
+2022-10-23 01:45:07,736:DEBUG:discord.client: on_message_delete has successfully been registered as an event
+2022-10-23 01:45:07,736:DEBUG:discord.client: on_message_edit has successfully been registered as an event
+2022-10-23 01:45:07,736:DEBUG:discord.client: on_member_join has successfully been registered as an event
+2022-10-23 01:45:07,736:DEBUG:discord.client: on_member_update has successfully been registered as an event
+2022-10-23 01:45:07,736:DEBUG:discord.client: on_message has successfully been registered as an event
+2022-10-23 01:45:07,736:DEBUG:discord.client: on_reaction_add has successfully been registered as an event
+2022-10-23 01:45:07,736:DEBUG:discord.client: on_reaction_remove has successfully been registered as an event
+2022-10-23 01:45:07,736:DEBUG:discord.client: on_command_error has successfully been registered as an event
+2022-10-23 01:45:07,745:INFO:discord.client: logging in using static token
+2022-10-23 01:45:08,640:INFO:discord.gateway: Shard ID None has connected to Gateway (Session ID: aad6a40d2375fd7e16cfbdf5b27b9112).
+2022-10-23 01:45:10,835:ERROR:discord.client: Ignoring exception in on_ready
+Traceback (most recent call last):
+  File "D:\renard\disbot\venv\lib\site-packages\discord\client.py", line 409, in _run_event
+    await coro(*args, **kwargs)
+  File "d:\renard\disbot\hackablebot.py", line 102, in on_ready
+    await tree.sync(guild = discord.Object(id = 237397384676507651))
+  File "D:\renard\disbot\venv\lib\site-packages\discord\app_commands\tree.py", line 1069, in sync
+    data = await self._http.bulk_upsert_guild_commands(self.client.application_id, guild.id, payload=payload)
+  File "D:\renard\disbot\venv\lib\site-packages\discord\http.py", line 604, in request
+    if not self._global_over.is_set():
+AttributeError: '_MissingSentinel' object has no attribute 'is_set'
