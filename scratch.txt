@@ -130,3 +130,5 @@ LOAD DATA LOCAL INFILE '/undrop/undrop-for-innodb/quotes5' REPLACE INTO TABLE `q
 ExecStart=/usr/bin/npm start /home/ubuntu/disbot/web/app.js
 
 tar -xf node-v16.15.1.tar.gz
+
+virtualenv --python=python3.10.8 /disbot/venv

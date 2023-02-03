@@ -106,7 +106,6 @@ oneOffTriggerList = [
 
 soloTriggerList = [
     "computer terminate",
-    "no"
 ]
 
 exceptTriggerListDict = {
