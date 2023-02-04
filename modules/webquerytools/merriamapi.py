@@ -58,22 +58,22 @@ def getmeaning(query):
     return(meaningjoin)
 
 
-@genFuncErrorWrapper
-def getsynonym(query):
-    print("getsynonym with query: [" + query + "]")
-    synonymurl = "https://www.dictionaryapi.com/api/v3/references/thesaurus/json/" + query + "?key=" + key
-    response = requests.get(url = synonymurl)
-    print("got synonym response")
-    print(response.text)
-    synonymjson = response.json()
-    print(synonymjson)
-    synlist = synonymjson[0]["meta"]["syns"][0]
-    synlist.insert(0, "**Synonyms:**")
-    synlist.append("```")
-    synjoin = "\n".join(synlist)
-    return(synjoin)
+# @genFuncErrorWrapper
+# def getsynonym(query):
+#     print("getsynonym with query: [" + query + "]")
+#     synonymurl = "https://www.dictionaryapi.com/api/v3/references/thesaurus/json/" + query + "?key=" + key
+#     response = requests.get(url = synonymurl)
+#     print("got synonym response")
+#     print(response.text)
+#     synonymjson = response.json()
+#     print(synonymjson)
+#     synlist = synonymjson[0]["meta"]["syns"][0]
+#     synlist.insert(0, "**Synonyms:**")
+#     synlist.append("```")
+#     synjoin = "\n".join(synlist)
+#     return(synjoin)
 
 
-test = getsynonym("fast")
+# test = getsynonym("fast")
 
-print(test)
+# print(test)
