@@ -105,11 +105,13 @@ oneOffTriggerList = [
 ]
 
 soloTriggerList = [
+    "no",
     "computer terminate",
 ]
 
 exceptTriggerListDict = {
-    1049786065260642354: "gang"
+    1049786065260642354: "gang",
+    237397384676507651: "no"
 }
 
     

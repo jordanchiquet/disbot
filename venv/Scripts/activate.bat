@@ -1,6 +1,6 @@
 @echo off
 
-set "VIRTUAL_ENV=D:\disbot\venv"
+set "VIRTUAL_ENV=D:\projects\disbot\venv"
 
 if defined _OLD_VIRTUAL_PROMPT (
     set "PROMPT=%_OLD_VIRTUAL_PROMPT%"
