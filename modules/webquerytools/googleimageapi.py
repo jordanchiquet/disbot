@@ -40,6 +40,7 @@ def resultiterator(rawresult, tryint):
 
 
 doesntEmbedRegex = (
+    r"\?cb=|"
     r"&get_thumbnail=1$|"
     r"cesarsway|"
     r"dynaimage|"
@@ -53,6 +54,8 @@ doesntEmbedRegex = (
     r"x-raw-image|"
     r"\.svg$"  
 )
+
+imageget("isildur")
 
 
 
