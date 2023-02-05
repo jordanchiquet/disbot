@@ -55,7 +55,6 @@ doesntEmbedRegex = (
     r"\.svg$"  
 )
 
-imageget("isildur")
 
 
 

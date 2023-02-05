@@ -10,7 +10,7 @@ def expiryCheck():
     if results is not None:
         for result in results:
             resultDate = datetime.strptime(result[2], "%Y-%m-%d %H:%M:%S.%f")
-            if resultDate <= getCSTOffsetTime:
+            if resultDate <= getCSTOffsetTime():
                 print("time " + result[2] + " expired")
                 expiryRemove(result[0])
                 print("debug line weasel man 99")

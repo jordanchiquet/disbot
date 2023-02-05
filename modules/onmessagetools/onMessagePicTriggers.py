@@ -10,11 +10,11 @@ def picTriggerMain(msgContent: str, serverid: int):
     if folderCheck[0]:
         picTriggerResult = folderCheck
     else:
-        oneOffCheck = trigMasterGeneral(oneOffTriggerList, msgContent)
+        oneOffCheck = trigMasterGeneral(oneOffTriggerList, msgContent, serverid)
         if oneOffCheck[0]:
             picTriggerResult = oneOffCheck
         else:
-            soloCheck = trigMasterGeneral(soloTriggerList, msgContent)
+            soloCheck = trigMasterGeneral(soloTriggerList, msgContent, serverid)
             if soloCheck[0]:
                 picTriggerResult = soloCheck
     print("picTriggerMain returning: [" + str(picTriggerResult) + "]")
@@ -35,11 +35,13 @@ def thisBitchTrigger(msgContent: str):
 def trigMasterGeneral(triggerList: list, msgContent: str, serverid: int = 1):
 
     print("listChecker started")
-    if serverid in exceptTriggerListDict:
-        for value in exceptTriggerListDict[serverid]:
-            triggerList.remove(value)
+    # if serverid in exceptTriggerListDict:
+    #     for value in exceptTriggerListDict[serverid]:
+            
+    #         triggerList.remove(value)
+    print(f"serverid: {serverid}")
     for item in triggerList:
-        if item in msgContent:
+        if item in msgContent and (item not in exceptTriggerListDict.get(serverid, '')):
             print(item + " in msgContent")
             if triggerList == soloTriggerList:
                 if item != msgContent:

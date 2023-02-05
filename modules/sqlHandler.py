@@ -1,4 +1,4 @@
-import mysql.connector
+import mysql.connector #mysql-connector-python
 import modules.sqlheader as sqlheader
 # import sqlheader as sqlheader
 
