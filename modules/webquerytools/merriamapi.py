@@ -77,3 +77,11 @@ def getmeaning(query):
 # test = getsynonym("fast")
 
 # print(test)
+
+
+
+def renameFile(oldname, newname):
+    os.rename(oldname, newname) #rename the file
+
+
+
