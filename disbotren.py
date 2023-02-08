@@ -716,14 +716,15 @@ async def stablediffusion(ctx, *, prompt):
     await ctx.defer(ephemeral=False)
     stablediff_embed=discord.Embed(title='', description='', color=discord.Colour.dark_teal())
     url = queryCmd("stablediffusion", prompt)
-    if url.startswith("Error"):
-        await ctx.send(f"error for prompt: {prompt}")
+    if url.startswith("error"):
+        await ctx.send(url)
     else:
         file = discord.File(fp="stablediffresult.png", filename="stablediffresult.png")
         # await ctx.send(file=file)
         stablediff_embed.title = prompt
         stablediff_embed.set_image(url="attachment://stablediffresult.png")
         await ctx.send(file=file, embed=stablediff_embed)
+        os.remove("stablediffresult.png")
 
 @bot.command()
 async def ing(ctx):

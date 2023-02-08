@@ -35,7 +35,6 @@ def generateStable(query):
                     print("cannot save image")
     return("success")
 
-generateStable("hello world")
 
 
 
