@@ -26,7 +26,7 @@ def generateStable(query):
                 print(
                     "Your request activated the API's safety filters and could not be processed."
                     "Please modify the prompt and try again.")
-                return("error: content/booby error i have not gotten around yet sorry")
+                return(f"error: content/booby error i have not gotten around yet sorry (prompt was: {query})")
             if artifact.type == generation.ARTIFACT_IMAGE:
                 img = Image.open(io.BytesIO(artifact.binary))
                 try:
