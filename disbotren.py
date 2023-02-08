@@ -692,7 +692,7 @@ async def img(ctx: commands.Context, *, query):
     delcmd = await ctx.send(embed=imgembed)
     deletelog[ctx.message.id] = delcmd
 
-@bot.hybrid_command(name="dalle", with_app_command=True, description="Get AI generated image with prompt")
+@bot.hybrid_command(name="dalle", with_app_command=True, description="Get AI generated image with DALLE2")
 async def dalle(ctx, *, prompt):
     await ctx.defer(ephemeral=False)
     dalle_embed=discord.Embed(title='', description='', color=discord.Colour.dark_teal())
@@ -709,6 +709,21 @@ async def dalle(ctx, *, prompt):
         dalle_embed.title = prompt
         dalle_embed.set_image(url = queryCmd("dalle", prompt))
     await ctx.send(embed=dalle_embed)
+
+
+@bot.hybrid_command(name="stablediffusion", with_app_command=True, description="Get AI generated image with Stable Diffusion (WIP)")
+async def stablediffusion(ctx, *, prompt):
+    await ctx.defer(ephemeral=False)
+    stablediff_embed=discord.Embed(title='', description='', color=discord.Colour.dark_teal())
+    url = queryCmd("stablediffusion", prompt)
+    if url.startswith("Error"):
+        await ctx.send(f"error for prompt: {prompt}")
+    else:
+        file = discord.File(fp="stablediffresult.png", filename="stablediffresult.png")
+        # await ctx.send(file=file)
+        stablediff_embed.title = prompt
+        stablediff_embed.set_image(url="attachment://stablediffresult.png")
+        await ctx.send(file=file, embed=stablediff_embed)
 
 @bot.command()
 async def ing(ctx):

@@ -1,11 +1,12 @@
 import random
 
-
+from modules.webquerytools.deepai import generateImage
 from modules.webquerytools.gifgrab import getgif
 from modules.webquerytools.googleapi import googleget
 from modules.webquerytools.googleimageapi import imageget
 from modules.webquerytools.merriamapi import getmeaning
 from modules.webquerytools.openaiquery import getdalle
+from modules.webquerytools.stabilityai import generateStable
 from modules.webquerytools.wikihow import wikihow
 from modules.webquerytools.wikipediasearch import wikipediaSearch
 from modules.webquerytools.urbandictionary import udget
@@ -28,8 +29,12 @@ def cmdHandlerWebQueries(cmd: str, query: str):
         cmdMainRes = wikihow(query)
     elif cmd == "img":
         cmdMainRes = imageget(query)
+    elif cmd == "stablediffusion":
+        cmdMainRes = generateStable(query)
     elif cmd =="ud":
         cmdMainRes = udget(query)
+    elif cmd == "wiki":
+        cmdMainRes = wikipediaSearch(query)
     elif cmd == "yt":
         cmdMainRes = youtubesearch(query)
 
