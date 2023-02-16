@@ -7,7 +7,7 @@ __pycache__/
 
 */__pycache__
 
-testignorefile/
+sqldump/
 venv/
 
 modules/__pychache__/
@@ -20,3 +20,5 @@ modules/README.md
 picfolder/shadowdir/dickshadow.png
 
 disbotren.code-workspace
+
+

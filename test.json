@@ -1,0 +1,248 @@
+{
+    "kind": "customsearch#search",
+    "url": {
+        "type": "application/json",
+        "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+    },
+    "queries": {
+        "request": [
+            {
+                "title": "Google Custom Search - how do we look to dogs",
+                "totalResults": "60150000000",
+                "searchTerms": "how do we look to dogs",
+                "count": 10,
+                "startIndex": 1,
+                "inputEncoding": "utf8",
+                "outputEncoding": "utf8",
+                "safe": "off",
+                "cx": "016515025707600383118:gqogcmpp7ka",
+                "searchType": "image"
+            }
+        ],
+        "nextPage": [
+            {
+                "title": "Google Custom Search - how do we look to dogs",
+                "totalResults": "60150000000",
+                "searchTerms": "how do we look to dogs",
+                "count": 10,
+                "startIndex": 11,
+                "inputEncoding": "utf8",
+                "outputEncoding": "utf8",
+                "safe": "off",
+                "cx": "016515025707600383118:gqogcmpp7ka",
+                "searchType": "image"
+            }
+        ]
+    },
+    "context": {
+        "title": "bob"
+    },
+    "searchInformation": {
+        "searchTime": 0.263506,
+        "formattedSearchTime": "0.26",
+        "totalResults": "60150000000",
+        "formattedTotalResults": "60,150,000,000"
+    },
+    "items": [
+        {
+            "kind": "customsearch#result",
+            "title": "Through A Dog's Eyes | Dog's Vision - Cesar's Way",
+            "htmlTitle": "Through A <b>Dog&#39;s</b> Eyes | <b>Dog&#39;s</b> Vision - Cesar&#39;s Way",
+            "link": "https://www.cesarsway.com/wp-content/uploads/2015/06/Through-a-Dogs-Eyes-2-300x224.jpg",
+            "displayLink": "www.cesarsway.com",
+            "snippet": "Through A Dog's Eyes | Dog's Vision - Cesar's Way",
+            "htmlSnippet": "Through A <b>Dog&#39;s</b> Eyes | <b>Dog&#39;s</b> Vision - Cesar&#39;s Way",
+            "mime": "image/jpeg",
+            "fileFormat": "image/jpeg",
+            "image": {
+                "contextLink": "https://www.cesarsway.com/through-a-dogs-eyes/",
+                "height": 224,
+                "width": 300,
+                "byteSize": 17424,
+                "thumbnailLink": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpCE_bC8XaCslKmwVGVg8gO5DDbQP7CKVZ6_8TK-xvy04pPeo7a2aw6g&s",
+                "thumbnailHeight": 87,
+                "thumbnailWidth": 116
+            }
+        },
+        {
+            "kind": "customsearch#result",
+            "title": "Dogs' eyes resemble their owner's' eyes, study says",
+            "htmlTitle": "<b>Dogs</b>&#39; eyes resemble their owner&#39;s&#39; eyes, study says",
+            "link": "https://improbable.com/wp-content/uploads/2014/01/Dogs_Eyes.jpg",
+            "displayLink": "improbable.com",
+            "snippet": "Dogs' eyes resemble their owner's' eyes, study says",
+            "htmlSnippet": "<b>Dogs</b>&#39; eyes resemble their owner&#39;s&#39; eyes, study says",
+            "mime": "image/jpeg",
+            "fileFormat": "image/jpeg",
+            "image": {
+                "contextLink": "https://improbable.com/2014/01/09/dogs-eyes-resemble-their-owners-eyes-study-says/",
+                "height": 674,
+                "width": 847,
+                "byteSize": 55311,
+                "thumbnailLink": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjrnAq9hglVtWvpKQjA5rTGutpbssrSo_HvXRHf0Dj8ocDR13IeGasFqk&s",
+                "thumbnailHeight": 115,
+                "thumbnailWidth": 145
+            }
+        },
+        {
+            "kind": "customsearch#result",
+            "title": "Dog Anxiety, Are you to Blame? | Compassionate Animal Care ...",
+            "htmlTitle": "<b>Dog</b> Anxiety, Are you to Blame? | Compassionate Animal Care ...",
+            "link": "https://www.queencreekvet.care/wp-content/uploads/2022/04/dogsowners.jpg",
+            "displayLink": "www.queencreekvet.care",
+            "snippet": "Dog Anxiety, Are you to Blame? | Compassionate Animal Care ...",
+            "htmlSnippet": "<b>Dog</b> Anxiety, Are you to Blame? | Compassionate Animal Care ...",
+            "mime": "image/jpeg",
+            "fileFormat": "image/jpeg",
+            "image": {
+                "contextLink": "https://www.queencreekvet.care/2022/04/05/dog-anxiety/",
+                "height": 600,
+                "width": 576,
+                "byteSize": 158119,
+                "thumbnailLink": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9iyVj0TAEglFSSDvHifara4b0PobAf73nPyoCBk3XG3aerUwb1yvGX1Y&s",
+                "thumbnailHeight": 135,
+                "thumbnailWidth": 130
+            }
+        },
+        {
+            "kind": "customsearch#result",
+            "title": "Through The Eyes Of Your Dog | Pets Doc Veterinary Services",
+            "htmlTitle": "Through The Eyes Of Your <b>Dog</b> | Pets Doc Veterinary Services",
+            "link": "https://petsdoc.org/wp-content/uploads/2015/11/eyes.jpg",
+            "displayLink": "petsdoc.org",
+            "snippet": "Through The Eyes Of Your Dog | Pets Doc Veterinary Services",
+            "htmlSnippet": "Through The Eyes Of Your <b>Dog</b> | Pets Doc Veterinary Services",
+            "mime": "image/jpeg",
+            "fileFormat": "image/jpeg",
+            "image": {
+                "contextLink": "https://petsdoc.org/through-the-eyes-of-your-dog/",
+                "height": 190,
+                "width": 366,
+                "byteSize": 10591,
+                "thumbnailLink": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdC_eAYyMhnXOOwI6k3NBg7ZTz9Q95ToTpgYqPkxMtk-TI-nGnEPdXJA&s",
+                "thumbnailHeight": 63,
+                "thumbnailWidth": 122
+            }
+        },
+        {
+            "kind": "customsearch#result",
+            "title": "How to Look Friendly to Dogs: 11 Steps (with Pictures) - wikiHow",
+            "htmlTitle": "<b>How</b> to <b>Look</b> Friendly to <b>Dogs</b>: 11 Steps (with Pictures) - wikiHow",
+            "link": "https://www.wikihow.com/images/thumb/9/9a/Look-Friendly-to-Dogs-Step-11.jpg/aid675995-v4-1200px-Look-Friendly-to-Dogs-Step-11.jpg",
+            "displayLink": "www.wikihow.com",
+            "snippet": "How to Look Friendly to Dogs: 11 Steps (with Pictures) - wikiHow",
+            "htmlSnippet": "<b>How</b> to <b>Look</b> Friendly to <b>Dogs</b>: 11 Steps (with Pictures) - wikiHow",
+            "mime": "image/jpeg",
+            "fileFormat": "image/jpeg",
+            "image": {
+                "contextLink": "https://www.wikihow.com/Look-Friendly-to-Dogs",
+                "height": 900,
+                "width": 1200,
+                "byteSize": 147681,
+                "thumbnailLink": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRarZmWx-zYoW60VTmsbKblGwefZhJpHhqjullRmJA0D8ONCtN9X8FH8Q&s",
+                "thumbnailHeight": 113,
+                "thumbnailWidth": 150
+            }
+        },
+        {
+            "kind": "customsearch#result",
+            "title": "Dogs Don't Experience Guilt \u2014 It's Fear",
+            "htmlTitle": "<b>Dogs</b> Don&#39;t Experience Guilt \u2014 It&#39;s Fear",
+            "link": "https://i.insider.com/58a5e53601fe586a018b4fca?width=1043&format=jpeg",
+            "displayLink": "www.businessinsider.com",
+            "snippet": "Dogs Don't Experience Guilt \u2014 It's Fear",
+            "htmlSnippet": "<b>Dogs</b> Don&#39;t Experience Guilt \u2014 It&#39;s Fear",
+            "mime": "image/",
+            "fileFormat": "image/",
+            "image": {
+                "contextLink": "https://www.businessinsider.com/dogs-guilt-fear-look-2017-2",
+                "height": 782,
+                "width": 1043,
+                "byteSize": 118872,
+                "thumbnailLink": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBf-3TSCizC2MwPYcQR82EmWZnHdqRD8cMrknNSLYCydfnADtMoes0UXw&s",
+                "thumbnailHeight": 112,
+                "thumbnailWidth": 150
+            }
+        },
+        {
+            "kind": "customsearch#result",
+            "title": "Stunning Dog Breeds That Look Just Like Wolves | Purina",
+            "htmlTitle": "Stunning <b>Dog</b> Breeds That <b>Look</b> Just Like Wolves | Purina",
+            "link": "https://www.purina.co.uk/sites/default/files/2020-12/These%20Stunning%20Dogs%20Look%20Just%20Like%20WolvesTEASER.jpg",
+            "displayLink": "www.purina.co.uk",
+            "snippet": "Stunning Dog Breeds That Look Just Like Wolves | Purina",
+            "htmlSnippet": "Stunning <b>Dog</b> Breeds That <b>Look</b> Just Like Wolves | Purina",
+            "mime": "image/jpeg",
+            "fileFormat": "image/jpeg",
+            "image": {
+                "contextLink": "https://www.purina.co.uk/find-a-pet/articles/dog-types/breed-guides/wolf-dog-breeds",
+                "height": 608,
+                "width": 1080,
+                "byteSize": 156627,
+                "thumbnailLink": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJW-QaoWOaSL7BZMsf1ZVdQMsi__XT3ayoXIpxVRR0HeN3wiqknPGvew&s",
+                "thumbnailHeight": 84,
+                "thumbnailWidth": 150
+            }
+        },
+        {
+            "kind": "customsearch#result",
+            "title": "How to Look Friendly to Dogs: 11 Steps (with Pictures) - wikiHow",
+            "htmlTitle": "<b>How</b> to <b>Look</b> Friendly to <b>Dogs</b>: 11 Steps (with Pictures) - wikiHow",
+            "link": "https://www.wikihow.com/images/thumb/9/9a/Look-Friendly-to-Dogs-Step-11.jpg/v4-460px-Look-Friendly-to-Dogs-Step-11.jpg",
+            "displayLink": "www.wikihow.com",
+            "snippet": "How to Look Friendly to Dogs: 11 Steps (with Pictures) - wikiHow",
+            "htmlSnippet": "<b>How</b> to <b>Look</b> Friendly to <b>Dogs</b>: 11 Steps (with Pictures) - wikiHow",
+            "mime": "image/jpeg",
+            "fileFormat": "image/jpeg",
+            "image": {
+                "contextLink": "https://www.wikihow.com/Look-Friendly-to-Dogs",
+                "height": 345,
+                "width": 460,
+                "byteSize": 24714,
+                "thumbnailLink": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQG_shaXBryJZ3PACCKY_STdi8NWhT1Fwqdy7NYpebpNWtdqQS3nVK_9A&s",
+                "thumbnailHeight": 96,
+                "thumbnailWidth": 128
+            }
+        },
+        {
+            "kind": "customsearch#result",
+            "title": "Why Dogs Look Like Their Owners",
+            "htmlTitle": "Why <b>Dogs Look</b> Like Their Owners",
+            "link": "https://images.fastcompany.net/image/upload/w_596,c_limit,q_auto:best,f_auto/fc/3037279-inline-i-6-why-some-dogs-look-like-their-owners.jpg",
+            "displayLink": "www.fastcompany.com",
+            "snippet": "Why Dogs Look Like Their Owners",
+            "htmlSnippet": "Why <b>Dogs Look</b> Like Their Owners",
+            "mime": "image/jpeg",
+            "fileFormat": "image/jpeg",
+            "image": {
+                "contextLink": "https://www.fastcompany.com/3037279/why-dogs-look-like-their-owners",
+                "height": 316,
+                "width": 596,
+                "byteSize": 25389,
+                "thumbnailLink": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBT1h_g3ARGdWrhlhgvGxy8zvVmZWOKVDYr6wwEd6MzbeluAwnd25TUg&s",
+                "thumbnailHeight": 72,
+                "thumbnailWidth": 135
+            }
+        },
+        {
+            "kind": "customsearch#result",
+            "title": "Through A Dog's Eyes | Dog's Vision - Cesar's Way",
+            "htmlTitle": "Through A <b>Dog&#39;s</b> Eyes | <b>Dog&#39;s</b> Vision - Cesar&#39;s Way",
+            "link": "https://www.cesarsway.com/wp-content/uploads/2015/06/Through-a-dogs-eyes.jpg",
+            "displayLink": "www.cesarsway.com",
+            "snippet": "Through A Dog's Eyes | Dog's Vision - Cesar's Way",
+            "htmlSnippet": "Through A <b>Dog&#39;s</b> Eyes | <b>Dog&#39;s</b> Vision - Cesar&#39;s Way",
+            "mime": "image/jpeg",
+            "fileFormat": "image/jpeg",
+            "image": {
+                "contextLink": "https://www.cesarsway.com/through-a-dogs-eyes/",
+                "height": 450,
+                "width": 845,
+                "byteSize": 41995,
+                "thumbnailLink": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgm82nL9NzzbrSwzHJey78pH3XCtU6j4ygdqbB6pGAUoPvPl9bq5eWh4w&s",
+                "thumbnailHeight": 77,
+                "thumbnailWidth": 145
+            }
+        }
+    ]
+}
