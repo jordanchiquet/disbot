@@ -22,8 +22,8 @@ def imageget(query, filetype: str = None):
         rawresult = gsource.list(q=query, searchType='image', fileType=filetype,
                                 cx=appapi).execute()
     print(rawresult)
-    with open ('test.json', 'w') as f:
-        json.dump(rawresult, f, indent=4)
+    # with open ('test.json', 'w') as f:
+    #     json.dump(rawresult, f, indent=4)
 
     tryint = 0
     imglink = resultiterator(rawresult, tryint)
