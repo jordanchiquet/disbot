@@ -20,7 +20,7 @@ class onMessageHandler:
         sqlInit = onMessageSQLCounter.sqlCounterMain(self.serveridStr, self.useridStr, self.msgContent, self.username)
         sqlInit.sqlCounterMain()
         messageHandleReturn = "none", ""
-        if self.userid == 172581464066490369:
+        if self.userid == 172581464066490369 and self.channelid != 499792227464380428:
             return("text", "didn't ask")
         onMessageHeyComputerInit = onMessageHeyComputer.OnMessageHeyComputer(self.msgContent)
         heyComputerCheck = onMessageHeyComputerInit.heyComputerMainHandle()
