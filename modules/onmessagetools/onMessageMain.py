@@ -20,6 +20,8 @@ class onMessageHandler:
         sqlInit = onMessageSQLCounter.sqlCounterMain(self.serveridStr, self.useridStr, self.msgContent, self.username)
         sqlInit.sqlCounterMain()
         messageHandleReturn = "none", ""
+        if self.userid == 172581464066490369:
+            return("text", "didn't ask")
         onMessageHeyComputerInit = onMessageHeyComputer.OnMessageHeyComputer(self.msgContent)
         heyComputerCheck = onMessageHeyComputerInit.heyComputerMainHandle()
         thisBitchCheck = onMessagePicTriggers.thisBitchTrigger(self.msgContent)
