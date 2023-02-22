@@ -1,5 +1,7 @@
 from modules.onmessagetools import onMessagePicTriggers, onMessageSQLCounter, onMessageJokeTriggers, onMessageHeyComputer
 
+from modules.randomhelpers import subEmotes
+
 class onMessageHandler:
 
     def __init__(self, serverid: int, channelid: int,
@@ -13,7 +15,7 @@ class onMessageHandler:
         self.useridStr = str(userid)
         self.username = username
         self.timestamp = str(timestamp)
-        self.msgContent = messageContent.lower()
+        self.msgContent = subEmotes(messageContent.lower(), "")
     
     def messageHandleMain(self):
         print("messageHandleMain started")

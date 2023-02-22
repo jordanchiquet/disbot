@@ -35,10 +35,6 @@ def thisBitchTrigger(msgContent: str):
 def trigMasterGeneral(triggerList: list, msgContent: str, serverid: int = 1):
 
     print("listChecker started")
-    # if serverid in exceptTriggerListDict:
-    #     for value in exceptTriggerListDict[serverid]:
-            
-    #         triggerList.remove(value)
     print(f"serverid: {serverid}")
     for item in triggerList:
         if item in msgContent and (item not in exceptTriggerListDict.get(serverid, '')):
