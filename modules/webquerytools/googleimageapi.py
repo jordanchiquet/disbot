@@ -3,8 +3,8 @@ import requests
 import os
 import pprint
 
-# function from my randomhelpers file in the folder above this; it is currently unused in this file
-from modules.randomhelpers import getRegexReturn
+# functions from my randomhelpers file in the folder above this; getRegexReturn is currently unused in this file. genErrorHandle is my exception handler that I use in several files. 
+from modules.randomhelpers import getRegexReturn, genErrorHandle
 
 from googleapiclient.discovery import build 
 
@@ -51,7 +51,8 @@ def resultiterator(rawresult, tryint: int = 0):
     try:
         result = rawresult['items'][tryint]
         imglink = result['link']
-    except KeyError:
+    except Exception as e:
+        genErrorHandle(e)
         imglink = None
     return(imglink)
 
