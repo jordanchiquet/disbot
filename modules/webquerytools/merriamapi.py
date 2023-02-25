@@ -57,27 +57,20 @@ def getmeaning(query):
             meaningjoin = None
     return(meaningjoin)
 
-
-# @genFuncErrorWrapper
-# def getsynonym(query):
-#     print("getsynonym with query: [" + query + "]")
-#     synonymurl = "https://www.dictionaryapi.com/api/v3/references/thesaurus/json/" + query + "?key=" + key
-#     response = requests.get(url = synonymurl)
-#     print("got synonym response")
-#     print(response.text)
-#     synonymjson = response.json()
-#     print(synonymjson)
-#     synlist = synonymjson[0]["meta"]["syns"][0]
-#     synlist.insert(0, "**Synonyms:**")
-#     synlist.append("```")
-#     synjoin = "\n".join(synlist)
-#     return(synjoin)
-
-
-# test = getsynonym("fast")
-
-# print(test)
-
+def getpronunciation(query):
+    print("getpronunciation with query: [" + query + "]")
+    try:
+        pronunciationurl = "https://www.dictionaryapi.com/api/v3/references/collegiate/json/" + query + "?key=" + key
+        response = requests.get(url = pronunciationurl)
+        print("got pronunciation response")
+        print("response:")
+        print(response)
+        pronunciationjson = response.json()
+        print(pronunciationjson)
+        pronunciation = pronunciationjson[0]["hwi"]["prs"][0]["mw"]
+    except:
+        pronunciation = None
+    return(pronunciation)
 
 
 def renameFile(oldname, newname):

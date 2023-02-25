@@ -21,9 +21,11 @@ def jokeTriggerMain(msgContent: str, serverid: int = 1):
 
 jokeTriggerDict = {
     "there's no need to fear": "UNDERDOG IS HERE",
-    "i get up": "https://youtu.be/qjm9QZT06ig",
-    "if it's meant to be": "https://youtu.be/GihobUe-LSs",
-    "speed me up": "https://youtu.be/dCuCpVPkWDY",
+
+    "hol up" : "https://youtu.be/kc9-HJ9Rd4w",
+    "i get up" : "https://youtu.be/qjm9QZT06ig",
+    "if it's meant to be" : "https://youtu.be/GihobUe-LSs",
+    "speed me up" : "https://youtu.be/dCuCpVPkWDY",
 }
 
 soloJokeTriggerDict = {

@@ -1,43 +1,53 @@
-import json
+
 import requests
 import os
 import pprint
 
-from googleapiclient.discovery import build #google-api-python-client
-#API GOOGLE
-# then further down for cx=..
-#API GOOGLEIMAGE
+# function from my randomhelpers file in the folder above this; it is currently unused in this file
 from modules.randomhelpers import getRegexReturn
 
+from googleapiclient.discovery import build 
+
+#getting my api keys... I have them stored as environment variables on the OS
 gapi = os.environ.get("GOOGLE")
 appapi = os.environ.get("GOOGLEAPP")
+
+# below line is making the google object, basically copy pasted from their docs. 
 gsource = build("customsearch", 'v1', developerKey=gapi).cse()
 
-def imageget(query, filetype: str = None):
-    print("imageget (g images) started with query: [" + query + "]")
-    if filetype is None or filetype == "nonspecific":
-        rawresult = gsource.list(q=query, searchType='image',
-                                cx=appapi).execute()
-    else:
-        rawresult = gsource.list(q=query, searchType='image', fileType=filetype,
-                                cx=appapi).execute()
-    print(rawresult)
-    # with open ('test.json', 'w') as f:
-    #     json.dump(rawresult, f, indent=4)
 
-    tryint = 0
-    imglink = resultiterator(rawresult, tryint)
-    print("here")
+#the main function the bot is actually calling. 
+def imageget(query):
+    print(f"imageget (g images) started with query: [{query}]")
+
+    # The below line creates an object called rawresult which consists of:
+    #   the nested 'list' object from 'gsource' object created above, given three paramaters 
+    #       the function 'execute()' within that 'list' object is then called.
+    rawresult = gsource.list(q=query, searchType='image',
+                                cx=appapi).execute()
+
+    # resuable function i made for getting results
+    imglink = resultiterator(rawresult)
+
+
+    # the below is currently commented out but was a section I used briefly to iterate until I got an image discord would embed. I currently have it off for a long-term debugging project. 
     # while getRegexReturn(query=doesntEmbedRegex, input=imglink) is not None:
-    #     print("non-discord supported image in link [" + imglink + "] ; iterating")
-    #     tryint = tryint + 1
+    #     print(f"non-discord supported image in link [{imglink}"]; iterating")
+    #     tryint += 1
     #     imglink = resultiterator(rawresult, tryint)
-    print("imageget returning: [" + imglink + "]")
-    getImageResponse(imglink)
+
+
+    print(f"imageget returning: [{imglink}]")
+
+    # getImageResponse is purely for debug purposes 
+    # getImageResponse(imglink)
+
+    # V this is the line that feeds the bot the link it will use V #
     return(imglink)
 
 
-def resultiterator(rawresult, tryint):
+# this actualy gets the result
+def resultiterator(rawresult, tryint: int = 0):
     try:
         result = rawresult['items'][tryint]
         imglink = result['link']
@@ -45,37 +55,9 @@ def resultiterator(rawresult, tryint):
         imglink = None
     return(imglink)
 
+#testing function
 def getImageResponse(url):
     response = requests.get(url)
     pprint.pprint(response.headers)
     print(response.status_code)
     return response
-
-
-doesntEmbedRegex = (
-    r"\?cb=|"
-    r"&get_thumbnail=1$|"
-    # r"cesarsway|"
-    r"dynaimage|"
-    r"edmunds|"
-    r"ikon-images|"
-    r"justhannen|"
-    r"liquipedia|"
-    r"lookaside.fbsbx|"
-    r"makingwithmetal|"
-    r"wordpress|"
-    r"x-raw-image|"
-    r"vox-cdn|" #https://cdn.vox-cdn.com/thumbor/X0UpfanPFP4M9ELKV1DNTKSF5U0=/94x0:1158x798/1200x800/filters:focal(94x0:1158x798)/cdn.vox-cdn.com/uploads/chorus_image/image/48839023/bachelormcdonalds.0.0.png
-    r"\.svg$"  
-)
-
-
-
-
-# ones I don't know why they don't work (embed in discord when not using embed api and directly pasted)
-#https://www.cesarsway.com/wp-content/uploads/2015/06/Through-a-Dogs-Eyes-2-300x224.jpg
-#https://vox-cdn.com/uploads/chorus_image/image/650/Screen_Shot_2019-10-01_at_10.54.01_AM.0.png
-
-
-
-# imageget('how do we look to dogs')

@@ -117,6 +117,3 @@ def subEmotes(input: str, substr: str) -> str:
     output = re.sub(r"<.*?\:.*?\:\d+>", substr, input)
     print(f"subEmotes output: [{output}]")
     return(output)
-
-# print(subEmotes("test string 1 <:pepega:123456789012345678>", ""))
-# print(subEmotes("test string 2", ""))
