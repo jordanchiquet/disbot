@@ -13,29 +13,9 @@ class Listen(commands.Cog):
         serverid = ctx.guild.id
         print(f"SERVERID {serverid}")
         await ctx.send(fr.feedReadMain(chanid, serverid, feed, keyword))
-        # fr.feedReadMain(feed, keyword)
-        # fr.feedSqlWriteNew(feed, keyword)
-            # feed modify function in feedreader
-        # if keyword:
-        #     await ctx.send(f"Listening to feed {feed} with filter for term '{keyword}'!")
-        # else:
-        #     await ctx.send(f"Listening to feed {feed}!")
-    
-    
-    
-    # @commands.hybrid_command(name="")
+
 
 async def setup(bot):
     await bot.add_cog(Listen(bot))
 
-    
 
-"""
-rain in games
-peez
-tamler
-warhammer something or other
-from soft
-dark and darker
-predernATORCESSor
-"""
