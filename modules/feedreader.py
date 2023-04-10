@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 
-from modules.randomhelpers import getWebSource, genErrorHandle
+from modules.randomhelpers import getWebSourceHTML, genErrorHandle
 from modules.sqlHandler import sqlMektanixDevilDog
 from modules.webquerytools.twitterscaper import getUserTweets
 
@@ -116,7 +116,7 @@ def getTweetDict(twitter_name: str):
 
 def getRSSDict(url):
     try:
-        responseStr = (getWebSource(url)).content
+        responseStr = (getWebSourceHTML(url)).content
         responseXML = ET.fromstring(responseStr)
         outerXML = responseXML.find('channel')
         innerXML = outerXML.find('item')

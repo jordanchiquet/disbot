@@ -1,10 +1,8 @@
 
-import requests
 import os
-import pprint
 
 # functions from my randomhelpers file in the folder above this; getRegexReturn is currently unused in this file. genErrorHandle is my exception handler that I use in several files. 
-from modules.randomhelpers import getRegexReturn, genErrorHandle
+from modules.randomhelpers import getRegexReturn, getUrlContentType, genErrorHandle
 
 from googleapiclient.discovery import build 
 
@@ -23,26 +21,18 @@ def imageget(query):
     # The below line creates an object called rawresult which consists of:
     #   the nested 'list' object from 'gsource' object created above, given three paramaters 
     #       the function 'execute()' within that 'list' object is then called.
-    rawresult = gsource.list(q=query, searchType='image',
-                                cx=appapi).execute()
+    rawresult = gsource.list(q=query,searchType='image',cx=appapi).execute()
 
-    # resuable function i made for getting results
     imglink = resultiterator(rawresult)
-
-
-    # the below is currently commented out but was a section I used briefly to iterate until I got an image discord would embed. I currently have it off for a long-term debugging project. 
-    # while getRegexReturn(query=doesntEmbedRegex, input=imglink) is not None:
-    #     print(f"non-discord supported image in link [{imglink}"]; iterating")
-    #     tryint += 1
-    #     imglink = resultiterator(rawresult, tryint)
-
-
+    imglinkContentType = getUrlContentType(imglink)
+    tryint = 0
+    while "ERROR" in imglinkContentType or "image" not in imglinkContentType:
+        print(f"non-embeddable image in link [{imglink}]")
+        tryint += 1
+        print("trying next result [tryint: {}]".format(tryint))
+        imglink = resultiterator(rawresult, tryint)
+        imglinkContentType = getUrlContentType(imglink)
     print(f"imageget returning: [{imglink}]")
-
-    # getImageResponse is purely for debug purposes 
-    # getImageResponse(imglink)
-
-    # V this is the line that feeds the bot the link it will use V #
     return(imglink)
 
 
@@ -55,10 +45,3 @@ def resultiterator(rawresult, tryint: int = 0):
         genErrorHandle(e)
         imglink = None
     return(imglink)
-
-#testing function
-def getImageResponse(url):
-    response = requests.get(url)
-    pprint.pprint(response.headers)
-    print(response.status_code)
-    return response

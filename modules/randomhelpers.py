@@ -4,6 +4,8 @@ import sys
 import time
 import traceback
 
+import urllib.request
+
 from datetime import datetime, timedelta
 from requests_html import HTMLSession
 
@@ -13,7 +15,7 @@ def capitalizexindex(s, n):
 def getFunctionName():
     return sys._getframe(1).f_code.co_name
 
-def genErrorHandle(exception: Exception):
+def genErrorHandle(exception: Exception) -> str:
     exceptionType = type(exception).__name__
     tb = sys.exc_info()[-1]
     stack = traceback.extract_tb(tb, 1)
@@ -37,7 +39,12 @@ def genFuncErrorWrapper(func):
         return func(exception)
     return(wrapper)
 
-
+def getCSTOffsetTime() -> datetime:
+    if time.localtime().tm_isdst > 0:
+        cstDelta = 5
+    else:
+        cstDelta = 6
+    return(datetime.now() - timedelta(hours=cstDelta))
 
 def getFirstAlphaIndex(input):
     return(input.find(next(filter(str.isalpha, input))))
@@ -51,14 +58,15 @@ def getNextItem(startItem, itemOwner: list, increment: int):
                 nextItem = itemOwner[index+increment]
     return(nextItem)
 
-def getCSTOffsetTime() -> datetime:
-    if time.localtime().tm_isdst > 0:
-        cstDelta = 5
-    else:
-        cstDelta = 6
-    return(datetime.now() - timedelta(hours=cstDelta))
+    
+def getSpaceList(input: str):
+    print(f"getSpaceList called for input: [{input}]")
+    output = input.split(" ")
+    return(output)
 
-def getWebSource(url: str):
+
+
+def getWebSourceHTML(url: str):
     print(f"getWebSource called for [{url}]")
     try:
         session = HTMLSession()
@@ -67,10 +75,25 @@ def getWebSource(url: str):
     except Exception as e:
         return(genErrorHandle(e))
 
-def getSpaceList(input: str):
-    print(f"getSpaceList called for input: [{input}]")
-    output = input.split(" ")
-    return(output)
+def getWebSource(url: str):
+    print(f"getWebSource called for [{url}]")
+    try:
+        response = urllib.request.urlopen(url)
+        return response
+    except Exception as e:
+        return(genErrorHandle(e))
+
+
+def getUrlContentType(url: str):
+    print(f"getUrlContentType called for url: [{url}]")
+    response = getWebSource(url)
+    try:
+        contentType = response.headers['content-type']
+        return(contentType)
+    except Exception as e:
+        return(genErrorHandle(e))
+
+
 
 def listemptystring(listtocheck):
     if listtocheck[0] == "":
