@@ -342,10 +342,11 @@ async def feedcheck():
             print(f"results in feedcheck:[{newLine.join(resultArray)}]")
             for result in resultArray:
                 resultSplit = result.split('|')
-                link, serverid, chanid = resultSplit[0], resultSplit[1], resultSplit[2]
-                checkForChannel = serv.getServerSetting(serverid, 'botspamchannel')
-                if checkForChannel:
-                    chanid = checkForChannel
+                link, serverid, chanid, override = resultSplit[0], resultSplit[1], resultSplit[2], resultSplit[3]
+                if override == "0":
+                    checkForChannel = serv.getServerSetting(serverid, 'botspamchannel')
+                    if checkForChannel:
+                        chanid = checkForChannel
                 outChannel = bot.get_channel(chanid)
                 await outChannel.send(link)
     except Exception as e:

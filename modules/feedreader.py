@@ -11,7 +11,7 @@ from modules.sqlHandler import sqlMektanixDevilDog
 from modules.webquerytools.twitterscaper import getUserTweets
 
 
-def feedReadMain(chanid, serverid, feed, keyword: str = ''):
+def feedReadMain(chanid, serverid, feed, keyword: str = '', defaultchanneloverride: bool = False, delete: bool = False):
     if doesFeedExist(feed):
         # keywords use OR logic
         databaseKeyword = getKeywordStr(feed)
@@ -67,7 +67,7 @@ def feedCheckAll() -> list:
             if checkForKeyword(readDict['text'], row[0]): #checking for keyword if applicable
                 feedSqlWriteUpdate(readDict)
                 print(f"new post found for {readDict['callsign']}")
-                newNu.append(f"{readDict['link']}|{row[8]}|{row[7]}")
+                newNu.append(f"{readDict['link']}|{row[8]}|{row[7]}|{row[9]}")
     return(newNu)
 
 def getFeedLink(feed):
@@ -135,13 +135,17 @@ def getRSSDict(url):
     print(f"exiting with rssDict for {url}\n{rssDict}")
     return(rssDict)
 
-def feedSqlWriteNew(url, chanid, serverid, keyword: str = '', ):
+def feedSqlWriteNew(url, chanid, serverid, keyword: str = '', defaultchanoverride: bool = False):
     feedDict = getFeedDict(url)
+    if defaultchanoverride:
+        defaultchanoverride = 1
+    else:
+        defaultchanoverride = 0
     if not type(feedDict) is dict:
         return("Error getting data for that one. Check spelling, and if you are sure, the bot is just broke.")
     else:   
         cursorResult = sqlMektanixDevilDog(purpose='insert', table='feeds', 
-        insertColumn="(callsign,feedtext,feedtype,lastread,link,keyword,fromchannel,fromserver)", insertData=f"('{feedDict['callsign']}', '{feedDict['text']}', '{feedDict['type']}', '{feedDict['date']}', '{feedDict['link']}', '{keyword}', {chanid}, {serverid})")
+        insertColumn="(callsign,feedtext,feedtype,lastread,link,keyword,fromchannel,fromserver,fromchanneloverride)", insertData=f"('{feedDict['callsign']}', '{feedDict['text']}', '{feedDict['type']}', '{feedDict['date']}', '{feedDict['link']}', '{keyword}', {chanid}, {serverid}, {defaultchanoverride})")
         dupe = dupeChecker(cursorResult.fetchwarnings())
         if dupe:
             return(f"{url} is already saved.")
