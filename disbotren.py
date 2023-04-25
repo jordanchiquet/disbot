@@ -332,7 +332,7 @@ async def notifyme(ctx):
 
 ## Tasks ##
 
-@tasks.loop(minutes=30.0)
+@tasks.loop(minutes=0.5)
 async def feedcheck():
     try:
         print("feedcheck started")
@@ -343,6 +343,7 @@ async def feedcheck():
             for result in resultArray:
                 resultSplit = result.split('|')
                 link, serverid, chanid, override = resultSplit[0], resultSplit[1], resultSplit[2], resultSplit[3]
+                print(f"link:[{link}] serverid:[{serverid}] chanid:[{chanid}] override:[{override}]")
                 if override == "0":
                     checkForChannel = serv.getServerSetting(serverid, 'botspamchannel')
                     if checkForChannel:
