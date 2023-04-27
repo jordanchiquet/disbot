@@ -1,4 +1,6 @@
-from discord.ext import commands, Embed
+import discord
+
+from discord.ext import commands
 import pyshorteners
 
 
@@ -9,7 +11,7 @@ class UrlHandler(commands.Cog):
 
     @commands.hybrid_command(name="hyperlink", with_app_command=True, description="Shorten a url.")
     async def tinyurl(self, ctx, url, displaytext):
-        embed = Embed()
+        embed = discord.Embed()
         embed.description = "[{displaytext}]({url})"
         await ctx.send(embed=embed)
 
