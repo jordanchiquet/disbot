@@ -12,7 +12,7 @@ class UrlHandler(commands.Cog):
     @commands.hybrid_command(name="hyperlink", with_app_command=True, description="Shorten a url.")
     async def tinyurl(self, ctx, url, displaytext):
         embed = discord.Embed()
-        embed.description = "[{displaytext}]({url})"
+        embed.description = f"[{displaytext}]({url})"
         await ctx.send(embed=embed)
 
 
