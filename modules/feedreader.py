@@ -2,6 +2,7 @@
 import xml.etree.ElementTree as ET
 import pytz
 import re
+import requests
 from datetime import datetime
 
 
@@ -185,7 +186,9 @@ def isRetweet(text: str) -> bool:
 def getRetweet(text: str) -> tuple:
     textUrl = re.search(r'https://t.co/\w+', text).group(0)
     tweeter = re.search(r'RT (@\w+)', text).group(1)
-    return(textUrl, tweeter)
+    tweet_r = requests.get(textUrl)
+    tweet_url = tweet_r.url
+    return(tweet_url, tweeter)
 
 
 

@@ -1,4 +1,5 @@
 import tweepy #tweepy
+import requests
 
 import os
 
@@ -32,9 +33,9 @@ def getUserTweets(username:str, tweetcount: int):
     return(getUserTweetsOutput)
 
 
-tweet = getUserTweets("wigger", 3)
 
-print(tweet)
+r = requests.get('https://t.co/QSaJQSPCGU')
 
+print(r.url)
 
 
