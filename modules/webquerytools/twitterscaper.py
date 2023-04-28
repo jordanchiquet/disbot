@@ -27,8 +27,14 @@ def getUserTweets(username:str, tweetcount: int):
             maxtweets = tweetcount
         tweets = client.get_users_tweets(id=userid, max_results=maxtweets, exclude=["replies"], tweet_fields=["created_at"])
         getUserTweetsOutput = tweets.data[:tweetcount+1]
-    
 
 
     return(getUserTweetsOutput)
+
+
+tweet = getUserTweets("wigger", 3)
+
+print(tweet)
+
+
 

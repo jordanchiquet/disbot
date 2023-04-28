@@ -67,6 +67,9 @@ def feedCheckAll() -> list:
             if checkForKeyword(readDict['text'], row[0]): #checking for keyword if applicable
                 feedSqlWriteUpdate(readDict)
                 print(f"new post found for {readDict['callsign']}")
+                if isRetweet(readDict['text']):
+                    retweet = getRetweet(readDict['text'])
+                    readDict['link'] = f"{readDict['callsign']} retweeted {retweet[1]}: {retweet[0]}"
                 newNu.append(f"{readDict['link']}|{row[8]}|{row[7]}|{row[9]}")
     return(newNu)
 
@@ -101,6 +104,7 @@ def getFeedDict(feed, type: str = 'tweet'):
 def getTweetDict(twitter_name: str):
     try:
         tweet = getUserTweets(twitter_name, 1)[0]
+        print(f"tweet: {tweet}")
     except Exception as e:
         return(genErrorHandle(e))
     tweetDict = {}
@@ -172,6 +176,16 @@ def dupeChecker(warningResponse) -> bool:
             dupe = True
     return dupe
 
+def isRetweet(text: str) -> bool:
+    if text.startswith('RT @'):
+        return True
+    else:
+        return False
+
+def getRetweet(text: str) -> tuple:
+    textUrl = re.search(r'https://t.co/\w+', text).group(0)
+    tweeter = re.search(r'RT @(\w+)', text).group(0)
+    return(textUrl, tweeter)
 
 
 
@@ -214,5 +228,7 @@ def writeKeyword(keyword: str, feedcallsign: str, replace: bool = False):
         purpose = 'append'
     cursorResult = sqlMektanixDevilDog(purpose=purpose, table='feeds', resultColumn='keyword', queryColumn='callsign', queryField=feedcallsign, insertData=keyword)
 
+
+getTweetDict('wigger')
 
 # feedSqlWriteNew('https://twitter.com/PlayOverwatch')
