@@ -184,7 +184,7 @@ def isRetweet(text: str) -> bool:
 
 def getRetweet(text: str) -> tuple:
     textUrl = re.search(r'https://t.co/\w+', text).group(0)
-    tweeter = re.search(r'RT @(\w+)', text).group(0)
+    tweeter = re.search(r'RT @(\w+)', text).group(1)
     return(textUrl, tweeter)
 
 
