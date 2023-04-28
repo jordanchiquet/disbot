@@ -33,9 +33,4 @@ def getUserTweets(username:str, tweetcount: int):
     return(getUserTweetsOutput)
 
 
-
-r = requests.get('https://t.co/QSaJQSPCGU')
-
-print(r.url)
-
-
+print(getUserTweets("wigger", 1))

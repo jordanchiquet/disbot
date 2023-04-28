@@ -188,6 +188,10 @@ def getRetweet(text: str) -> tuple:
     tweeter = re.search(r'RT (@\w+)', text).group(1)
     tweet_r = requests.get(textUrl)
     tweet_url = tweet_r.url
+    media_types = ['photo', 'animated_gif']
+    media_check = next((media for media in media_types if media in tweet_url), False)
+    if media_check:
+        tweet_url = tweet_url.split(media_check)[0]
     return(tweet_url, tweeter)
 
 
@@ -232,6 +236,6 @@ def writeKeyword(keyword: str, feedcallsign: str, replace: bool = False):
     cursorResult = sqlMektanixDevilDog(purpose=purpose, table='feeds', resultColumn='keyword', queryColumn='callsign', queryField=feedcallsign, insertData=keyword)
 
 
-getTweetDict('wigger')
+
 
 # feedSqlWriteNew('https://twitter.com/PlayOverwatch')
