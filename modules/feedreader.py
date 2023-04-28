@@ -71,6 +71,7 @@ def feedCheckAll() -> list:
                 if isRetweet(readDict['text']):
                     retweet = getRetweet(readDict['text'])
                     readDict['link'] = f"{readDict['callsign']} retweeted {retweet[1]}: {retweet[0]}"
+                readDict['link'] = readDict['link'].replace("statuses","status")
                 newNu.append(f"{readDict['link']}|{row[8]}|{row[7]}|{row[9]}")
     return(newNu)
 
