@@ -29,7 +29,6 @@ class OnMessageHeyComputer:
     def lookForCommand(self) -> bool:
         print("lookForCommand started with self.msgWordList: [" + str(self.msgWordList) + "]")
         lookingForCommand = False
-        #TODO: bug here with command 'computer, load up a dog image' ; always returning False
         if self.msgWordList[0] in str(greetingIgnoreList):
             print("greeting found as first entry: [" + self.msgWordList[0] + "]")
             self.msgWordList = rh.removefirstindex(self.msgWordList)

@@ -1,5 +1,6 @@
 
 import os
+import requests
 
 # functions from my randomhelpers file in the folder above this; getRegexReturn is currently unused in this file. genErrorHandle is my exception handler that I use in several files. 
 from modules.randomhelpers import getRegexReturn, getUrlContentType, genErrorHandle
@@ -15,25 +16,42 @@ gsource = build("customsearch", 'v1', developerKey=gapi).cse()
 
 
 #the main function the bot is actually calling. 
-def imageget(query):
+def imageget(query, tryint: int = 0):
     print(f"imageget (g images) started with query: [{query}]")
-
-    # The below line creates an object called rawresult which consists of:
-    #   the nested 'list' object from 'gsource' object created above, given three paramaters 
-    #       the function 'execute()' within that 'list' object is then called.
     rawresult = gsource.list(q=query,searchType='image',cx=appapi).execute()
 
-    imglink = resultiterator(rawresult)
-    imglinkContentType = getUrlContentType(imglink)
-    tryint = 0
-    while "ERROR" in imglinkContentType or "image" not in imglinkContentType:
+    imglink, imglinkContentType = get_new_image_tuple(rawresult, tryint)
+    print(f"imglinkContentType: {imglinkContentType}")
+    print(f"get_need_iteration: {get_need_iteration(imglinkContentType)}")
+    r = requests.get(imglink)
+    print(f"r.status_code: {r.status_code}")
+    print(r.headers)
+
+    while get_need_iteration(imglinkContentType):
         print(f"non-embeddable image in link [{imglink}]")
         tryint += 1
         print("trying next result [tryint: {}]".format(tryint))
-        imglink = resultiterator(rawresult, tryint)
-        imglinkContentType = getUrlContentType(imglink)
-    print(f"imageget returning: [{imglink}]")
+        imglink, imglinkContentType = get_new_image_tuple(rawresult, tryint)
     return(imglink)
+
+
+def get_new_image_tuple(rawresult: dict, tryint: int = 0) -> tuple:
+    imglink = resultiterator(rawresult, tryint)
+    imglinkContentType = getUrlContentType(imglink)
+    return(imglink, imglinkContentType)
+
+def get_need_iteration(contenttype: str) -> bool:
+    skipList = [
+    'ERROR',
+    'avif'
+    ]
+    if "image" not in contenttype:
+        return True
+    for skip in skipList:
+        if skip in contenttype:
+            return True
+    return False
+
 
 
 # this actualy gets the result
@@ -45,3 +63,7 @@ def resultiterator(rawresult, tryint: int = 0):
         genErrorHandle(e)
         imglink = None
     return(imglink)
+
+
+test = imageget("house full of bugs")
+print(test)

@@ -23,7 +23,7 @@ def picTriggerMain(msgContent: str, serverid: int):
 def thisBitchTrigger(msgContent: str):
     print("thisBitchTriggerStarted")
     msgSanitized = msgContent.replace(",", "")
-    if msgSanitized.endswith("this bitch"):
+    if msgSanitized != "this bitch" and msgSanitized.endswith("this bitch"):
         fileFolder = ("/home/ubuntu/disbot/picfolder/bitchfolder")
         fileIntStr = folderWalker(fileFolder)
         fileName = "bitchfile" + fileIntStr

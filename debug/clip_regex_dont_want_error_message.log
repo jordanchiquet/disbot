@@ -1,0 +1,64 @@
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: attempting to compile query: [comp\w+|jarvis|machine|^(robo)?renard|^(ro)?bot\b|techbride\b]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturnOut: [<re.Match object; span=(0, 6), match='renard'>]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: regex match in lookForCommand <re.Match object; span=(0, 6), match='renard'>   
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: list before removing first index: ['renard', 'is', 'autofollowing', 'sams', 'twitter', 'and', 'the', 'main', 'clip', 'account', 'is', 'getting', 'spammed', 'to', '<#600430089519497235>']
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: list after removing the first index: ['is', 'autofollowing', 'sams', 'twitter', 'and', 'the', 'main', 'clip', 'account', 'is', 'getting', 'spammed', 'to', '<#600430089519497235>']
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: lookForCommand returning: [True]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: looking for command in heyComputerMain
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: tryGetQueryCommand started
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: commandDictInit started
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: self.queryCommandDict initialized and declared
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturn with query: [defin] and input: [is autofollowing sams twitter and the main clip account is getting spammed to <#600430089519497235>]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: attempting to compile query: [defin]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturnOut: [None]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturn with query: [meaning] and input: [is autofollowing sams twitter 
+and the main clip account is getting spammed to <#600430089519497235>]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: attempting to compile query: [meaning]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturnOut: [None]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturn with query: [picture] and input: [is autofollowing sams twitter 
+and the main clip account is getting spammed to <#600430089519497235>]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: attempting to compile query: [picture]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturnOut: [None]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturn with query: [pictograph] and input: [is autofollowing sams twitter and the main clip account is getting spammed to <#600430089519497235>]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: attempting to compile query: [pictograph]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturnOut: [None]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturn with query: [pic] and input: [is autofollowing sams twitter and 
+the main clip account is getting spammed to <#600430089519497235>]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: attempting to compile query: [pic]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturnOut: [None]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturn with query: [photograph] and input: [is autofollowing sams twitter and the main clip account is getting spammed to <#600430089519497235>]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: attempting to compile query: [photograph]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturnOut: [None]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturn with query: [photo] and input: [is autofollowing sams twitter and the main clip account is getting spammed to <#600430089519497235>]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: attempting to compile query: [photo]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturnOut: [None]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturn with query: [image] and input: [is autofollowing sams twitter and the main clip account is getting spammed to <#600430089519497235>]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: attempting to compile query: [image]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturnOut: [None]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturn with query: [img] and input: [is autofollowing sams twitter and 
+the main clip account is getting spammed to <#600430089519497235>]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: attempting to compile query: [img]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturnOut: [None]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturn with query: [video] and input: [is autofollowing sams twitter and the main clip account is getting spammed to <#600430089519497235>]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: attempting to compile query: [video]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturnOut: [None]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturn with query: [clip] and input: [is autofollowing sams twitter and the main clip account is getting spammed to <#600430089519497235>]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: attempting to compile query: [clip]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: getRegexReturnOut: [<re.Match object; span=(43, 47), match='clip'>]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: clipfound command: [yt]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: tryGetParam started with self.cmdMsgSplit: [clip]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: articleListInit started
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: tryGetQueryAfterCmd started with [1] of self.cmdRemovalList: [['is autofollowing sams twitter and the main ', ' account is getting spammed to <#600430089519497235>']]
+
+NOTE: This filtering out the 'a' when it should only do that if if there is a space after (including the space)
+
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: paramEndingCleanser started
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: queryFinalGauntlet started
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: self.param AFTER FINAL GAUNTLET: [ccount is getting spammed to <#600430089519497235>]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: HEY COMPUTER GOING FORWARD WITH QUERY: [ount is getting spammed to <#600430089519497235>]
+
+NOTE: Don't know why the fuck it is taking out the 'cc' here 
+
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: cmdHandlerWebQueries started
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: youtubesearch started with query [ount is getting spammed to <#600430089519497235>]
+Apr 27 16:31:08 ip-172-31-37-201 disbotren[92951]: youtubesearch returning: [https://youtu.be/Px_mohrKAXc]
