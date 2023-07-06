@@ -1,6 +1,5 @@
 import random
 from random import randrange
-from modules.randomhelpers import removefirstindex
 
 class dice:
     def __init__(self, a: str = None, b: str = None):

@@ -4,7 +4,7 @@ import random
 #TODO: picgrabber master function?
 
 def picTriggerMain(msgContent: str, serverid: int):
-    print("starting picTriggerMain")
+    print("starting picTriggerMain with input: [" + msgContent + "]")
     picTriggerResult = False, ""
     folderCheck = trigMasterGeneral(folderTriggerList, msgContent, serverid)
     if folderCheck[0]:
@@ -88,6 +88,7 @@ folderTriggerList = [
     "your sign",
     "i see what you mean",
     "gang",
+    "shh",
     "thanks obama",
     "vibe check"
 ]
@@ -95,6 +96,7 @@ folderTriggerList = [
 oneOffTriggerList = [
     "actually,",
     "give me a hand",
+    "i got you",
     "promotion",
     "same sex",
     "stop right there",
