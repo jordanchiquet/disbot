@@ -45,9 +45,9 @@ def genErrorHandle(exception: Exception, funcName = "[no funcName Found]") -> st
 @genFuncErrorWrapper
 def getCSTOffsetTime() -> datetime:
     if time.localtime().tm_isdst > 0:
-        cstDelta = 5
-    else:
         cstDelta = 6
+    else:
+        cstDelta = 5
     return(datetime.now() - timedelta(hours=cstDelta))
 
 @genFuncErrorWrapper

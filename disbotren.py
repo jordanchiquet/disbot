@@ -251,6 +251,7 @@ async def on_reaction_add(reaction, user):
     messageContent = message.content
     messageuserid = messageuser.id
     reactionuser = user.id
+    reeactionuserstr = (str(user)).split("#")[0]
     msgOut = None
     if reaction.emoji == '💬' and not user.bot:
         print("speech bubble called")
@@ -258,9 +259,9 @@ async def on_reaction_add(reaction, user):
         serverid=serverid, userid=messageuserid)
         quoteId = str(quoteAddResult[1])
         if quoteAddResult[0]:
-            msgOut = ("Quote " + quoteId + " added by " + str(user) + ".")
+            msgOut = ("Quote " + quoteId + " added by " + reeactionuserstr + ".")
         else: 
-            msgOut = (str(user) + " tried to add a quote that is already in as " + quoteId + ".")   
+            msgOut = (reeactionuserstr + " tried to add a quote that is already in as " + quoteId + ".")   
     elif (reaction.emoji == Gib or reaction.emoji == '✋') and messageuser.bot:
         extraNotifyInit = timerNotify.timerNotify(str(reactionuser), messageContent)
         result = extraNotifyInit.extraNotifyWrite()
