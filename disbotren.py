@@ -688,11 +688,16 @@ async def how(ctx, *, query):
 
 @bot.hybrid_command(name="img", with_app_command=True, description="Gets first embeddable google image result.")
 async def img(ctx: commands.Context, *, query):
-    imgquery = query
-    print(f"arg: [{query}]")
-    imgembed = discord.Embed(title ='', description=imgquery, color=discord.Colour.dark_orange())
-    imgembed.set_image(url = queryCmd("img", imgquery))
-    delcmd = await ctx.send(embed=imgembed)
+    print(f"img command arg: [{query}]")
+
+    imgembedlink = queryCmd("img", query)
+    
+    if "sorry" in imgembedlink:
+        delcmd = await ctx.send(imgembedlink)
+    else:
+        imgembed = discord.Embed(title ='', description=query, color=discord.Colour.dark_orange())
+        imgembed.set_image(url = imgembedlink)
+        delcmd = await ctx.send(embed=imgembed)
     deletelog[ctx.message.id] = delcmd
 
 @bot.hybrid_command(name="dalle", with_app_command=True, description="Get AI generated image with DALLE2")
