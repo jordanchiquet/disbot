@@ -26,11 +26,12 @@ def imageget(query, tryint: int = 0):
     r = requests.get(imglink)
     print(f"r.status_code: {r.status_code}")
 
-    while get_need_iteration(imglinkContentType):
+    while get_need_iteration(imglinkContentType) and tryint < 10:
         print(f"non-embeddable image in link [{imglink}]")
         tryint += 1
         print("trying next result [tryint: {}]".format(tryint))
         imglink, imglinkContentType = get_new_image_tuple(rawresult, tryint)
+    print(f"done with get_new_image_tuple loop, imglink: [{imglink}]")
     return(imglink)
 
 
