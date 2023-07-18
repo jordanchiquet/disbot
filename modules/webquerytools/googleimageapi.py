@@ -25,7 +25,6 @@ def imageget(query, tryint: int = 0):
     print(f"get_need_iteration: {get_need_iteration(imglinkContentType)}")
     r = requests.get(imglink)
     print(f"r.status_code: {r.status_code}")
-    print(r.headers)
 
     while get_need_iteration(imglinkContentType):
         print(f"non-embeddable image in link [{imglink}]")
