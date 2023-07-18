@@ -41,6 +41,7 @@ def get_new_image_tuple(rawresult: dict, tryint: int = 0) -> tuple:
     else:
         imglink = "sorry, google did not like that one for some reason."
         imglinkContentType = "image"
+    print(f"exiting get_new_image_tuple with imglink: [{imglink}] and imglinkContentType: [{imglinkContentType}]")
     return(imglink, imglinkContentType)
 
 def get_need_iteration(contenttype: str) -> bool:
@@ -48,6 +49,7 @@ def get_need_iteration(contenttype: str) -> bool:
     'ERROR',
     'avif'
     ]
+    print(f"get_need_iteration called with contenttype: [{contenttype}]")
     if "image" not in contenttype:
         return True
     for skip in skipList:
