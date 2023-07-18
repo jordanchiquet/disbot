@@ -148,3 +148,10 @@ def subEmotes(input: str, substr: str) -> str:
     output = re.sub(r"<.*?\:.*?\:\d+>", substr, input)
     print(f"subEmotes output: [{output}]")
     return(output)
+
+
+@genFuncErrorWrapper
+def addition(*args):
+    print(sum(args))
+
+addition(1, "dog")

@@ -36,8 +36,12 @@ def imageget(query, tryint: int = 0):
 
 
 def get_new_image_tuple(rawresult: dict, tryint: int = 0) -> tuple:
-    imglink = resultiterator(rawresult, tryint)
-    imglinkContentType = getUrlContentType(imglink)
+    if tryint < 10:
+        imglink = resultiterator(rawresult, tryint)
+        imglinkContentType = getUrlContentType(imglink)
+    else:
+        imglink = "sorry, google did not like that one for some reason."
+        imglinkContentType = "image"
     return(imglink, imglinkContentType)
 
 def get_need_iteration(contenttype: str) -> bool:
@@ -63,7 +67,3 @@ def resultiterator(rawresult, tryint: int = 0):
         genErrorHandle(e)
         imglink = None
     return(imglink)
-
-
-test = imageget("house full of bugs")
-print(test)
