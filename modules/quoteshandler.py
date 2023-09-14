@@ -9,6 +9,7 @@ def addQuote (user: str, quoteStr: str, timestamp, serverid: int, userid: int) -
     timestamp = str(timestamp) #test with and wihout str-ing this
     serverid, userid = str(serverid), str(userid)
     quoteStr = quoteStr.replace("\"", "'")
+    user = user.split("#")[0]
     insertValues = (user, quoteStr, timestamp, serverid, userid)
     insertValues = str(insertValues)
     addQuoteOutSuccess = False, ""
