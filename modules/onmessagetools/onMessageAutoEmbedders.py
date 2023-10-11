@@ -30,7 +30,7 @@ class OnMessageAutoEmbedder:
             return False
 
     def getEmbedUrl(self) -> str:
-        usableLinkSearch = rh.getRegexReturn(query=r"\S+f"+self.twitterOrX+r"\.com/\S+", input=self.msgContent)
+        usableLinkSearch = rh.getRegexReturn(query=r"\S+"+self.twitterOrX+r"\.com/\S+", input=self.msgContent)
         if usableLinkSearch == None:
             print("onMessageAutoEmbedders no usable link found")
             return None

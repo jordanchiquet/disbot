@@ -25,7 +25,7 @@ from discord.ext import commands, tasks
 import numexpr as ne
 from urlextract import URLExtract #urlextract
 
-import modules.feedreader as fr
+# import modules.feedreader as fr
 import modules.serverset as serv
 from modules.commandHandler import cmdHandlerWebQueries as queryCmd
 from modules.dice import dice as diceroller
