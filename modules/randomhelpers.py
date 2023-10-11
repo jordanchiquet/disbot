@@ -155,5 +155,3 @@ def addition(*args):
     print(sum(args))
 
 test = getRegexReturn(r"\w+x\.com/\w+", "doogie house dugg https://x.com/TheInsiderPaper/status/1711075873741312021?s=20 asdsad")
-
-print(test.group())
