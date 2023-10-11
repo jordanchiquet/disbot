@@ -61,7 +61,7 @@ class Bot(commands.Bot):
     
     async def on_ready(self):
         timercheck.start()
-        feedcheck.start()
+        # feedcheck.start()
         channel_bot_testing = bot.get_channel(600430089519497235)
         await channel_bot_testing.send(content="renard online")
 
