@@ -1,5 +1,4 @@
 import tweepy #tweepy
-import requests
 
 import os
 

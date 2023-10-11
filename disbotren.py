@@ -333,27 +333,27 @@ async def notifyme(ctx):
 
 ## Tasks ##
 
-@tasks.loop(minutes=0.5)
-async def feedcheck():
-    try:
-        print("feedcheck started")
-        resultArray = fr.feedCheckAll()
-        newLine = "\n"
-        if len(resultArray) > 0:
-            print(f"results in feedcheck:[{newLine.join(resultArray)}]")
-            for result in resultArray:
-                resultSplit = result.split('|')
-                link, serverid, chanid, override = resultSplit[0], resultSplit[1], int(resultSplit[2]), resultSplit[3]
-                print(f"link:[{link}] serverid:[{serverid}] chanid:[{chanid}] override:[{override}]")
-                if override == "0":
-                    checkForChannel = serv.getServerSetting(serverid, 'botspamchannel')
-                    if checkForChannel:
-                        chanid = checkForChannel
-                outChannel = bot.get_channel(chanid)
-                await outChannel.send(link)
-    except Exception as e:
-        genErrorHandle(e)
-        pass
+# @tasks.loop(minutes=0.5)
+# async def feedcheck():
+#     try:
+#         print("feedcheck started")
+#         resultArray = fr.feedCheckAll()
+#         newLine = "\n"
+#         if len(resultArray) > 0:
+#             print(f"results in feedcheck:[{newLine.join(resultArray)}]")
+#             for result in resultArray:
+#                 resultSplit = result.split('|')
+#                 link, serverid, chanid, override = resultSplit[0], resultSplit[1], int(resultSplit[2]), resultSplit[3]
+#                 print(f"link:[{link}] serverid:[{serverid}] chanid:[{chanid}] override:[{override}]")
+#                 if override == "0":
+#                     checkForChannel = serv.getServerSetting(serverid, 'botspamchannel')
+#                     if checkForChannel:
+#                         chanid = checkForChannel
+#                 outChannel = bot.get_channel(chanid)
+#                 await outChannel.send(link)
+#     except Exception as e:
+#         genErrorHandle(e)
+#         pass
             
 
 @tasks.loop(seconds=5.0)
