@@ -154,4 +154,6 @@ def subEmotes(input: str, substr: str) -> str:
 def addition(*args):
     print(sum(args))
 
-addition(1, "dog")
+test = getRegexReturn(r"\w+x\.com/\w+", "doogie house dugg https://x.com/TheInsiderPaper/status/1711075873741312021?s=20 asdsad")
+
+print(test.group())

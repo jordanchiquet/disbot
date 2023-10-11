@@ -1,4 +1,4 @@
-from modules.onmessagetools import onMessagePicTriggers, onMessageSQLCounter, onMessageJokeTriggers, onMessageHeyComputer
+from modules.onmessagetools import onMessagePicTriggers, onMessageSQLCounter, onMessageJokeTriggers, onMessageHeyComputer, onMessageAutoEmbedders
 
 from modules.randomhelpers import subEmotes
 
@@ -29,6 +29,9 @@ class onMessageHandler:
         thisBitchCheck = onMessagePicTriggers.thisBitchTrigger(self.msgContent)
         picTriggerCheck = onMessagePicTriggers.picTriggerMain(self.msgContent, self.serverid)
         jokeTriggerCheck = onMessageJokeTriggers.jokeTriggerMain(self.msgContent)
+        autoEmbedderInit = onMessageAutoEmbedders.OnMessageAutoEmbedder(self.msgContent)
+        autoEmbedderCheck = autoEmbedderInit.autoEmbedderMain()
+
         if thisBitchCheck[0]:
             messageHandleReturn = "file", thisBitchCheck[1]
         elif picTriggerCheck[0]:
@@ -37,6 +40,9 @@ class onMessageHandler:
             messageHandleReturn = "text", jokeTriggerCheck[1]
         elif heyComputerCheck[0]:
             messageHandleReturn = heyComputerCheck[1], heyComputerCheck[2]
+        elif autoEmbedderCheck:
+            messageHandleReturn = "text", autoEmbedderCheck
+        
         print("messageHandleReturn: [" + str(messageHandleReturn) + "]")
         return(messageHandleReturn)
     
