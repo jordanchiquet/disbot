@@ -22,10 +22,7 @@ def generateStable(query):
     for resp in answers:
         for artifact in resp.artifacts:
             if artifact.finish_reason == generation.FILTER:
-                print(
-                    "Your request activated the API's safety filters and could not be processed."
-                    "Please modify the prompt and try again.")
-                return(f"error: content/booby error i have not gotten around yet sorry (prompt was: {query})")
+                return(f"error - {query}| the Stability endpoint just returned the following to Renard: **'Your request activated the API's safety filters and could not be processed. Please modify your prompt and try again.'")
             if artifact.type == generation.ARTIFACT_IMAGE:
                 img = Image.open(io.BytesIO(artifact.binary))
                 try:

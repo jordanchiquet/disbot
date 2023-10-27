@@ -188,7 +188,7 @@ async def on_message(message):
     user = (str(message.author)).split("#")[0]
     timeorig = (message.created_at - timedelta(hours=5))
     mclower = message.content.lower()
-    onMessageInit = onMessageMain.onMessageHandler(serverid, channelid, userid, username, timeorig, mclower)
+    onMessageInit = onMessageMain.onMessageHandler(serverid, channelid, userid, username, timeorig, mclower, message)
     onMessageResult = onMessageInit.messageHandleMain()
     if onMessageResult[0] != None:
         if onMessageResult[0] == "text":

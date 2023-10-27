@@ -1,84 +1,71 @@
 #!/usr/bin/env python3
 
-#TODO: pipdependencies script
-#TODO: venv on aws
-#TODO: owned counter
+#TODO: setup hook embed message
+#TODO: encrypt/hash sql pw and api keys
+#TODO: pip dependency update script for venv parity 
+#TODO: biden I did that command using overlay
 
-versionstr = "v6.6.6"
 
+#API DISCORDREN
 
-#API DISCORDHACK
+versionstr = "v2.0.0"
 
 
 import datetime
 import discord #discord
-import logging
 import os, os.path
-import modules.feedreader as fr
-import mysql.connector #mysql-connector-python 
 import random
 import re
 import requests
-import sys
-import time
-# import tenorpy #tenorpy TODO: deprecated... net to switch to TenGiphPy for gifs
 import urllib.parse
 import urllib.request
-import wikipediaapi #wikipedia-api
-from bs4 import BeautifulSoup #bs4
 from datetime import datetime, timedelta
-from discord import File, app_commands
+from discord import File
 from discord.ext import commands, tasks
-from discord.utils import get
-# from discord_slash import SlashCommand,SlashContext
-from googleapiclient.discovery import build #google-api-python-client
-# from GoogleScraper import scrape_with_config, GoogleSearchError TODO: am i even using this
-from googlesearch import search #google
+import numexpr as ne
 from urlextract import URLExtract #urlextract
 
+# import modules.feedreader as fr
 import modules.serverset as serv
-from modules.countgraphs import GraphMaker
-from modules.dice import dice
+from modules.commandHandler import cmdHandlerWebQueries as queryCmd
+from modules.dice import dice as diceroller
 from modules.piltools.dickshadow import executeoverlay #Pillow #numpy #whapi
 from modules.figlet import figgletizer 
-from modules.onmessagetools import onMessageMain
+from modules.goatse import goatse
 from modules import quoteshandler as qh
-from modules.webquerytools.gifgrab import getgif
-from modules.webquerytools.googleimageapi import imageget
-from modules.webquerytools.merriamapi import getmeaning
+from modules.onmessagetools import onMessageMain
 from modules.randomhelpers import genErrorHandle
 from modules.timertools import timerExpiryCheck, timerNotify, timerWriter
 from modules.timertools.expiryExclaims import exclaimList
-from modules.webquerytools.wikihow import wikihow
-from modules.webquerytools.youtube import youtubesearch
+from modules.webquerytools.wikipediasearch import wikipediaSearch
 from modules.zooo import zooo
 
-
-# sys.stdout = open('hackbotlogfile.txt', 'w')
+intents = discord.Intents().default()
+intents.members = True
+intents.presences = True
+client = discord.Client(intents=intents)
 
 
 class Bot(commands.Bot):
     def __init__(self):
         intents = discord.Intents.default()
         intents.message_content = True
-        # intents.reactions = True
         # intents.members = True
-        # intents.guilds = True   
-        # intents.members = True
-        super().__init__(command_prefix = ",", case_insensitive=True, intents=intents) #application_id=608080063019352084
+        super().__init__(command_prefix = ".", case_insensitive=True, intents=intents)
     
     async def setup_hook(self):
         print(f"starting setup_hook for {self.user}.")
-        # await load()
+        await load()
         await self.tree.sync()
         print("tree sync complete.")
     
     async def on_ready(self):
-        print("ready")
-        channel_bot_testing = bot.get_channel(600430089519497235)
-        await channel_bot_testing.send(content="hackable online")
+        timercheck.start()
         # feedcheck.start()
-        print("sent")
+        channel_bot_testing = bot.get_channel(600430089519497235)
+        await channel_bot_testing.send(content="renard online (test)")
+
+        
 
 bot = Bot()
 
@@ -87,32 +74,15 @@ async def load():
         if filename.endswith('.py'):
             await bot.load_extension(f'cogs.{filename[:-3]}')
 
-# @bot.event
-# async def on_ready():
-#     print("ready")
-#     channel_bot_testing = bot.get_channel(600430089519497235)
-#     await channel_bot_testing.send(content="hackable online")
-#     print("sent")
-
-
-
-# @bot.hybrid_command(name="test", with_app_command=True, description="test1")
-# async def test(ctx: commands.Context):
-#     await ctx.reply("test")
-
-
 
 
 renardgenchannel = bot.get_channel(649528092691529749)
 
-
 deletelog = {}
 commandRunningDict = {}
 chatLog = []
-jordan_id = 191688156427321344
-
-
 now = datetime.now() - timedelta(hours=5)
+jordan_id = 191688156427321344
 
 
 @bot.event
@@ -124,7 +94,6 @@ async def on_message_delete(message):
         await dellog.delete()
         del deletelog[message.id]
 
-
 @bot.event
 async def on_message_edit(before, after):
     if before.id in deletelog:
@@ -135,19 +104,8 @@ async def on_message_edit(before, after):
         delcmd = await edlog.edit(content=("http://youtube.com/watch?v=" + ytresult[0]))
         deletelog[after] = delcmd
     if (after.content).startswith("."):
-        # edmessage = msgloginmem[before.id]
-        print('starting process cmd')
+        print('starting process cmd on message edit')
         await bot.process_commands(after)
-
-
-@bot.event
-async def on_member_join(member):
-    if member.guild.id == 237397384676507651:
-        channel = bot.get_channel(649528092691529749)
-    elif member.guild.id == 688494181727207478:
-        channel = bot.get_channel(767847844039753789)
-    await channel.send("a pedophile has joined the chatroom")
-
 
 @tasks.loop(seconds=300.0)
 async def commandRunningDictClear():
@@ -155,7 +113,45 @@ async def commandRunningDictClear():
     commandRunningDict.clear()
     chatLog.clear()
 
+@bot.command()
+async def cyberwar(ctx, a, b: str = None):
+    if ctx.author.id == jordan_id:
+        print("got jordan")
+        if b == "fire":
+            if a == "open":
+                cyberWarfareLoop.start(ctx.channel.id)
+            elif a == "cease":
+                print("got to cease")
+                cyberWarfareLoop.stop()
+    else:
+        await ctx.send("did you really think that would work")
 
+@bot.command()
+async def todo(ctx):
+    if ctx.author.id == jordan_id:
+        with open("todo.txt", 'a') as f:
+            f.write("\n- " + ctx.message.content[6:])
+            f.close()
+        outMsg = "appended"
+    else:
+        outMsg = "🤖"
+    await ctx.send(outMsg)
+
+@tasks.loop(seconds=5.0)
+async def cyberWarfareLoop(cyberwarchannelid: int = None):
+    print("cyberwarfare engaged")
+    freaxchannel = bot.get_channel(cyberwarchannelid)
+    await freaxchannel.send(goatse)
+
+@bot.check
+async def channel_not_poll(ctx):
+    print("starting channel_not_poll check")
+    if ctx.channel.id == 1041861487876132885:
+        print("channel was poll chan")
+        return ctx.command.qualified_name == "poll"
+    else:
+        print("channel not poll chan")
+        return True
 
 @bot.event
 async def on_member_update(before, after):
@@ -166,163 +162,139 @@ async def on_member_update(before, after):
             print("nick changed for user " + str(before.id) + " from " + before.nick + " to " + after.nick)
         except:
             print("user " + str(before.id) + " changed name from one there's no record of to " + after.nick)
-        #nickcounterinit = wordcounter(before.id, before.guild.id, after.nick, nicktally=True)
-        #nickcounterinit.countprocessor()
-    user = after.id
-    if user == 978091507741499425 and after.nick != "jordanlivingroom":
-        print("bot nick reach")
-        await before.edit(nick="jordanlivingroom")
+        # nickcounterinit = wordcounter(before.id, before.guild.id, after.nick, nicktally=True)
+        # nickcounterinit.countprocessor()
 
 msgCache = {} #blank dict for coupling ids with message content
 
+@bot.event
+async def on_message(message):
+    if message.author == bot.user:
+        commandRunningDict[message.id] = message.content
+        print("bot command logged")
+        return
+    else:
+        chatLog.append(message.content)
+    serverid = message.guild.id
+    channelid = message.channel.id
+
+    userid = message.author.id
+    if channelid == 1041861487876132885 and not message.author == bot.user:
+        await message.delete()
+    authorfull = str(message.author)
+    username = authorfull.split("#")[0]
+    channel = message.channel
+    print(message.author)
+    user = (str(message.author)).split("#")[0]
+    timeorig = (message.created_at - timedelta(hours=5))
+    mclower = message.content.lower()
+    onMessageInit = onMessageMain.onMessageHandler(serverid, channelid, userid, username, timeorig, mclower, message)
+    onMessageResult = onMessageInit.messageHandleMain()
+    if onMessageResult[0] != None:
+        if onMessageResult[0] == "text":
+            print("onMessageResult got text and sending: [" + onMessageResult[1] + "] to channel")
+            await channel.send(onMessageResult[1])
+        elif onMessageResult[0] == "file":
+            await channel.send(file=File(onMessageResult[1]))
+
+    if len(chatLog) >= 3: 
+        if chatLog[-1] == chatLog[-2] and chatLog[-2] == chatLog[-3]:
+            await channel.send(chatLog[-2])
+            chatLog.clear()
+
+    if len(chatLog) >= 3: 
+        if chatLog[-1] == chatLog[-2] and chatLog[-2] == chatLog[-3]:
+            await channel.send(chatLog[-2])
+            chatLog.clear()
+    if not mclower.startswith(".") and ("belay that order" in mclower or "cancel that order" in mclower or "cancel that command" in mclower or "delete that timer" in mclower
+     or "cancel that timer" in mclower or "erase that timer" in mclower):
+        print("belay that in command, checking commandRunning Dict")
+        if  commandRunningDict != []:
+            print("dict is not empty")
+            deletionID = [*commandRunningDict.keys()][-1]
+            print("made it to first key acquire")
+            msgObj = await channel.fetch_message(deletionID)
+            commandMsgStr = commandRunningDict[deletionID]
+            print(commandMsgStr)
+            if "Timer set for " in commandMsgStr:
+                print("timer detected in command")
+                authorRegCheck = re.search("[a-zA-Z]+#[0-9]{4}", commandMsgStr)
+                if authorRegCheck.group() == str(message.author):
+                    print("belay order call was made by timer author")
+                    deltable = "timers"
+                else:
+                    await channel.send("I cannot do that sir, the timer is DNA-locked by Commander " + authorRegCheck.group() + ".")
+                    return
+            elif commandRunningDict[deletionID].startswith("Quote ") and " added by " in commandRunningDict[deletionID]:
+                print("quotes detected in command")
+                deltable = "quotes"
+            else:
+                await msgObj.delete()
+                await channel.send("TRANSPHASIC PAYLOAD DROPPED... MESSAGE OBLITERATED")
+                return
+            await msgObj.delete()
+            await channel.send("LAUNCHING " + deltable[:-1].upper() + " TORPEDOES")
+        else:
+            print("nothing to belay..")
+            await channel.send("Nothing to belay Sir.")
+    await bot.process_commands(message)
 
 # @bot.event
-# async def on_message(message):
-#     if message.author == bot.user:
-#         commandRunningDict[message.id] = message.content
-#         print("bot command logged")
-#         return
-#     else:
-#         chatLog.append(message.content)
-#     serverid = message.guild.id
-#     channelid = message.channel.id
-#     userid = message.author.id
-#     authorfull = str(message.author)
-#     username = authorfull.split("#")[0]
-#     channel = message.channel
-#     print(message.author)
-#     user = (str(message.author)).split("#")[0]
-#     timeorig = (message.created_at - timedelta(hours=5))
-#     mclower = message.content.lower()
-#     onMessageInit = onMessageMain.onMessageHandler(serverid, channelid, userid, username, timeorig, mclower)
-#     onMessageResult = onMessageInit.messageHandleTestBot()
-#     if onMessageResult[0] != None:
-#         if onMessageResult[0] == "text":
-#             await channel.send(onMessageResult[1])
-#         elif onMessageResult[0] == "file":
-#             await channel.send(file=File(onMessageResult[1]))
-
-#     if len(chatLog) >= 3: 
-#         if chatLog[-1] == chatLog[-2] and chatLog[-2] == chatLog[-3]:
-#             await channel.send(chatLog[-2])
-#             chatLog.clear()
-    
-#     if not mclower.startswith(".") and ("belay that order" in mclower or "cancel that order" in mclower or "cancel that command" in mclower or "delete that timer" in mclower
-#      or "cancel that timer" in mclower or "erase that timer" in mclower):
-#         print("belay that in command, checking commandRunning Dict")
-#         if  commandRunningDict != []:
-#             print("dict is not empty")
-#             deletionID = [*commandRunningDict.keys()][-1]
-#             print("made it to first key acquire")
-#             msgObj = await channel.fetch_message(deletionID)
-#             commandMsgStr = commandRunningDict[deletionID]
-#             print(commandMsgStr)
-#             if "Timer set for " in commandMsgStr:
-#                 print("timer detected in command")
-#                 authorRegCheck = re.search("[a-zA-Z]+#[0-9]{4}", commandMsgStr)
-#                 if authorRegCheck.group() == str(message.author):
-#                     print("belay order call was made by timer author")
-#                     deltable = "timers"
-#                 else:
-#                     await channel.send("I cannot do that sir, the timer is DNA-locked by Commander " + authorRegCheck.group() + ".")
-#                     return
-#             elif commandRunningDict[deletionID].startswith("Quote ") and " added by " in commandRunningDict[deletionID]:
-#                 print("quotes detected in command")
-#                 deltable = "quotes"
-#             else:
-#                 await msgObj.delete()
-#                 await channel.send("TRANSPHASIC PAYLOAD DROPPED... MESSAGE OBLITERATED")
-#                 return
-#             mydb = mysql.connector.connect(
-#                 host='3.144.163.74',
-#                 user='dbuser',
-#                 passwd='e4miqtng')
-#             mycursor = mydb.cursor()
-#             sql = "DELETE FROM renarddb." + deltable + "\nORDER BY id DESC LIMIT 1"
-#             mycursor.execute(sql)
-#             mydb.commit()
-#             await msgObj.delete()
-#             await channel.send("LAUNCHING " + deltable[:-1].upper() + " TORPEDOES")
+# async def on_reaction_add(reaction, user):
+#     Gib = bot.get_emoji(410972413036331008)
+#     message = reaction.message
+#     channel = reaction.message.channel
+#     serverid = reaction.message.guild.id
+#     ts = message.created_at - timedelta(hours=5)
+#     messageuser = message.author
+#     msguserstr = str(messageuser)
+#     messageContent = message.content
+#     messageuserid = messageuser.id
+#     reactionuser = user.id
+#     reeactionuserstr = (str(user)).split("#")[0]
+#     msgOut = None
+#     if reaction.emoji == '💬' and not user.bot:
+#         print("speech bubble called")
+#         quoteAddResult = qh.addQuote(user=msguserstr, quoteStr=messageContent, timestamp=str(ts),
+#         serverid=serverid, userid=messageuserid)
+#         quoteId = str(quoteAddResult[1])
+#         if quoteAddResult[0]:
+#             msgOut = ("Quote " + quoteId + " added by " + reeactionuserstr + ".")
+#         else: 
+#             msgOut = (reeactionuserstr + " tried to add a quote that is already in as " + quoteId + ".")   
+#     elif (reaction.emoji == Gib or reaction.emoji == '✋') and messageuser.bot:
+#         extraNotifyInit = timerNotify.timerNotify(str(reactionuser), messageContent)
+#         result = extraNotifyInit.extraNotifyWrite()
+#         if result == "timer inactive":
+#             msgOut= "timer is expired, deleted, or something went wrong, " + (str(user)).split("#")[0]
+#         elif result == "duplicate userid":
+#             msgOut = "you are already in the notify list for that timer, " + (str(user)).split("#")[0]
 #         else:
-#             print("nothing to belay..")
-#             await channel.send("Nothing to belay Sir.")
-#     await bot.process_commands(message)
+#             msgOut = (str(user) + " added to notify list for timer " + result + ".")
+#     if msgOut is not None:
+#         await channel.send(msgOut)
 
-
-@bot.event
-async def on_reaction_add(reaction, user):
-    Gib = bot.get_emoji(410972413036331008)
-    message = reaction.message
-    channel = reaction.message.channel
-    serverid = reaction.message.guild.id
-    ts = message.created_at - timedelta(hours=5)
-    messageuser = message.author
-    msguserstr = str(messageuser)
-    messageContent = message.content
-    messageuserid = messageuser.id
-    reactionuser = user.id
-    #emotecountinit = wordcounter(reactionuser, serverid, str(user), reacttally=True)
-    #emotecountinit.countprocessor()
-    msgOut = None
-    if reaction.emoji == '🙂' and not user.bot:
-        print("speech bubble called")
-        quoteAddResult = qh.addQuote(user=msguserstr, quoteStr=messageContent, timestamp=str(ts),
-        serverid=serverid, userid=messageuserid)
-        quoteId = str(quoteAddResult[1])
-        if quoteAddResult[0]:
-            msgOut = ("Quote " + quoteId + " added by " + msguserstr + ".")
-        else: 
-            msgOut = (msguserstr + " tried to add a quote that is already in as " + quoteId)     
-    elif reaction.emoji == '🙁' and messageuser.bot:
-        print("gib called for bot message")
-        extraNotifyInit = timerNotify.timerNotify(str(reactionuser), messageContent)
-        result = extraNotifyInit.extraNotifyWrite()
-        if result == "timer inactive":
-            msgOut= "timer is expired, deleted, or something went wrong, " + (str(user)).split("#")[0]
-        elif result == "duplicate userid":
-            msgOut = "you are already in the notify list for that timer, " + (str(user)).split("#")[0]
-        else:
-            msgOut = (str(user) + " added to notify list for timer " + result + ".")
-    if msgOut is not None:
-        await channel.send(msgOut)
-
-
-        # timerID = timerExtranNotify.getTimerID(messageContent)
-        # #TODO: getting timerID 1 pack everytime, fix this
-        # if timerID == "invalid":
-        #     print("got invalid for timerID for: [" + messageContent + "]")
-        #     return None
-        # else:
-        #     userid = str(reactionuser)
-        #     timerSQL.addNotifyUsers(id=timerID, userid=userid)
-        #     print("attempted addNotifyUsers for timer + [" + str(timerID) + 
-        #     "] with userid: [" + userid + "]")
-        #     #TODO: check for duplicate notify - should not notify original
-        #     #user more than once, or add someone already in addNotify
-    
-
-        
-
-
-@bot.event
-async def on_reaction_remove(reaction, user):
-    message = reaction.message
-    channel = reaction.message.channel
-    messageuser = message.author
-    reactuser = user
-    reactionuserid = user.id
-    messageContent = message.content
-    outMsg = None
-    ts = message.created_at - timedelta(hours=5)
-    if reaction.emoji == '🙂' and not user.bot:
-        qh.deleteQuoteByTime(str(ts))
-        outMsg = ("Quote erased from the archive memory :).")
-    elif reaction.emoji == '🙁' and messageuser.bot:
-        removeInit = timerNotify.timerNotify(str(reactionuserid), messageContent)
-        timerid = removeInit.removeNotifyUser()
-        outMsg = str(reactuser) + " removed from timer " + timerid + " notify list!"
-    if outMsg is not None:
-        await channel.send(outMsg)
+# @bot.event
+# async def on_reaction_remove(reaction, user):
+#     Gib = bot.get_emoji(410972413036331008)
+#     message = reaction.message
+#     channel = reaction.message.channel
+#     messageuser = message.author
+#     messageuserid = messageuser.id
+#     reactuser = user
+#     reactionuserid = user.id
+#     messageContent = message.content   
+#     outMsg = None
+#     ts = message.created_at - timedelta(hours=5)
+#     if reaction.emoji == '💬' and not user.bot:
+#         qh.deleteQuoteByTime(str(ts))
+#         outMsg = ("Quote erased from the archive memory :).")
+#     elif reaction.emoji == Gib:
+#         removeInit = timerNotify.timerNotify(str(reactionuserid), messageContent)
+#         timerid = removeInit.removeNotifyUser()
+#         outMsg = str(reactuser) + " removed from timer " + timerid + " notify list!"
+#     if outMsg is not None:
+#         await channel.send(outMsg)
 
 
 @bot.event
@@ -330,203 +302,19 @@ async def on_command_error(ctx,error):
     if isinstance(error, commands.CommandNotFound) and "..." not in ctx.message.content:
             print("command not found")
 
-
-# ----------------- Tasks ----------------- #
-
-@tasks.loop(seconds=5.0)
-async def feedcheck():
-    try:
-        print("feedcheck started")
-        resultArray = fr.feedCheckAll()
-        newLine = "\n"
-        if len(resultArray) > 0:
-            print(f"results in feedcheck:[{newLine.join(resultArray)}]")
-            for result in resultArray:
-                resultSplit = result.split('|')
-                link, serverid, chanid = resultSplit[0], resultSplit[1], resultSplit[2]
-                checkForChannel = serv.getServerSetting(serverid, 'botspamchannel')
-                if checkForChannel:
-                    chanid = checkForChannel
-                outChannel = bot.get_channel(chanid)
-                await outChannel.send(link)
-    except Exception as e:
-        genErrorHandle(e)
-        pass
-            
-
-
-
-
-
-# ----------------- Commands ----------------- #
-# ---------------------------------------- #
-##DEBUGCOMMANDS##
-@bot.command()
-async def embedobject(ctx):
-    async for message in ctx.channel.history(limit=2):
-        print(message.content)
-        if message.embeds:
-            print("debug line embedobject")
-            outstr = f"message.embeds[0]: {message.embeds[0]}\n.type: {message.embeds[0].type}\n.description: {message.embeds[0].description}\n.image:{message.embeds[0].image.url}"
-            await ctx.send(outstr)
-            print(outstr)
-
-@bot.command()
-async def hasembedimg(ctx):
-    async for message in ctx.channel.history(limit=2):
-        if message.embeds:
-            outstr = "has embed"
-            if message.embeds[0].image:
-                outstr += "|has image"
-            else:
-                outstr += "|no image"
-        else:
-            outstr = "no embeds"
-        await ctx.send(outstr)
-
-@bot.command()
-async def feedback(ctx):
-    fdbackmsg = ctx.message.content[10:]
-    jordan = bot.get_user(191688156427321344)
-    await jordan.send(fdbackmsg)
-    await ctx.send("feedback sent to creator")
-
-
-@bot.command()
-async def chanid(ctx):
-    await ctx.send(ctx.channel.id)
-
-
-@bot.command()
-async def datetest(ctx):
-    """test"""
-    await ctx.send("datetime.now(): " + str(datetime.now()) + "\n" + 
-                   "datetime.now().date(): " + str(datetime.now().date()))
-
-
-@bot.command()
-async def axestupletest(ctx, a):
-    print("graphtest cmd called")
-    graphInit = GraphMaker(ctx.guild.id, a)
-    outMsg = graphInit.main()
-    await ctx.send(str(outMsg))
-
-
-@bot.command()
-async def ding(ctx):
-    dong = str(bot.latency * 1000)
-    await ctx.send("dong!! " + dong[:2] + " ms")
-
-
-@bot.command()
-async def fb(ctx):
-    fdbackmsg = ctx.message.content[3:]
-    jordan = bot.get_user(191688156427321344)
-    await jordan.send(fdbackmsg)
-    await ctx.send("feedback sent to creator")
-
-
-@bot.command()
-async def mtn(ctx):
-    await ctx.send("this is a test mention message, <@!" + str(ctx.message.author.id) + ">")
-
-
-@bot.command()
+@bot.hybrid_command(name="ping", with_app_command=True, description="Gets latency in ms between Discord server and bot's instance on AWS.")
 async def ping(ctx):
     pong = str(bot.latency * 1000)
     await ctx.send("pong!! " + pong[:2] + " ms")
 
-
-@bot.command()
-async def strcheck(ctx, a):
-    if a == "raw":
-        usablestr = ((ctx.message.content).split(a))[1]
-        if usablestr[0] == " ":
-            usablestr = usablestr[0:]
-        await ctx.send(usablestr)
-    elif a is None:
-        usablestr = "no string to check detected"
-    else:
-        usablestr = "```" + ctx.message.content[10:] + "```"
-    print("strcheck: " + usablestr)
-    await ctx.send(usablestr)
-
-
-@bot.command()
-async def todo(ctx):
-    if ctx.author.id == jordan_id:
-        todoWrite = "\n- " + ctx.message.content[6:]
-        with open("todo.txt", 'a') as f:
-            f.write(todoWrite)
-            f.close()
-        outMsg = "appended"
-    else:
-        outMsg = "🤖"
-    await ctx.send(outMsg)
-
-
-
-# @bot.command()
-# async def timerdebug(ctx):
-#     timercheckinit = timercl("msgcontent", "user", "channel", "timeorig")
-#     response = timercheckinit.timercheck()
-#     if response == "no timepops":
-#         return
-#     else:
-#         channel = bot.get_channel(int(response[3]))
-#         if response[2] == "":
-#             await  channel.send("<@!" + response[1] + "> Ringa ling dong, the time " + (response[4])[:-3] + " has finally come!")
-#         else:
-#             await channel.send("<@!" + response[1] + "> Sir you must remember: \"" + response[2] + "\" | " + (response[4])[:-3])
-
-
-@bot.command()
-@commands.has_role("High Council of Emoji")
-async def close(ctx):
-    await ctx.send("Personal PC Computer plugging off online mode shut down - COMPUTER OFF")
-    print("terminate request received")
-    await sys.exit()
-
-# @bot.command()
-# @commands.has_role("High Council of Emoji")
-# async def pull(ctx):
-#     pullrestart()
-
-
-@close.error
-async def close_error(ctx, error):
-    if isinstance(error, commands.CheckFailure):
-        username = ctx.message.author.display_name
-        userid = ctx.message.author.id
-        response = [
-            "You do not have the clearance for that command... are you retarded?",
-            "You aren't a server admin... this is why she left you dude.",
-            "Try that shit again and see who gets terminated bitch ;)",
-            "It seems like there's a lot you don't know about terminating this bot",
-        ]
-        await ctx.send(random.choice(response))
-        print("insufficient perms to terminate " + username + " " + str(userid))
-
-
-# ---------------------------------------- #
-# documentation
-# @bot.command()
-# async def help(ctx):
-#     await ctx.send("List of commands: https://pastebin.com/dBDALLSX")
-
-
 @bot.command()
 async def version(ctx):
-    embed = discord.Embed(title="hackablebot.py", description="jordan test bot", color=0xee657)
+    embed = discord.Embed(title="disbotren.py", description="Gaming forever in paradise [.help]", color=0xee657)
     embed.add_field(name="Version", value=versionstr)
-    embed.add_field(name="Release Notes", value="shorturl.at/bjwC1")
+    embed.add_field(name="Release Notes", value="https://pastebin.com/P63XbH2b")
     await ctx.send(embed=embed)
 
-@bot.command()
-async def vers(ctx):
-    version.invoke(ctx)
-
-@bot.command()
+@bot.hybrid_command(name="notifyme", with_app_command=True, description="Toggles whether you are on the @ mention list for notifications about bot updates and downtime.")
 async def notifyme(ctx):
     print("notifyme called")
     notifyrole = discord.utils.find(lambda r: r.name == 'botnotify', ctx.message.guild.roles)
@@ -543,47 +331,62 @@ async def notifyme(ctx):
         await notifyuser.add_roles(notifyrole)
         await ctx.send("You will be notified with bot updates.")
 
+## Tasks ##
 
-# ------------------------------------------- #
-# practical functions
+# @tasks.loop(minutes=0.5)
+# async def feedcheck():
+#     try:
+#         print("feedcheck started")
+#         resultArray = fr.feedCheckAll()
+#         newLine = "\n"
+#         if len(resultArray) > 0:
+#             print(f"results in feedcheck:[{newLine.join(resultArray)}]")
+#             for result in resultArray:
+#                 resultSplit = result.split('|')
+#                 link, serverid, chanid, override = resultSplit[0], resultSplit[1], int(resultSplit[2]), resultSplit[3]
+#                 print(f"link:[{link}] serverid:[{serverid}] chanid:[{chanid}] override:[{override}]")
+#                 if override == "0":
+#                     checkForChannel = serv.getServerSetting(serverid, 'botspamchannel')
+#                     if checkForChannel:
+#                         chanid = checkForChannel
+#                 outChannel = bot.get_channel(chanid)
+#                 await outChannel.send(link)
+#     except Exception as e:
+#         genErrorHandle(e)
+#         pass
+            
 
+@tasks.loop(seconds=5.0)
+async def timercheck():
+    print(str(datetime.now()) + " timercheck started")
+    checked = timerExpiryCheck.expiryCheck()
+    print("timerCheck got expiryCheck")
+    if len(checked) > 1:
+        print("timerCheck got checked longer than 1 char")
+        notifyChannel = bot.get_channel(int(checked[1]))
+        print("timerCheck got notifyChannel: [" + str(notifyChannel) + "]")
+        notifyUser = checked[2]
+        print("timerCheck got notifyUser: [" + notifyUser + "]")
+        expiryTime = " | " + (checked[3])[:-10] + " "
+        print("timerCheck got expiryTimer: [" + expiryTime + "]")
+        expiryNote = checked[4]
+        print("timerCheck got expiryNote: [" + expiryNote + "]")
+        if expiryNote == "":
+            exclaim = str(random.choice(exclaimList))
+            notifyMessage = (notifyUser + exclaim + expiryTime)
+        else:
+            notifyMessage = (notifyUser + expiryNote + expiryTime)
+        print("timerCheck outgoing notifyMessage: [" + notifyMessage + "]")
+        await notifyChannel.send(notifyMessage)
+    else:
+        return
 
-
-                
-# @tasks.loop(seconds=5.0)
-# async def timercheck():
-#     print(str(datetime.now()) + " timercheck started")
-#     checked = timerExpiryCheck.expiryCheck()
-#     print("timerCheck got expiryCheck")
-#     if len(checked) > 1:
-#         print("timerCheck got checked longer than 1 char")
-#         notifyChannel = bot.get_channel(int(checked[1]))
-#         print("timerCheck got notifyChannel: [" + str(notifyChannel) + "]")
-#         notifyUser = checked[2]
-#         print("timerCheck got notifyUser: [" + notifyUser + "]")
-#         expiryTime = " | " + (checked[3])[:-10] + " "
-#         print("timerCheck got expiryTimer: [" + expiryTime + "]")
-#         expiryNote = checked[4]
-#         print("timerCheck got expiryNote: [" + expiryNote + "]")
-#         if expiryNote == "":
-#             exclaim = str(random.choice(exclaimList))
-#             notifyMessage = (notifyUser + exclaim + expiryTime)
-#         else:
-#             notifyMessage = (notifyUser + expiryNote + expiryTime)
-#         print("timerCheck outgoing notifyMessage: [" + notifyMessage + "]")
-#         await notifyChannel.send(notifyMessage)
-#     else:
-#         return
-
-
-@bot.command()
-async def timer(ctx, a: str = None):
-    timerInit = timerWriter.timerWriter(ctx.author.id, ctx.channel.id, ctx.message.content)
-    if a is None:
+@bot.hybrid_command(name="timer", with_app_command=True, description="Set a timer using format '2 h 3 m pizza in oven' or '12/21/2012 2:00 pm pizza party'")
+async def timer(ctx: commands.Context, *, timerdetails):
+    timerInit = timerWriter.timerWriter(ctx.author.id, ctx.channel.id, ".timer " + timerdetails)
+    args = timerdetails.split()
+    if args[0] is None:
         messageOut = "https://iknowwhatyoudownload.com/en/peer/"
-    if a.startswith == "del":
-        timerExpiryCheck.expiryCheck()
-        messageOut = "check logs"
     else:
         messageOutTup = timerInit.timerWriterMain()
         if type(messageOutTup) is str:
@@ -592,316 +395,146 @@ async def timer(ctx, a: str = None):
             messageOut = messageOutTup[1]
     await ctx.send(messageOut)
 
+@bot.hybrid_command(name="reminder", with_app_command=True, description="See '/timer'")
+async def reminder(ctx: commands.Context, *, timerdetails):
+    await ctx.invoke(bot.get_command('timer'), timerdetails = timerdetails)
+
+@bot.hybrid_command(name="calculator", with_app_command=True, description="Evaluates an expression (no variables).")
+async def calculator(ctx, *, expression):
+    res = str(ne.evaluate(expression))
+    print("here")
+    mathembed = discord.Embed(title=res, description=expression, color=discord.Colour.yellow())
+    await ctx.send(embed=mathembed)
+
+@bot.hybrid_command(name="roll", with_app_command=True, description="Roll the dice. e.g. '1d20' or '2d6+3'. appending 'adv' or 'dis' applies advantage or disadv.")
+async def roll(ctx: commands.Context, *, dice):
+    args = dice.split()
+    a, b, c, d, e = args[0], args[1] if len(args) > 1 else None, args[2] if len(args) > 2 else None, args[3] if len(args) > 3 else None, args[4] if len(args) > 4 else None
 
 
-# ------------------------------------------------ #
-# random math
-
-
-@bot.command()
-async def add(ctx, a, b):
-    await ctx.send(a + b)
-
-
-@bot.command()
-async def div(ctx, a: int, b: int):
-    await ctx.send(a / b)
-
-
-@bot.command()
-async def mul(ctx, a: int, b: int):
-    await ctx.send(a * b)
-
-
-@bot.command()
-async def roll(ctx, a, b: str = None, c: str = None, d: str = None, e: str = None):
     print("dice initiated")
     if b is None or not b[0].isdigit():
         print("dice is one roll, with or without adv")
-        rollinit0 = dice(a, b)
+        rollinit0 = diceroller(a, b)
+        print("made it here")
         if a.startswith("ab"):
             rollresult = rollinit0.abilityroller()
         else:
             rollresult = rollinit0.roller()
     elif a.startswith("ab"):
-        rollinit0 = dice(a,b)
+        rollinit0 = diceroller(a,b)
         rollresult = rollinit0.abilityroller()
     else:
-        rollinit0 = dice(a)
+        rollinit0 = diceroller(a)
         print("rollinit0 has launched")
-        rollinit1 = dice (b)
+        rollinit1 = diceroller(b)
         print("rollinit1 has launched")
         rollresult = rollinit0.roller() + "\n" + rollinit1.roller()
         if c is not None:
-            rollinit2 = dice(c)
+            rollinit2 = diceroller(c)
             print("rollinit2 has launched")
             rollresult = rollresult + "\n" + rollinit2.roller()
         if d is not None:
-            rollinit3 = dice(d)
+            rollinit3 = diceroller(d)
             print("rollinit3 has launched")
             rollresult = rollresult + "\n" + rollinit3.roller()
         if e is not None:
-            rollinit4 = dice(e)
+            rollinit4 = diceroller(e)
             print("rollinit4 launched")
             rollresult = rollresult + "\n" + rollinit4.roller()
     print("rollresult: [" + rollresult + "]")
-    await ctx.send(rollresult)
-
+    rollembed = discord.Embed(title=rollresult, description=dice, color=discord.Colour.dark_red())
+    await ctx.send(embed=rollembed)
 
 @roll.error
 async def roll_error(ctx, error):
     if isinstance(error, commands.CommandInvokeError):
         await ctx.send("That's not how I roll brother...")
 
-
-@bot.command()
-async def sub(ctx, a: int, b: int):
-    await ctx.send(a - b)
-
-
-# ------------------------------------------------ #
-# random shit
-
-
-@bot.command()
-async def bird(ctx):
-    birdr = requests.get('https://some-random-api.ml/img/birb')
-    birdf = str(birdr.json()['link'])
-    await ctx.send(birdf)
-
-
-@bot.command()
+@bot.hybrid_command(name="cat", with_app_command=True, description="Gets random picture of cat(s)")
 async def cat(ctx):
     catr = requests.get('http://aws.random.cat/meow')
     catf = str(catr.json()['file'])
     await ctx.send(catf)
 
-
-@bot.command()
+@bot.hybrid_command(name="coin", with_app_command=True, description="Flips logandollar")
 async def coin(ctx):
     coinflip = ("Heads", "Tails")
     await ctx.send(random.choice(coinflip))
 
-
-@bot.command()
+@bot.hybrid_command(name="conch", with_app_command=True, description="Consult the conch on a closed (yes/no) question.")
 async def conch(ctx):
     path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/conchfolder").__next__()
     min = 1
     max = len(files)
     conchfile = random.randint(min, max)
-    destiny = ("Yes", "No")
-    await ctx.send(file=File("/home/ubuntu/disbot/picfolder/conchfolder/conch" + str(conchfile) + ".png"))
-    await ctx.send(random.choice(destiny))
+    destiny = random.choice(("Yes", "No"))
+    file = discord.File(fp = f"/home/ubuntu/disbot/picfolder/conchfolder/conch{conchfile}.png", filename="conch.png")
+    embed = discord.Embed(title=destiny, description="", color=discord.Colour.dark_magenta())
+    embed.set_image(url="attachment://conch.png")
+    delcmd = await ctx.send(file=file, embed=embed)
+    deletelog[ctx.message.id] = delcmd
 
-
-@bot.command()
+@bot.hybrid_command(name="dog", with_app_command=True, description="Gets random picture of dog(s)")
 async def dog(ctx):
-    dogr = requests.get('fhttps://dog.ceo/api/breeds/image/random')
+    dogr = requests.get('https://dog.ceo/api/breeds/image/random')
     dogf = str(dogr.json()['message'])
     await ctx.send(dogf)
 
-#TODO: flesh out, make separate lists (lunch, quick, dinner, date, etc)
-@bot.command()
-async def eat(ctx):
-    any = (
-        "Albasha",
-        "Bay Leaf",
-        "Burgersmith",
-        "City Pork",
-        "Curbside",
-        "Curry N Kabob",
-        "Duang Tuan",
-        "Dang's"
-        "El Rancho",
-        "Elsie's",
-        "Fat Cow",
-        "La Caretta",
-        "Lit",
-        "Mooyah",
-        "Pluckers",
-        "Serops",
-        "Superior Grill",
-        "Sushi Masa",
-        "Tsunami",
-        "Umami",
-        "Velvet Cactus"
-    )
-    await ctx.send(random.choice(any))
+@bot.hybrid_command(name="enhance", with_app_command=True, description="Enhance last image in the chat - 20 message cache.")
+async def enhance(ctx):
+    msg = ctx.message
+    channel = ctx.channel
+    history = channel.history
+    print(f"channel:{channel}")
+    haveimg = False
+    bgtitle = "/home/ubuntu/disbot/picfolder/shadowdir/providedbackground.png"
+    if os.path.isfile(bgtitle):
+        os.remove(bgtitle)
+    if not msg.attachments and not msg.embeds:
+        print("enhance message did not have an attachment")
+        async for message in ctx.channel.history(limit=20):
+            print("iterating history")
+            if message.attachments:
+                print("attempting to save attachment...")
+                await message.attachments[0].save(bgtitle)
+                haveimg = True
+                break
+            elif message.embeds:
+                print(f'message.embeds: {message.embeds}')
+                if message.embeds[0].type == "image":
+                    print("attempting to save embed...")
+                    print(message.embeds[0].url)
+                    urllib.request.urlretrieve(message.embeds[0].url, bgtitle)
+                    haveimg = True
+                    break
+                elif message.embeds[0].image:
+                    print("attempting to save image within embed...")
+                    urllib.request.urlretrieve(message.embeds[0].image.url, bgtitle)
+                    haveimg = True
+                    break
+            else:
+                continue
+    else:
+        print("enhance message had one or more attachments")
+        haveimg = True
+        await ctx.message.attachments[0].save(bgtitle)
+    if haveimg:
+        newfilepath = executeoverlay(bgtitle)
+        if newfilepath == "inv":
+            await ctx.send("sum ting wong...")
+        else:
+            await ctx.send(file=File(newfilepath))
+            os.remove(bgtitle)
+            os.remove(newfilepath)
+    else:
+        await ctx.send("Could not find an image to enhance...")
 
+@bot.hybrid_command(name="figlet", with_app_command=True, description="Turns input into giant bubble letters.")
+async def figlet(ctx, *, figgletext):
+    await ctx.send("```" + figgletizer(figgletext) + "```")
 
-# @bot.hybrid_command(name="enhance", with_app_command=True, description="Enhance last image in the chat - 20 message cache.")
-# async def enhance(ctx):
-#     msg = ctx.message
-#     channel = ctx.channel
-#     history = channel.history
-#     print(f"channel:{channel}")
-#     haveimg = False
-#     bgtitle = "/home/ubuntu/disbot/picfolder/shadowdir/providedbackground.png"
-#     if os.path.isfile(bgtitle):
-#         os.remove(bgtitle)
-#     if not msg.attachments and not msg.embeds:
-#         print("enhance message did not have an attachment")
-#         async for message in ctx.channel.history(limit=20):
-#             print("iterating history")
-#             hasembeddedimage = False
-#             if message.attachments:
-#                 print("attempting to save attachment...")
-#                 await message.attachments[0].save(bgtitle)
-#                 haveimg = True
-#                 break
-#             elif message.embeds:
-#                 print(f'message.embeds: {message.embeds}')
-#                 if message.embeds[0].type == "image":
-#                     print("attempting to save embed...")
-#                     print(message.embeds[0].url)
-#                     urllib.request.urlretrieve(message.embeds[0].url, bgtitle)
-#                     haveimg = True
-#                     break
-#             else:
-#                 continue
-
-
-# @bot.command()
-# async def football(ctx, a):
-#     print("placeholder")
-#     if a == "submit":
-#         if ctx.message.author.id == 191688156427321344:
-#             usable = (ctx.message.content.split[a]).replace(" ","")
-#             sublist = usable.split(",")
-#         else:
-#             ctx.send("youve notten permission to to this")
-
-
-@bot.command()
-async def fox(ctx):
-    foxr = requests.get('https://randomfox.ca/floof/')
-    foxf = str(foxr.json()['image'])
-    await ctx.send(foxf)
-
-
-@bot.command()
-async def fuck(ctx, a: str = None):
-    serverid = ctx.guild.id
-    if a is None:
-        getgraph("fuckcount", serverid)
-    elif a == "total" or a == "count":
-        getgraph("fuckcount", serverid, True)
-    await ctx.send(file=File("graph.png"))
-    os.remove('graph.png')
-
-
-@bot.command()
-async def south(ctx, a: str = None):
-    serverid = ctx.guild.id
-    if a is None:
-        getgraph("southcount", serverid)
-    elif a == "total":
-        getgraph("southcount", serverid, True)
-    await ctx.send(file=File("graph.png"))
-    os.remove('graph.png')
-
-
-@bot.command()
-async def inanycase(ctx, a: str = None):
-    serverid = ctx.guild.id
-    if a is None:
-        getgraph("inanycase", serverid)
-    elif a == "total":
-        getgraph("inanycount", serverid, True)
-    await ctx.send(file=File("graph.png"))
-    os.remove('graph.png')
-
-
-@bot.command()
-async def nicks(ctx):
-    serverid = ctx.guild.id
-    getgraph("nicknames", serverid, True)
-    await ctx.send(file=File("graph.png"))
-    os.remove('graph.png')
-
-
-@bot.command()
-async def positive(ctx, a: str = None):
-    serverid = ctx.guild.id
-    if a is None:
-        getgraph("yescount", serverid)
-    elif a == "total":
-        getgraph("yescount", serverid, True)
-    await ctx.send(file=File("graph.png"))
-    os.remove('graph.png')
-
-
-@bot.command()
-async def negative(ctx, a: str = None):
-    serverid = ctx.guild.id
-    if a is None:
-        getgraph("nocount", serverid)
-    elif a == "total":
-        getgraph("nocount", serverid, True)
-    await ctx.send(file=File("graph.png"))
-    os.remove('graph.png')
-
-
-@bot.command()
-async def dude(ctx, a: str = None):
-    serverid = ctx.guild.id
-    if a is None:
-        getgraph("dudecount", serverid)
-    elif a == "total":
-        getgraph("dudecount", serverid, True)
-    await ctx.send(file=File("graph.png"))
-    os.remove('graph.png')
-
-
-@bot.command()
-async def imgcount(ctx, a: str = None):
-    serverid = ctx.guild.id
-    if a is None:
-        getgraph("imgsearchcount", serverid)
-    elif a == "total":
-        getgraph("imgsearchcount", serverid, True)
-    await ctx.send(file=File("graph.png"))
-    os.remove('graph.png')
-
-
-@bot.command()
-async def like(ctx, a: str = None):
-    serverid = ctx.guild.id
-    if a is None:
-        getgraph("likecount", serverid)
-    elif a == "total":
-        getgraph("likecount", serverid, True)
-    await ctx.send(file=File("graph.png"))
-    os.remove('graph.png')
-
-
-@bot.command()
-async def count(ctx):
-    serverid = ctx.guild.id
-    getgraph("msgcount", serverid, True)
-    await ctx.send(file=File("graph.png"))
-    os.remove('graph.png')
-
-
-@bot.command()
-async def words(ctx):
-    serverid = ctx.guild.id
-    getgraph("wordcount", serverid, True)
-    await ctx.send(file=File("graph.png"))
-    os.remove('graph.png')
-
-
-@bot.command()
-async def word(ctx):
-    words.invoke(ctx)
-
-
-@bot.command()
-async def figlet(ctx):
-    await ctx.send("```" + figgletizer(ctx.message.content[8:]) + "```")
-
-
-@bot.command()
+@bot.hybrid_command(name="gun", with_app_command=True, description="Threatening react images for your various needs")
 async def gun(ctx):
     path, dirs, files = os.walk("/home/ubuntu/disbot/picfolder/bitchfolder").__next__()
     min = 1
@@ -909,21 +542,30 @@ async def gun(ctx):
     bitchfile = random.randint(min, max)
     await ctx.send(file=File("/home/ubuntu/disbot/picfolder/bitchfolder/bitchfile" + str(bitchfile) + ".png"))
 
-
-@bot.command()
+@bot.hybrid_command(name="loon", with_app_command=True, description="Never know when you might need one of these")
 async def loon(ctx):
     await ctx.send("https://youtu.be/asXfA40uudo")
 
-
-@bot.command()
-async def pepocheer(ctx):
-    await ctx.send(file=File("home/ubuntu/disbot/picfolder/pepocheer.gif"))
-
-
-@bot.command()
-async def cheer(ctx):
-    await pepocheer.invoke(ctx)
-
+@bot.hybrid_command(name="poll", with_app_command=True, description="Start a poll; delimit items in 'options' with commas.")
+async def poll(ctx, question, options: str):
+    options = options.split(',')
+    if len(options) <= 1:
+        await ctx.send("Poll requires at least two options.")
+        return
+    if len(options) > 10:
+        await ctx.send("I can't fucking count that high")
+    if len(options) == 2 and options[0].lower() == 'yes' and options[1].replace(" ","").lower() == 'no':
+        reactions = ['✅', '❌']
+    else:
+        reactions = ['🇦','🇧','🇨','🇩','🇪','🇫','🇬','🇭','🇮','🇯']
+    polloptions = []
+    for x, option in enumerate(options):
+        polloptions += f'\n{reactions[x]} {option[1:] if option.startswith(" ") else option}'
+    embed = discord.Embed(title=question, description=''.join(polloptions))
+    outmessage = await ctx.send(embed=embed)
+    for reaction in reactions[:len(options)]:
+        await outmessage.add_reaction(reaction)
+    await ctx.start
 
 @bot.command()
 async def qp(ctx):
@@ -932,55 +574,54 @@ async def qp(ctx):
     if ctx.guild.id == 237397384676507651:
         await msg.add_reaction('<:Jeff:601576645807046656>')
         await msg.add_reaction('<:What:370701344232701952>')
-    elif ctx.guild.id == 688494181727207478:
-        await msg.add_reaction('<:3578_dewit:695735256631738419>')
-        await msg.add_reaction('<:5480_PutinRages:695735613407887452>')
+    else:
+        await msg.add_reaction('✅')
+        await msg.add_reaction('❌')
 
 
-@bot.command()
-async def quote(ctx, a: str = None, b: str = None):
-    print("quote called")
-    print("debug line one")
+@bot.hybrid_command(name="quote", with_app_command=True, description="Call quote from server. Optionally specify a specific number. Optionally enter 'yes' for delete.")
+async def quote(ctx, id: str = None, delete: str = None):
     serverid = ctx.guild.id
-    print("debug line 2")
     doNotEmbedList = [".bmp", ".gif", ".jpg", ".jpeg", ".png", ".webm", ".webp"]
     doEmbed = False
     noQuote = False
-    if a is None:
+    if id is None:
         quoteToUse = qh.getRandomQuote(serverid)
         qtxt, qid, name, date = quoteToUse[0], quoteToUse[1], quoteToUse[2], quoteToUse[3]
     else:
         print("else")
-        a = a.replace("#", "")
-        if a.isdigit():
-            print("quote cmd called with id: [" + a + "]")
-            quoteToUse = qh.getQuoteById(a)
+        id = id.replace("#", "")
+        if id.isdigit():
+            print("quote cmd called with id: [" + id + "]")
+            quoteToUse = qh.getQuoteById(id)
             if quoteToUse is None:
                 noQuote = True
                 outMsg = ("Quote not found dog")
             else:
-                qtxt, qid, name, date = quoteToUse[0], a, quoteToUse[1], quoteToUse[2]
-        elif a.startswith("del"):
-            noQuote = True
-            if b is not None:
-                b = b.replace('#','')
-            if b is None or not b.isdigit(): 
-                print("user provided no delete value")
-                outMsg = ("Provide a quote to delete!!")
-            else:
-                print("user wants to delete a quote: [" + b + "]")
-                role = discord.utils.get(ctx.guild.roles, name="High Council of Emoji")
-                isAdmin = False
-                print("debug line dog")
-                if role in ctx.message.author.roles:
-                    isAdmin = True
-                print("debug line cat")
-                userid = ctx.message.author.id
-                outMsg = qh.deleteQuote(isAdmin, b, str(userid))
-        elif a == "list":
+                qtxt, qid, name, date = quoteToUse[0], id, quoteToUse[1], quoteToUse[2]
+        if delete is not None:
+            delete = delete.lower()
+            if  delete == 'yes' or delete == "true" or delete.startswith('del'):
+                noQuote = True
+                if id is not None:
+                    id = id.replace('#','')
+                if id is None or not id.isdigit(): 
+                    print("user provided no delete value")
+                    outMsg = ("Provide a quote to delete!!")
+                else:
+                    print("user wants to delete a quote: [" + id + "]")
+                    role = discord.utils.get(ctx.guild.roles, name="High Council of Emoji")
+                    isAdmin = False
+                    print("debug line dog")
+                    if role in ctx.message.author.roles:
+                        isAdmin = True
+                    print("debug line cat")
+                    userid = ctx.message.author.id
+                    outMsg = qh.deleteQuote(isAdmin, id, str(userid))
+        if id == "list":
             noQuote = True
             outMsg = "https://bit.ly/renardquotes"
-        else:
+        if not id.isdigit() and id != "list":
             noQuote = True
             outMsg = ("*Dobby relished his groinsaw's roar as he withdrew the flesh-choked blade from the astronaut's ruined skull. He turned to Harry, thrusting his bloody, retina-covered pelvis with elfin fervor. 'How does Ronnie Ron taste, master?'*")
     if not noQuote:
@@ -1003,9 +644,7 @@ async def quote(ctx, a: str = None, b: str = None):
 async def q(ctx):
     await quote.invoke(ctx)
 
-
-
-@bot.command()
+@bot.hybrid_command(name="xfile", with_app_command=True, description="Get random lore from the archive")
 async def xfile(ctx):
     xfiletxt = "/home/ubuntu/disbot/xfile.txt"
     xfileline = open(xfiletxt).read().splitlines()
@@ -1014,244 +653,115 @@ async def xfile(ctx):
     for url in extractor.gen_urls(str(xfileres)):
         await ctx.send("LOADING SECRET FILE...\n" + url)
 
-
-@bot.command()
+@bot.hybrid_command(name="zoo", with_app_command=True, description="Get an animal from a list I made of ones I like")
 async def zoo(ctx):
-        await ctx.send("HAVE YOU BEEN DRINKKIN DANIMAALLS...\n" + zooo())
+        await ctx.send(zooo())
 
-
-# ------------------------------------------------- #
-# web search utilities
-
-gapi = "AIzaSyDse_e2vwSyvENfJiYM_oQNDOA06dR4a3g"
-gsource = build("customsearch", 'v1', developerKey=gapi).cse()
-
+@bot.hybrid_command(name="define", with_app_command=True, description="Get definition for term(s) from Merriam-Webster")
+async def define(ctx: commands.Context, *, term):
+    print("define called")
+    delcmd = await ctx.send(f"**{term.upper()}**\n" + queryCmd("d", term))
+    deletelog[ctx.message.id] = delcmd
 
 @bot.command()
 async def d(ctx):
-    print("d called")
-    meaning = getmeaning(ctx.message.content[3:])
-    if meaning == "inv":
-        print("got inv")
-        delcmd = await ctx.send(file=File("/home/ubuntu/disbot/picfolder/archivememory.png"))
-        deletelog[ctx.message.id] = delcmd
-    else:    
-        delcmd = await ctx.send(meaning)
-        deletelog[ctx.message.id] = delcmd
+    await define.invoke(ctx)
 
-
-@bot.command()
-async def define(ctx):
-    print("define called")
-    meaning = getmeaning(ctx.message.content[8:])
-    if meaning == "inv":
-        print("got inv")
-        delcmd = await ctx.send(file=File("/home/ubuntu/disbot/picfolder/archivememory.png"))
-        deletelog[ctx.message.id] = delcmd
-    else:    
-        delcmd = await ctx.send(meaning)
-        deletelog[ctx.message.id] = delcmd
-
-
-
-@bot.command()
-async def g(ctx):
-    rawresult = gsource.list(q=ctx.message.content[3:],
-                             cx='016515025707600383118:gqogcmpp7ka').execute()
-    try:
-        firstresult = rawresult['items'][0]
-        gresult = firstresult['link']
-        delcmd = await ctx.send(gresult)
-        deletelog[ctx.message.id] = delcmd
-    except KeyError:
-        delcmd = await ctx.send("wtf no results? should have used bing...")
-        deletelog[ctx.message.id] = delcmd
+@bot.hybrid_command(name="g", with_app_command=True, description="First result from google.com")
+async def g(ctx, *, query):
+    delcmd = await ctx.send(queryCmd("g", query) + f"\n[{query}]")
+    deletelog[ctx.message.id] = delcmd
         
-
-@bot.command()
-async def gif(ctx, a: str = None, b: str = None):
-    #TODO: upgrade to TenGiphPy
-    # await ctx.send("this command is being upgraded, please be patient with jordan")
-    reptilelist = ["lizard", "gecko", "reptile", "geico"]
-    geckotriggers = ["lizard dance", "gecko dance", "cgi dancing lizard"]
-    gifquery = ctx.message.content[5:]
-    if b is not None:
-        if (a.startswith("danc") and b in str(reptilelist)) or (b.startswith("danc") and a in str(reptilelist) or gifquery in str(geckotriggers)):
-            await ctx.send(file=File("/home/ubuntu/disbot/picfolder/gecko_dance.gif"))
-            return
-    delcmd = await ctx.send(getgif(gifquery))
+@bot.hybrid_command(name="gif", with_app_command=True, description="Gets gif; uses Tenor")
+async def gif(ctx, *, query):
+    gifembed = discord.Embed(title='', description=query, color=discord.Colour.dark_orange())
+    gifembed.set_image(url = queryCmd("gif", query))
+    delcmd = await ctx.send(embed=gifembed)
     deletelog[ctx.message.id] = delcmd
 
-
-@bot.command()
-async def how(ctx):
+@bot.hybrid_command(name="how", with_app_command=True, description="Searches wikihow with whatver you enter")
+async def how(ctx, *, query):
     howquery = ctx.message.content[5:]
-    delcmd = await ctx.send(wikihow(howquery))
+    howResult = queryCmd("how", query)
+    delcmd = await ctx.send(queryCmd("how", query) + f"\n[{query}]")
     deletelog[ctx.message.id] = delcmd
 
+@bot.hybrid_command(name="img", with_app_command=True, description="Gets first embeddable google image result.")
+async def img(ctx: commands.Context, *, query):
+    print(f"img command arg: [{query}]")
 
-# # @bot.command()
-# @bot.hybrid_command(name="hackimg", with_app_command=True, description="Gets first embeddable google image result.")
-# async def hackimg(ctx: commands.Context, *, query):
-#     imgquery = query
-#     print(f"arg: [{query}]")
-#     args = imgquery.split()
-#     a = args[0]
-#     if "spoil," == a or "spoiler," == a or "spoil" == a or "spoiler" == a:
-#         delcmd = await ctx.send("||" + imageget(imgquery) + "||")
-#         deletelog[ctx.message.id] = delcmd
-#     else:
-#         delcmd = await ctx.send(imageget(imgquery))
-#         deletelog[ctx.message.id] = delcmd
+    imgembedlink = queryCmd("img", query)
+    
+    if "sorry" in imgembedlink:
+        delcmd = await ctx.send(imgembedlink)
+    else:
+        imgembed = discord.Embed(title ='', description=query, color=discord.Colour.dark_orange())
+        imgembed.set_image(url = imgembedlink)
+        delcmd = await ctx.send(embed=imgembed)
+    deletelog[ctx.message.id] = delcmd
 
+@bot.hybrid_command(name="dalle", with_app_command=True, description="Get AI generated image with DALLE2")
+async def dalle(ctx, *, prompt):
+    await ctx.defer(ephemeral=False)
+    dalle_embed=discord.Embed(title='', description='', color=discord.Colour.dark_teal())
+    url = queryCmd("dalle", prompt)
+    if url.startswith("error"):
+        if "\n" in url:
+            dalle_embed.title = url.splitlines()[0]
+            dalle_embed.description = "\n".join(url.splitlines()[2:-1])
+        else:
+            dalle_embed.title = url.split("|")[0]
+            dalle_embed.description = url.split("|")[1]
+
+    else:
+        dalle_embed.title = prompt
+        dalle_embed.set_image(url = queryCmd("dalle", prompt))
+    await ctx.send(embed=dalle_embed)
+
+
+@bot.hybrid_command(name="stablediffusion", with_app_command=True, description="Get AI generated image with Stable Diffusion (WIP)")
+async def stablediffusion(ctx, *, prompt):
+    await ctx.defer(ephemeral=False)
+    stablediff_embed=discord.Embed(title='', description='', color=discord.Colour.dark_teal())
+    url = queryCmd("stablediffusion", prompt)
+    if url.startswith("error"):
+        await ctx.send(url)
+    else:
+        file = discord.File(fp="stablediffresult.png", filename="stablediffresult.png")
+        # await ctx.send(file=file)
+        stablediff_embed.title = prompt
+        stablediff_embed.set_image(url="attachment://stablediffresult.png")
+        await ctx.send(file=file, embed=stablediff_embed)
+        os.remove("stablediffresult.png")
 
 @bot.command()
 async def ing(ctx):
     await img.invoke(ctx)
 
+@bot.hybrid_command(name="ud", with_app_command=True, description="Gets first Urban Dictionary definition.")
+async def ud(ctx, *, query):
+    delcmd = await ctx.send(f"**{query.upper()}**\n" + queryCmd("ud", query))
+    deletelog[ctx.message.id] = delcmd
 
-@bot.command()
-async def sky(ctx):
-    print("sky called")
-    url = "https://earthsky.org/tonight"
-    req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-    skyhtml = urllib.request.urlopen(req)
-    skysoup = BeautifulSoup(skyhtml.read(), 'html.parser')
-    print("reqwuesrt succesful")
-    image = skysoup.findAll("img", src=True)
-    # print(skysoup)
-    print(image[1])
-    splitone = str(image[1]).split("src=")[1]
-    splittwo = splitone.split(" ")[0]
-    delcmd2 = await ctx.send(" \nhttps://earthsky.org/tonight")
-    deletelog[ctx.message.id] = delcmd2
-    delcmd = await ctx.send(splittwo.replace("\"", ""))
+@bot.hybrid_command(name="wiki", with_app_command=True, description="Search wikipedia")
+async def wiki(ctx, *, query):
+    wikiresult = wikipediaSearch(query)
+    if wikiresult[0] == 0:
+        delcmd = await ctx.send(wikiresult[1].url)
+    elif wikiresult[0] == 1:
+        delcmd = await ctx.send(wikipediaSearch(wikiresult[1][0])[1].url)
+    if wikiresult[0] == 2:
+        delcmd = await ctx.send(f"no result for {query}")
+
+    deletelog[ctx.message.id] = delcmd
+
+@bot.hybrid_command(name="yt", with_app_command=True, description="Gets first youtube result (for an anonymous user)")
+async def yt(ctx, *, query):
+    delcmd = await ctx.send(queryCmd("yt", query) + f"\n[{query}]")
     deletelog[ctx.message.id] = delcmd
 
 
-
-@bot.command()
-async def spell(ctx):
-    spellresult = gsource.list(q=ctx.message.content[7:],
-                             cx='016515025707600383118:zzbf7g7bqty').execute()
-    try:
-        firstresult = spellresult['items'][0]
-        spellresultfinal = firstresult['link']
-        delcmd = await ctx.send(spellresultfinal)
-        deletelog[ctx.message.id] = delcmd
-    except KeyError:
-        delcmd = await ctx.send("knowledge of that spell is forbidden...")
-        deletelog[ctx.message.id] = delcmd
- 
- 
-@bot.command()
-async def ud(ctx):
-    udrequest = ctx.message.content[4:]
-    udurlfriendly = udrequest.replace(" ", "%20")
-    udhtml = urllib.request.urlopen("https://www.urbandictionary.com/define.php?term="+udurlfriendly)
-    udsoup = BeautifulSoup(udhtml.read(), 'html.parser')
-    udmeaning = udsoup.findAll("div", "meaning")
-    udresult = udmeaning[0].get_text().replace("\n","")
-    delcmd = await ctx.send(udresult.replace("&apos", "'"))
-    deletelog[ctx.message.id] = delcmd
-
-
-@ud.error
-async def ud_error(ctx, error):
-    if isinstance(error, commands.CommandInvokeError):
-        delcmd = await ctx.send("I CANT FIND THIS WORD SOMEBODY HELP ME")
-        deletelog[ctx.message.id] = delcmd
-
-
-@bot.command()
-async def war(ctx, a: str = None, b: str = None):
-    print("war were declared")
-    userid = ctx.message.author.id
-    authorfull = str(ctx.message.author)
-    username = authorfull.split("#")[0]
-    if a is None:
-        battlenetcheckinit = renardusers(userid, "battlenet", serverid="uni")
-        print("warzone reached users class")
-        battlenetcheck = battlenetcheckinit.userread()
-        print("battlenetcheck: [" + str(battlenetcheck) +"]")
-        if battlenetcheck is None or battlenetcheck[0] is None:
-            await ctx.send("No user found! Use \".war register battlenettagwithnumbersignandnumbers\"")
-        else:
-            battlenettag = battlenetcheck[0]
-            numberlen = len(battlenettag.split("#")[1])
-            print("battlecheck[0] was not None, continuing")
-            if numberlen == 4 or numberlen == 5:
-                platform = "battle"
-            if numberlen == 7:
-                platform = "uno"
-            warzoneresponse = warzonestats(str(battlenetcheck[0]), platform)
-    elif a == "register" or a == "reg":
-        battlenetcheckinit = renardusers(userid, "battlenet", b, username, "uno")  
-        print("warzone reached users class")
-        battlenetcheckinit.userwrite()
-        print("warzone wrote battlenet tag: [" + a + "]")
-        await ctx.send("new gamertag stored")
-    else:
-        battlenettag = a
-        numberlen = len(battlenettag.split("#")[1])
-        if numberlen == 4 or numberlen == 5:
-            platform = "battle"
-        if numberlen == 7:
-            platform = "uno"
-            print("got uno")
-        warzoneresponse = warzonestats(a, platform)
-    if warzoneresponse == "inv":
-        print("got inv")
-        await ctx.send(file=File("/home/ubuntu/disbot/picfolder/archivememory.png"))
-    else:
-        if platform == "uno":
-            platformfullurl = "atvi"
-        else:
-            platformfullurl = "battlenet"
-        warstats = warzoneresponse.split("|")
-        level = warstats[0]
-        kills = warstats[1]
-        deaths = warstats[2]
-        suicides = warstats[3]
-        ratio = warstats[4]
-        wins = warstats[5]
-        top5 = warstats[6]
-        top10 = warstats[7]
-        games = warstats[8]
-        namebeforenumber = battlenettag.split("#")[0]
-        numberaftername = battlenettag.split("#")[1]
-        embed = discord.Embed(title = namebeforenumber + " Level " + level, 
-                            description ="[more stats...](https://cod.tracker.gg/warzone/profile/" + platformfullurl + "/" + namebeforenumber + "%23" + numberaftername + "/overview)", 
-                            color = 0x00badf)
-        embed.set_thumbnail(url="https://i.insider.com/55a3e234eab8eab243028ac8?width=300&format=jpeg&auto=webp")
-        embed.add_field(name="KILLS", value=kills)
-        embed.add_field(name="DEATHS", value=deaths)
-        embed.add_field(name="K/D", value=ratio)
-        embed.add_field(name="WINS", value=wins + " (" + str(int(wins)*100/int(games))[:4] + "%)")
-        embed.add_field(name="TOP 5", value=top5 + " (" + str(int(top5)*100/int(games))[:4] + "%)")
-        embed.add_field(name="TOP 10", value=top10 + " (" + str(int(top10)*100/int(games))[:4] + "%)")
-        embed.add_field(name="GAMES", value=games)
-        await ctx.send(embed=embed)
-
-
-@bot.command()
-async def wiki(ctx):
-    wikirequest = ctx.message.content[6:]
-    wikiurlfriendly = wikirequest.replace(" ", "_")
-    wikiq = wikipediaapi.Wikipedia('en')
-    wikipage = wikiq.page(wikiurlfriendly)
-    if not (wikipage.exists()):
-        delcmd = await ctx.send("damn thats fucked up dude i dont see this page nowheres")
-        deletelog[ctx.message.id] = delcmd
-    else:
-        delcmd = await ctx.send(wikipage.fullurl)
-        deletelog[ctx.message.id] = delcmd
-
-
-@bot.command()
-async def yt(ctx):
-    delcmd = await ctx.send(youtubesearch(ctx.message.content[4:]))
-    deletelog[ctx.message.id] = delcmd
 
 botkey = os.environ.get('DISCORDHACK')
-bot.run(botkey, reconnect=True)
+# bot.run(botkey, reconnect=True)
+bot.run('NjA4MDgwMDYzMDE5MzUyMDg0.G_Zqrz.YYayFwOQz2xahhL-Esdc5LdTLkczNv8ND9c-oA', reconnect=True)

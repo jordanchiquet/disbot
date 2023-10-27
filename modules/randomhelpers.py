@@ -75,6 +75,7 @@ def getWebSourceHTML(url: str):
     print(f"getWebSourceHTML called for [{url}]")
     source = getWebObject(url).read()
     soup = bs.BeautifulSoup(source, 'html.parser')
+    return(soup)
 
 
 
@@ -86,8 +87,8 @@ def getWebObject(url: str):
         print("got response")
         return response
     except (HTTPError, URLError) as e:
-        print(f"HttpError for: {url}")
-        # return(genErrorHandle(e))
+        print(f"HttpError fors: {url}")
+        return(genErrorHandle(e))
 
 @genFuncErrorWrapper
 def getUrlContentType(url: str):

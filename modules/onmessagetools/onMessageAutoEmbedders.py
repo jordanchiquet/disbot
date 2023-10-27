@@ -5,6 +5,7 @@ class OnMessageAutoEmbedder:
     def __init__(self, msgContent: str):
         self.msgContent = msgContent
         self.twitterOrX = ""
+        self.usableLink = ""
 
     def autoEmbedderMain(self):
         if self.containsDotCom():
@@ -20,7 +21,7 @@ class OnMessageAutoEmbedder:
             return False
 
     def isTwitterUrl(self) -> bool:
-        if "twitter.com" in self.msgContent:
+        if "twitter.com" in self.msgContent and "vxtwitter.com" not in self.msgContent:
             self.twitterOrX = r"twitter"
             return True
         if "x.com" in self.msgContent:
@@ -29,15 +30,20 @@ class OnMessageAutoEmbedder:
         else:
             return False
 
+    
     def getEmbedUrl(self) -> str:
         usableLinkSearch = rh.getRegexReturn(query=r"\S+"+self.twitterOrX+r"\.com/\S+", input=self.msgContent)
         if usableLinkSearch == None:
             print("onMessageAutoEmbedders no usable link found")
             return None
         else:
-            usableLink = usableLinkSearch.group()
+            self.usableLink = usableLinkSearch.group()
 
-        fxTwitterLink = usableLink.split(".com/")[1]
+        fxTwitterLink = self.usableLink.split(".com/")[1]
         embedUrl = "https://vxtwitter.com/" + fxTwitterLink
         return embedUrl
-    
+
+
+    def isEmbeddedMediaVideo(self) -> bool:
+        pass
+

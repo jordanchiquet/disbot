@@ -1,11 +1,11 @@
-from modules.onmessagetools import onMessagePicTriggers, onMessageSQLCounter, onMessageJokeTriggers, onMessageHeyComputer, onMessageAutoEmbedders
+from modules.onmessagetools import onMessagePicTriggers, onMessageSQLCounter, onMessageJokeTriggers, onMessageHeyComputer, onMessageAutoEmbedders, onMessageContentParser
 
 from modules.randomhelpers import subEmotes
 
 class onMessageHandler:
 
     def __init__(self, serverid: int, channelid: int,
-    userid: int, username: str, timestamp, messageContent: str):
+    userid: int, username: str, timestamp, messageContent: str, messageobj: any = None):
         print("onMessageHandler started")
         print(messageContent)
         self.serverid = serverid
@@ -16,12 +16,14 @@ class onMessageHandler:
         self.username = username
         self.timestamp = str(timestamp)
         self.msgContent = subEmotes(messageContent.lower(), "")
+        self.messageobj = messageobj
     
     def messageHandleMain(self):
         print("messageHandleMain started")
         sqlInit = onMessageSQLCounter.sqlCounterMain(self.serveridStr, self.useridStr, self.msgContent, self.username)
         sqlInit.sqlCounterMain()
         messageHandleReturn = "none", ""
+        autoEmbedderCheck = None
         # if self.userid == 172581464066490369 and self.channelid != 499792227464380428:
         #     return("emote", "didn't ask")
         onMessageHeyComputerInit = onMessageHeyComputer.OnMessageHeyComputer(self.msgContent)
@@ -29,8 +31,11 @@ class onMessageHandler:
         thisBitchCheck = onMessagePicTriggers.thisBitchTrigger(self.msgContent)
         picTriggerCheck = onMessagePicTriggers.picTriggerMain(self.msgContent, self.serverid)
         jokeTriggerCheck = onMessageJokeTriggers.jokeTriggerMain(self.msgContent)
-        autoEmbedderInit = onMessageAutoEmbedders.OnMessageAutoEmbedder(self.msgContent)
-        autoEmbedderCheck = autoEmbedderInit.autoEmbedderMain()
+        containsEmbed = onMessageContentParser.containsEmbed(self.messageobj)
+        if containsEmbed:
+            autoEmbedderInit = onMessageAutoEmbedders.OnMessageAutoEmbedder(self.msgContent)
+            autoEmbedderCheck = autoEmbedderInit.autoEmbedderMain()
+
 
         if thisBitchCheck[0]:
             messageHandleReturn = "file", thisBitchCheck[1]
