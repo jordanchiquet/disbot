@@ -23,7 +23,7 @@ def getdalle(prompt):
         else:
             image_url = f"error, your prompt {prompt} was MODERATED by openAI\n" + f"{modresponse['results'][0]['categories']}"
     except Exception as e:
-        image_url = f"error - {prompt}| OpenAI just returned the following to Renard: **'{(rh.genErrorHandle(e)).split('InvalidRequestError:')[1]}'** - That's all they gave me :("
+        image_url = f"error - {prompt}| OpenAI just returned the following to Renard: **'{(rh.genErrorHandle(e)).split('InvalidRequestError:')[1]}'**"
     finally:
         print("returning")
         return(image_url)

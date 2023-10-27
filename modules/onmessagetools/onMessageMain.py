@@ -32,7 +32,7 @@ class onMessageHandler:
         picTriggerCheck = onMessagePicTriggers.picTriggerMain(self.msgContent, self.serverid)
         jokeTriggerCheck = onMessageJokeTriggers.jokeTriggerMain(self.msgContent)
         containsEmbed = onMessageContentParser.containsEmbed(self.messageobj)
-        if containsEmbed:
+        if not containsEmbed:
             autoEmbedderInit = onMessageAutoEmbedders.OnMessageAutoEmbedder(self.msgContent)
             autoEmbedderCheck = autoEmbedderInit.autoEmbedderMain()
 
