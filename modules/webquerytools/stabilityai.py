@@ -7,13 +7,13 @@ import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
 stability_api = client.StabilityInference(
     key=os.environ.get("STABILITYAI"),
     verbose=True,
-    engine="stable-diffusion-v1-5"
+    engine="stable-diffusion-xl-1024-v1-0"
 )
 
 def generateStable(query):
     answers = stability_api.generate(
-        prompt=query,
-        steps=30,
+        prompt="create a high resolution image of: " + query,
+        steps=50,
         cfg_scale=8.0,
         width=512,
         height=512,

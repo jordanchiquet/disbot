@@ -763,4 +763,4 @@ async def yt(ctx, *, query):
 
 
 botkey = os.environ.get('DISCORDHACK')
-bot.run(botkey, reconnect=True)
+bot.run('botkey', reconnect=True)
