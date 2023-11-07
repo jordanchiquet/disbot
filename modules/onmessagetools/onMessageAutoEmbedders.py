@@ -10,8 +10,12 @@ class OnMessageAutoEmbedder:
     def autoEmbedderMain(self):
         if self.containsDotCom():
             if self.isTwitterUrl():
-                embedUrl = self.getEmbedUrl()
+                embedUrl = self.getVXTwitterEmbedUrl()
                 return embedUrl
+            elif self.isInstagramUrl():
+                embedUrl = self.getDDInstagramEmbedUrl()
+                return embedUrl
+
 
 
     def containsDotCom(self) -> bool:
@@ -36,7 +40,7 @@ class OnMessageAutoEmbedder:
             return True
 
     
-    def getEmbedUrl(self) -> str:
+    def getVXTwitterEmbedUrl(self) -> str:
         usableLinkSearch = rh.getRegexReturn(query=r"\S+"+self.twitterOrX+r"\.com/\S+", input=self.msgContent)
         if usableLinkSearch == None:
             print("onMessageAutoEmbedders no usable link found")
@@ -48,15 +52,16 @@ class OnMessageAutoEmbedder:
         embedUrl = "https://vxtwitter.com/" + fxTwitterLink
         return embedUrl
     
-    def getTwitterEmbedUrl(self) -> str:
-        usableLinkSearch = rh.getRegexReturn(query=r"\S+"+self.twitterOrX+r"\.com/\S+", input=self.msgContent)
+    def getDDInstagramEmbedUrl(self) -> str:
+        usableLinkSearch = rh.getRegexReturn(query=r"\S+instagram\.com/\S+", input=self.msgContent)
         if usableLinkSearch == None:
             print("onMessageAutoEmbedders no usable link found")
             return None
         else:
             self.usableLink = usableLinkSearch.group()
-        fxTwitterLink = self.usableLink.split(".com/")[1]
-        embedUrl = "https://vxtwitter.com/" + fxTwitterLink
+
+        ddinstagramLink = self.usableLink.split(".com/")[1]
+        embedUrl = "https://ddinstagram.com/" + ddinstagramLink
         return embedUrl
 
 
