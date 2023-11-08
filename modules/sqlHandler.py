@@ -143,7 +143,7 @@ def getRandomRow(dbCursor, table: str,  resultColumn: str, queryColumn: str = No
     if queryColumn is None or queryField is None:
         whereClause = "\n"
     else:
-        whereClause = " WHERE " + queryField + " LIKE " + queryField + "\n"
+        whereClause = " WHERE " + queryColumn + " LIKE " + queryField + "\n"
     randomSql = ("SELECT " + resultColumn + " FROM " + table + "" + whereClause + "ORDER BY RAND()\nLIMIT 1") 
     print("randomSql: [" + randomSql + "]")
     dbCursor.execute(randomSql)

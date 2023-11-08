@@ -51,7 +51,7 @@ class Bot(commands.Bot):
         intents = discord.Intents.default()
         intents.message_content = True
         # intents.members = True
-        super().__init__(command_prefix = ".", case_insensitive=True, intents=intents)
+        super().__init__(command_prefix = ",", case_insensitive=True, intents=intents)
     
     async def setup_hook(self):
         print(f"starting setup_hook for {self.user}.")
@@ -60,7 +60,7 @@ class Bot(commands.Bot):
         print("tree sync complete.")
     
     async def on_ready(self):
-        timercheck.start()
+        # timercheck.start()
         # feedcheck.start()
         channel_bot_testing = bot.get_channel(600430089519497235)
         await channel_bot_testing.send(content="renard online (test)")
@@ -188,7 +188,7 @@ async def on_message(message):
     user = (str(message.author)).split("#")[0]
     timeorig = (message.created_at - timedelta(hours=5))
     mclower = message.content.lower()
-    onMessageInit = onMessageMain.onMessageHandler(serverid, channelid, userid, username, timeorig, mclower, message)
+    onMessageInit = onMessageMain.onMessageHandler(serverid, channelid, userid, username, timeorig, mclower, message, True)
     onMessageResult = onMessageInit.messageHandleMain()
     if onMessageResult[0] != None:
         if onMessageResult[0] == "text":
@@ -763,4 +763,5 @@ async def yt(ctx, *, query):
 
 
 botkey = os.environ.get('DISCORDHACK')
-bot.run('botkey', reconnect=True)
+print (botkey)
+bot.run(botkey, reconnect=True)

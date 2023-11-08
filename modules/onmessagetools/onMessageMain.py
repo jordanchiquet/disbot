@@ -5,7 +5,7 @@ from modules.randomhelpers import subEmotes
 class onMessageHandler:
 
     def __init__(self, serverid: int, channelid: int,
-    userid: int, username: str, timestamp, messageContent: str, messageobj: any = None):
+    userid: int, username: str, timestamp, messageContent: str, messageobj: any = None, testBot: bool = False):
         print("onMessageHandler started")
         print(messageContent)
         self.serverid = serverid
@@ -17,11 +17,15 @@ class onMessageHandler:
         self.timestamp = str(timestamp)
         self.msgContent = subEmotes(messageContent.lower(), "")
         self.messageobj = messageobj
+        self.testBot = testBot
     
     def messageHandleMain(self):
         print("messageHandleMain started")
         sqlInit = onMessageSQLCounter.sqlCounterMain(self.serveridStr, self.useridStr, self.msgContent, self.username)
-        sqlInit.sqlCounterMain()
+        if not self.testBot:
+            sqlInit.sqlCounterMain()
+        else:
+            print("testBot detected, not counting message")
         messageHandleReturn = "none", ""
         autoEmbedderCheck = None
         # if self.userid == 172581464066490369 and self.channelid != 499792227464380428:
