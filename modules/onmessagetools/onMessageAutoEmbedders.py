@@ -13,8 +13,9 @@ class OnMessageAutoEmbedder:
                 embedUrl = self.getVXTwitterEmbedUrl()
                 return embedUrl
             elif self.isInstagramUrl():
-                embedUrl = self.getDDInstagramEmbedUrl()
-                return embedUrl
+                print("placeholder")
+                # embedUrl = self.getDDInstagramEmbedUrl()
+                # return embedUrl
 
 
 
