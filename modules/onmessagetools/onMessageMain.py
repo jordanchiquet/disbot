@@ -2,26 +2,27 @@ from modules.onmessagetools import onMessagePicTriggers, onMessageSQLCounter, on
 
 from modules.randomhelpers import subEmotes
 
+from datetime import timedelta
+
 class onMessageHandler:
 
-    def __init__(self, serverid: int, channelid: int,
-    userid: int, username: str, timestamp, messageContent: str, messageobj: any = None, testBot: bool = False):
+    def __init__(self, messageobj: any = None, testBot: bool = False):
         print("onMessageHandler started")
-        print(messageContent)
-        self.serverid = serverid
-        self.serveridStr = str(serverid)
-        self.channelid = channelid
-        self.userid = userid
-        self.useridStr = str(userid)
-        self.username = username
-        self.timestamp = str(timestamp)
-        self.msgContent = subEmotes(messageContent.lower(), "")
+        self.serverid = messageobj.guild.id
+        self.serveridStr = str(self.serverid)
+        self.channelid = messageobj.channel.id
+        self.userid = messageobj.author.id
+        self.useridStr = str(self.userid)
+        self.username = (str(messageobj.author)).split("#")[0]
+        self.timestamp = str(messageobj.created_at - timedelta(hours=5))
+        self.msgContentLower = subEmotes((messageobj.content).lower(), "")
+        self.msgContentOriginalCase = subEmotes(messageobj.content, "")
         self.messageobj = messageobj
         self.testBot = testBot
     
     def messageHandleMain(self):
         print("messageHandleMain started")
-        sqlInit = onMessageSQLCounter.sqlCounterMain(self.serveridStr, self.useridStr, self.msgContent, self.username)
+        sqlInit = onMessageSQLCounter.sqlCounterMain(self.serveridStr, self.useridStr, self.msgContentLower, self.username)
         if not self.testBot:
             sqlInit.sqlCounterMain()
         else:
@@ -30,14 +31,14 @@ class onMessageHandler:
         autoEmbedderCheck = None
         # if self.userid == 172581464066490369 and self.channelid != 499792227464380428:
         #     return("emote", "didn't ask")
-        onMessageHeyComputerInit = onMessageHeyComputer.OnMessageHeyComputer(self.msgContent)
+        onMessageHeyComputerInit = onMessageHeyComputer.OnMessageHeyComputer(self.msgContentLower)
         heyComputerCheck = onMessageHeyComputerInit.heyComputerMainHandle()
-        thisBitchCheck = onMessagePicTriggers.thisBitchTrigger(self.msgContent)
-        picTriggerCheck = onMessagePicTriggers.picTriggerMain(self.msgContent, self.serverid)
-        jokeTriggerCheck = onMessageJokeTriggers.jokeTriggerMain(self.msgContent)
-        containsEmbed = onMessageContentParser.containsEmbed(self.messageobj)
+        thisBitchCheck = onMessagePicTriggers.thisBitchTrigger(self.msgContentLower)
+        picTriggerCheck = onMessagePicTriggers.picTriggerMain(self.msgContentLower, self.serverid)
+        jokeTriggerCheck = onMessageJokeTriggers.jokeTriggerMain(self.msgContentLower)
+        containsEmbed = onMessageContentParser.onMessageContentParserMain(self.messageobj)
         if not containsEmbed:
-            autoEmbedderInit = onMessageAutoEmbedders.OnMessageAutoEmbedder(self.msgContent)
+            autoEmbedderInit = onMessageAutoEmbedders.OnMessageAutoEmbedder(self.msgContentOriginalCase)
             autoEmbedderCheck = autoEmbedderInit.autoEmbedderMain()
 
 
@@ -57,12 +58,12 @@ class onMessageHandler:
     
     def messageHandleTestBot(self):
         print("messageHandleMain started")
-        onMessageHeyComputerInit = onMessageHeyComputer.OnMessageHeyComputer(self.msgContent)
+        onMessageHeyComputerInit = onMessageHeyComputer.OnMessageHeyComputer(self.msgContentLower)
         messageHandleReturn = "none", ""
         heyComputerCheck = onMessageHeyComputerInit.heyComputerMainHandle()
-        thisBitchCheck = onMessagePicTriggers.thisBitchTrigger(self.msgContent)
-        picTriggerCheck = onMessagePicTriggers.picTriggerMain(self.msgContent)
-        jokeTriggerCheck = onMessageJokeTriggers.jokeTriggerMain(self.msgContent)
+        thisBitchCheck = onMessagePicTriggers.thisBitchTrigger(self.msgContentLower)
+        picTriggerCheck = onMessagePicTriggers.picTriggerMain(self.msgContentLower)
+        jokeTriggerCheck = onMessageJokeTriggers.jokeTriggerMain(self.msgContentLower)
         if thisBitchCheck[0]:
             messageHandleReturn = "file", thisBitchCheck[1]
         elif picTriggerCheck[0]:

@@ -5,11 +5,15 @@ def onMessageContentParserMain(msgObject: any):
     if msgObject.embeds:
         print("embed exists")
         determineEmbedType(msgObject.embeds[0])
+    return containsEmbed(msgObject)
 
 def containsEmbed(msgobj) -> bool:
     if msgobj.embeds:
+        print("embed exists")
         return True
     else:
+        print(msgobj.content)
+        print("embed doesn't exist")
         return False
 
 def setObjectImage(embed) -> bool:
