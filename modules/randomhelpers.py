@@ -45,9 +45,11 @@ def genErrorHandle(exception: Exception, funcName = "[no funcName Found]") -> st
 @genFuncErrorWrapper
 def getCSTOffsetTime() -> datetime:
     if time.localtime().tm_isdst > 0:
-        cstDelta = 6
-    else:
+        print("daylight savings time is in effect")
         cstDelta = 5
+    else:
+        print("daylight savings time is not in effect")
+        cstDelta = 6
     return(datetime.now() - timedelta(hours=cstDelta))
 
 @genFuncErrorWrapper

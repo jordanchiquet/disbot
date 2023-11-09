@@ -579,7 +579,7 @@ async def qp(ctx):
         await msg.add_reaction('❌')
 
 
-@bot.hybrid_command(name="quote", with_app_command=True, description="Call quote from server. Optionally specify a specific number. Optionally enter 'yes' for delete.")
+@bot.hybrid_command(name="quote", with_app_command=True, description="Call quote from server. Optionally specify a specific number. Optionally enter 'true' for delete.")
 async def quote(ctx, id: str = None, delete: str = None):
     serverid = ctx.guild.id
     doNotEmbedList = [".bmp", ".gif", ".jpg", ".jpeg", ".png", ".webm", ".webp"]
@@ -601,7 +601,7 @@ async def quote(ctx, id: str = None, delete: str = None):
                 qtxt, qid, name, date = quoteToUse[0], id, quoteToUse[1], quoteToUse[2]
         if delete is not None:
             delete = delete.lower()
-            if  delete == 'yes' or delete == "true" or delete.startswith('del'):
+            if  delete == 'yes' or delete == "true" or delete.startswith('del') or delete.startswith('y'):
                 noQuote = True
                 if id is not None:
                     id = id.replace('#','')
@@ -613,7 +613,7 @@ async def quote(ctx, id: str = None, delete: str = None):
                     role = discord.utils.get(ctx.guild.roles, name="High Council of Emoji")
                     isAdmin = False
                     print("debug line dog")
-                    if role in ctx.message.author.roles:
+                    if role in ctx.message.author.roles or serverid != 237397384676507651:
                         isAdmin = True
                     print("debug line cat")
                     userid = ctx.message.author.id
