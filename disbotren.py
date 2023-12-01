@@ -309,27 +309,11 @@ async def ping(ctx):
 
 @bot.command()
 async def version(ctx):
-    embed = discord.Embed(title="disbotren.py", description="Gaming forever in paradise [.help]", color=0xee657)
+    embed = discord.Embed(title="disbotren.py", description="Gaming forever in paradise ", color=0xee657)
     embed.add_field(name="Version", value=versionstr)
-    embed.add_field(name="Release Notes", value="https://pastebin.com/P63XbH2b")
     await ctx.send(embed=embed)
 
-@bot.hybrid_command(name="notifyme", with_app_command=True, description="Toggles whether you are on the @ mention list for notifications about bot updates and downtime.")
-async def notifyme(ctx):
-    print("notifyme called")
-    notifyrole = discord.utils.find(lambda r: r.name == 'botnotify', ctx.message.guild.roles)
-    print("got notifyme role")
-    notifyuser = ctx.message.author
-    print("got notifyme user")
 
-    if notifyrole in notifyuser.roles:
-        print("found notifyrole in user roles")
-        await notifyuser.remove_roles(notifyrole)
-        await ctx.send("You will no longer be notified with bot updates.")
-    else:
-        print("did not find notifyrole in user roles")
-        await notifyuser.add_roles(notifyrole)
-        await ctx.send("You will be notified with bot updates.")
 
 ## Tasks ##
 
