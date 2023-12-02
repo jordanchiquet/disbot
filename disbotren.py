@@ -45,6 +45,13 @@ intents.members = True
 intents.presences = True
 client = discord.Client(intents=intents)
 
+quotesWhitelist = [237397384676507651,688494181727207478,1049786065260642354]
+
+def is_in_server_list(server_list):
+    def predicate(ctx):
+        return ctx.message.server.id in server_list
+    return commands.check(predicate)
+
 
 class Bot(commands.Bot):
     def __init__(self):
@@ -241,10 +248,13 @@ async def on_message(message):
 
 @bot.event
 async def on_reaction_add(reaction, user):
+
     Gib = bot.get_emoji(410972413036331008)
     message = reaction.message
     channel = reaction.message.channel
     serverid = reaction.message.guild.id
+    if serverid not in quotesWhitelist:
+        return
     ts = message.created_at - timedelta(hours=5)
     messageuser = message.author
     msguserstr = str(messageuser)
