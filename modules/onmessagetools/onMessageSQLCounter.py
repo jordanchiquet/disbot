@@ -11,10 +11,15 @@ class sqlCounterMain:
         self.queryField = (self.serverid + "|" + self.userid)
         self.msgContent = msgContent
         self.username = username
+        self.filterarray = [940975831910604811]
     
 
     def sqlCounterMain(self):
         print("sqlCounterMain starting")
+        for server in self.filterarray:
+            if self.serverid == server:
+                print("serverid is " + str(server) + ", not counting")
+                return
         self.msgCounter()
         self.wordCounter()
         self.specificCounter()

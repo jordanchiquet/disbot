@@ -42,6 +42,9 @@ class onMessageHandler:
             autoEmbedderCheck = autoEmbedderInit.autoEmbedderMain()
 
 
+
+
+
         if thisBitchCheck[0]:
             messageHandleReturn = "file", thisBitchCheck[1]
         elif picTriggerCheck[0]:
