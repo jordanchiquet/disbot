@@ -594,12 +594,6 @@ async def quote(ctx, id: str = None, delete: str = None):
                     outMsg = ("Provide a quote to delete!!")
                 else:
                     print("user wants to delete a quote: [" + id + "]")
-                    role = discord.utils.get(ctx.guild.roles, name="High Council of Emoji")
-                    isAdmin = False
-                    print("debug line dog")
-                    if role in ctx.message.author.roles or serverid != 237397384676507651:
-                        isAdmin = True
-                    print("debug line cat")
                     userid = ctx.message.author.id
                     outMsg = qh.deleteQuote(True, id, str(userid))
         if id == "list":
