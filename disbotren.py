@@ -601,7 +601,7 @@ async def quote(ctx, id: str = None, delete: str = None):
                         isAdmin = True
                     print("debug line cat")
                     userid = ctx.message.author.id
-                    outMsg = qh.deleteQuote(isAdmin, id, str(userid))
+                    outMsg = qh.deleteQuote(True, id, str(userid))
         if id == "list":
             noQuote = True
             outMsg = "https://bit.ly/renardquotes"
