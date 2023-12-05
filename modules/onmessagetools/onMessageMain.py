@@ -44,17 +44,17 @@ class onMessageHandler:
 
 
 
-
-        if thisBitchCheck[0]:
-            messageHandleReturn = "file", thisBitchCheck[1]
-        elif picTriggerCheck[0]:
-            messageHandleReturn = "file", picTriggerCheck[1]
-        elif jokeTriggerCheck[0]:
-            messageHandleReturn = "text", jokeTriggerCheck[1]
-        elif heyComputerCheck[0]:
-            messageHandleReturn = heyComputerCheck[1], heyComputerCheck[2]
-        elif autoEmbedderCheck:
-            messageHandleReturn = "text", autoEmbedderCheck
+        if not self.messageobj.author.bot:
+            if thisBitchCheck[0]:
+                messageHandleReturn = "file", thisBitchCheck[1]
+            elif picTriggerCheck[0]:
+                messageHandleReturn = "file", picTriggerCheck[1]
+            elif jokeTriggerCheck[0]:
+                messageHandleReturn = "text", jokeTriggerCheck[1]
+            elif heyComputerCheck[0]:
+                messageHandleReturn = heyComputerCheck[1], heyComputerCheck[2]
+            elif autoEmbedderCheck:
+                messageHandleReturn = "text", autoEmbedderCheck
         
         print("messageHandleReturn: [" + str(messageHandleReturn) + "]")
         return(messageHandleReturn)

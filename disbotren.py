@@ -445,9 +445,9 @@ async def roll_error(ctx, error):
     if isinstance(error, commands.CommandInvokeError):
         await ctx.send("That's not how I roll brother...")
 
-@bot.hybrid_command(name="cat", with_app_command=True, description="this is broken")
-async def cat(ctx):
-    await ctx.send('you should not have done that')
+# @bot.hybrid_command(name="cat", with_app_command=True, description="this is broken")
+# async def cat(ctx):
+#     await ctx.send('you should not have done that')
 
 @bot.hybrid_command(name="coin", with_app_command=True, description="Flips logandollar")
 async def coin(ctx):
