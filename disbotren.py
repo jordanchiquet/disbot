@@ -445,11 +445,11 @@ async def roll_error(ctx, error):
     if isinstance(error, commands.CommandInvokeError):
         await ctx.send("That's not how I roll brother...")
 
-@bot.hybrid_command(name="cat", with_app_command=True, description="Gets random picture of cat(s)")
-async def cat(ctx):
-    catr = requests.get('http://aws.random.cat/meow')
-    catf = str(catr.json()['file'])
-    await ctx.send(catf)
+# @bot.hybrid_command(name="cat", with_app_command=True, description="Gets random picture of cat(s)")
+# async def cat(ctx):
+#     catr = requests.get('http://aws.random.cat/meow')
+#     catf = str(catr.json()['file'])
+#     await ctx.send(catf)
 
 @bot.hybrid_command(name="coin", with_app_command=True, description="Flips logandollar")
 async def coin(ctx):
