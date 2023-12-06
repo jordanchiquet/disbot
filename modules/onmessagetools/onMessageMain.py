@@ -59,23 +59,6 @@ class onMessageHandler:
         print("messageHandleReturn: [" + str(messageHandleReturn) + "]")
         return(messageHandleReturn)
     
-    def messageHandleTestBot(self):
-        print("messageHandleMain started")
-        onMessageHeyComputerInit = onMessageHeyComputer.OnMessageHeyComputer(self.msgContentLower)
-        messageHandleReturn = "none", ""
-        heyComputerCheck = onMessageHeyComputerInit.heyComputerMainHandle()
-        thisBitchCheck = onMessagePicTriggers.thisBitchTrigger(self.msgContentLower)
-        picTriggerCheck = onMessagePicTriggers.picTriggerMain(self.msgContentLower)
-        jokeTriggerCheck = onMessageJokeTriggers.jokeTriggerMain(self.msgContentLower)
-        if thisBitchCheck[0]:
-            messageHandleReturn = "file", thisBitchCheck[1]
-        elif picTriggerCheck[0]:
-            messageHandleReturn = "file", picTriggerCheck[1]
-        elif jokeTriggerCheck[0]:
-            messageHandleReturn = "text", jokeTriggerCheck[1]
-        elif heyComputerCheck[0]:
-            messageHandleReturn = heyComputerCheck[1], heyComputerCheck[2]
-        print("messageHandleReturn: [" + str(messageHandleReturn) + "]")
-        return(messageHandleReturn)
+
     
     
