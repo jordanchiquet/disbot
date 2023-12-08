@@ -449,7 +449,7 @@ async def roll_error(ctx, error):
 # async def cat(ctx):
 #     await ctx.send('you should not have done that')
 
-@bot.hybrid_command(name="coin", with_app_command=True, description="Flips logandollar")
+@bot.hybrid_command(name="coin", with_app_command=True, description="Flips coin")
 async def coin(ctx):
     coinflip = ("Heads", "Tails")
     await ctx.send(random.choice(coinflip))
