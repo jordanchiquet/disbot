@@ -209,11 +209,6 @@ async def on_message(message):
             if serverid != 940975831910604811:
                 await channel.send(chatLog[-2])
                 chatLog.clear()
-
-    if len(chatLog) >= 3: 
-        if chatLog[-1] == chatLog[-2] and chatLog[-2] == chatLog[-3]:
-            await channel.send(chatLog[-2])
-            chatLog.clear()
     if not mclower.startswith(".") and ("belay that order" in mclower or "cancel that order" in mclower or "cancel that command" in mclower or "delete that timer" in mclower
      or "cancel that timer" in mclower or "erase that timer" in mclower):
         print("belay that in command, checking commandRunning Dict")
