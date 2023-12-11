@@ -206,8 +206,9 @@ async def on_message(message):
 
     if len(chatLog) >= 3: 
         if chatLog[-1] == chatLog[-2] and chatLog[-2] == chatLog[-3]:
-            await channel.send(chatLog[-2])
-            chatLog.clear()
+            if serverid != 940975831910604811:
+                await channel.send(chatLog[-2])
+                chatLog.clear()
 
     if len(chatLog) >= 3: 
         if chatLog[-1] == chatLog[-2] and chatLog[-2] == chatLog[-3]:
