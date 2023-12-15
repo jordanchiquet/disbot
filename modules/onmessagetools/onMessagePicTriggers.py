@@ -4,7 +4,6 @@ import random
 #TODO: picgrabber master function?
 
 def picTriggerMain(msgContent: str, serverid: int):
-    print("starting picTriggerMain with input: [" + msgContent + "]")
     picTriggerResult = False, ""
     folderCheck = trigMasterGeneral(folderTriggerList, msgContent, serverid)
     if folderCheck[0]:
@@ -33,9 +32,6 @@ def thisBitchTrigger(msgContent: str):
 
 
 def trigMasterGeneral(triggerList: list, msgContent: str, serverid: int = 1):
-
-    print("listChecker started")
-    print(f"serverid: {serverid}")
     for item in triggerList:
         if item in msgContent and (item not in exceptTriggerListDict.get(serverid, '')):
             print(item + " in msgContent")
@@ -55,12 +51,10 @@ def trigMasterGeneral(triggerList: list, msgContent: str, serverid: int = 1):
 
 def folderWalker(fileFolder: str):
     print("folderWalker started")
-    print("fileFolder: [" + fileFolder + "]")
     path, dir, files = os.walk(fileFolder).__next__()
     fileMin = 1
     fileMax = len(files)
     outFile = random.randint(fileMin, fileMax) 
-    print("folderWalker returning: [" + str(outFile) + "]")
     return(str(outFile))
 
 def getFileName(fileName: str, fileFolder: str):
@@ -69,9 +63,7 @@ def getFileName(fileName: str, fileFolder: str):
     for root, dirs, files in os.walk(fileFolder):
         for name in files:
             if fnmatch.fnmatch(name, fileName):
-                print("getFileName found file for fileName: [" + fileName + "]")
                 getFileNameOut = (os.path.join(root, name))
-                print("getFileName returning: [" + getFileNameOut + "]")
                 return(getFileNameOut)
 
 def getFileFolder(triggerListInUse: list, folderPrefix: str):

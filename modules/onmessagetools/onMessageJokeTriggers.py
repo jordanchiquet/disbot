@@ -7,15 +7,12 @@ def jokeTriggerMain(msgContent: str, serverid: int = 1):
     jokeTrigOut = (False, "")
     for key in jokeTriggerDict:
         if key in msgContent:
-            print("key: [" + key + "] found in msgContent: [" + msgContent + "]")
             jokeOut = jokeTriggerDict[key]
             jokeTrigOut = (True, jokeOut)
     for key in soloJokeTriggerDict:
         if key == msgContent:
-            print("key: [" + key + "] found to be == msgContent: [" + msgContent + "]")
             jokeOut = soloJokeTriggerDict[key]
             jokeTrigOut = (True, jokeOut)
-    print("jokeTriggerMain returning: [" + str(jokeTrigOut) + "]")
     return(jokeTrigOut)
 
 

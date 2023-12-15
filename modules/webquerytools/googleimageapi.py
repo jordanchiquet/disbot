@@ -16,29 +16,45 @@ gsource = build("customsearch", 'v1', developerKey=gapi).cse()
 
 
 #the main function the bot is actually calling. 
-def imageget(query, tryint: int = 0):
+
+ignoreList = [
+    "kglobalservices"
+]
+
+
+def imageget(query):
     print(f"imageget (g images) started with query: [{query}]")
     rawresult = gsource.list(q=query,searchType='image',cx=appapi).execute()
+    tryint = 0
 
     imglink, imglinkContentType = get_new_image_tuple(rawresult, tryint)
-    print(f"imglinkContentType: {imglinkContentType}")
-    print(f"get_need_iteration: {get_need_iteration(imglinkContentType)}")
-    r = requests.get(imglink)
-    print(f"r.status_code: {r.status_code}")
+
+
 
     while get_need_iteration(imglinkContentType) and tryint < 10:
         print(f"non-embeddable image in link [{imglink}]")
         tryint += 1
-        print("trying next result [tryint: {}]".format(tryint))
+        print(f"trying next result tryint: [{tryint}]")
         imglink, imglinkContentType = get_new_image_tuple(rawresult, tryint)
     print(f"done with get_new_image_tuple loop, imglink: [{imglink}]")
     return(imglink)
 
 
 def get_new_image_tuple(rawresult: dict, tryint: int = 0) -> tuple:
+    needContentType = True
     if tryint < 10:
         imglink = resultiterator(rawresult, tryint)
-        imglinkContentType = getUrlContentType(imglink)
+        for item in ignoreList:
+            if item in imglink:
+                imglinkContentType = "ERROR"
+                needContentType = False
+        if needContentType:
+            try:
+                imglinkContentType = getUrlContentType(imglink)
+            except Exception as e:
+                genErrorHandle(e)
+                imglinkContentType = "ERROR"
+                
     else:
         imglink = "sorry, google did not like that one for some reason."
         imglinkContentType = "image"
@@ -69,3 +85,5 @@ def resultiterator(rawresult, tryint: int = 0):
         genErrorHandle(e)
         imglink = None
     return(imglink)
+
+

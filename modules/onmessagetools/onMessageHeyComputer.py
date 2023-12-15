@@ -30,9 +30,7 @@ class OnMessageHeyComputer:
         print("lookForCommand started with self.msgWordList: [" + str(self.msgWordList) + "]")
         lookingForCommand = False
         if self.msgWordList[0] in str(greetingIgnoreList):
-            print("greeting found as first entry: [" + self.msgWordList[0] + "]")
             self.msgWordList = rh.removefirstindex(self.msgWordList)
-            print("self.msgWordList after greeting removal: [" + str(self.msgWordList) + "]")
         if len(self.msgWordList) >= 2:
             lfcCheck = rh.getRegexReturn(query=computerPrefixTriggerRegex, input=self.msgWordList[0])
             if lfcCheck is not None:
@@ -40,9 +38,6 @@ class OnMessageHeyComputer:
                 self.msgWordList = rh.removefirstindex(self.msgWordList)
                 self.msgString = " ".join(self.msgWordList)
                 lookingForCommand = True
-        else:
-            print("self.msgWordList: [" + str(self.msgWordList) + "] found to not be >= 2 len")
-        print("lookForCommand returning: [" + str(lookingForCommand) + "]")
         return(lookingForCommand)
 
     def commandDictInit(self):
@@ -60,7 +55,6 @@ class OnMessageHeyComputer:
             #because 'search' might be used in command term for the other ones
             self.queryCommandDict[key] = "g"
         self.otherCommandDict = {}
-        print("self.queryCommandDict initialized and declared")
 
     def articleListInit(self):
         print("articleListInit started")
@@ -73,7 +67,6 @@ class OnMessageHeyComputer:
             if rh.getRegexReturn(query=key, input=self.msgString) is not None:
                 self.command = self.queryCommandDict[key]
                 self.cmdMsgSplit = key
-                print(key + "found command: [" + self.command + "]")
                 return(True)
         return(False)
 
@@ -83,7 +76,6 @@ class OnMessageHeyComputer:
         return(False)
 
     def tryGetParam(self) -> bool:
-        print("tryGetParam started with self.cmdMsgSplit: [{}]".format(self.cmdMsgSplit))
         self.cmdRemovalList = (self.msgString).split(self.cmdMsgSplit)
         self.articleListInit()
         if self.tryGetQueryAfterCmd():

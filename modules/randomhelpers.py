@@ -1,4 +1,3 @@
-import functools
 import re
 import sys
 import time
@@ -45,10 +44,8 @@ def genErrorHandle(exception: Exception, funcName = "[no funcName Found]") -> st
 @genFuncErrorWrapper
 def getCSTOffsetTime() -> datetime:
     if time.localtime().tm_isdst > 0:
-        print("daylight savings time is in effect")
         cstDelta = 5
     else:
-        print("daylight savings time is not in effect")
         cstDelta = 6
     return(datetime.now() - timedelta(hours=cstDelta))
 
@@ -81,6 +78,7 @@ def getWebSourceHTML(url: str):
 
 
 
+
 @genFuncErrorWrapper
 def getWebObject(url: str):
     print(f"getWebObject called for [{url}]")
@@ -88,7 +86,7 @@ def getWebObject(url: str):
         response = urllib.request.urlopen(url)
         print("got response")
         return response
-    except (HTTPError, URLError) as e:
+    except (HTTPError, URLError, TimeoutError) as e:
         print(f"HttpError fors: {url}")
         return(genErrorHandle(e))
 
@@ -110,9 +108,7 @@ def listemptystring(listtocheck):
 
 @genFuncErrorWrapper
 def removefirstindex(thelist):
-    print(f"list before removing first index: {thelist}")
     del thelist[0]
-    print(f"list after removing the first index: {thelist}")
     return(thelist)
 
 @genFuncErrorWrapper
@@ -129,7 +125,6 @@ def getFirstWordGoneString(input: str):
 
 @genFuncErrorWrapper
 def getRegexReturn(query: str, input: str):
-    print("getRegexReturn with query: [" + query + "] and input: [" + input + "]")
     try:
         print("attempting to compile query: [" + query + "]")
         re.compile(query)
@@ -138,18 +133,11 @@ def getRegexReturn(query: str, input: str):
         getRegexReturnOut = None
     regexSearch = re.search(query, input)
     getRegexReturnOut = regexSearch
-    print("getRegexReturnOut: [" + str(getRegexReturnOut) + "]")
     return(getRegexReturnOut)
 
 @genFuncErrorWrapper
-def isEmote(input: str) -> bool:
-    print(f"isEmote called with input: [{input}]")
-
-@genFuncErrorWrapper
 def subEmotes(input: str, substr: str) -> str:
-    print(f"subEmotes called with input: [{input}]")
     output = re.sub(r"<.*?\:.*?\:\d+>", substr, input)
-    print(f"subEmotes output: [{output}]")
     return(output)
 
 
@@ -157,3 +145,17 @@ def subEmotes(input: str, substr: str) -> str:
 def addition(*args):
     print(sum(args))
 
+
+
+
+def getWebObject2(url: str):
+    print(f"getWebObject called for [{url}]")
+    response = urllib.request.urlopen(url)
+    print("got response")
+    return response
+
+
+
+
+
+# this is a te
