@@ -77,16 +77,18 @@ def getWebSourceHTML(url: str):
     return(soup)
 
 
-
-
 @genFuncErrorWrapper
 def getWebObject(url: str):
     print(f"getWebObject called for [{url}]")
     try:
-        response = urllib.request.urlopen(url)
+        headers = {
+        "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0"
+        }
+        request = urllib.request.Request(url, headers=headers)
+        response = urllib.request.urlopen(request)
         print("got response")
         return response
-    except (HTTPError, URLError, TimeoutError) as e:
+    except (HTTPError, URLError) as e:
         print(f"HttpError fors: {url}")
         return(genErrorHandle(e))
 

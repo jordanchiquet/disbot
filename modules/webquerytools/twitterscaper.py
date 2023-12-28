@@ -27,7 +27,7 @@ def getUserTweets(username:str, tweetcount: int):
     print(tweetlist)
     
 
-getUserTweets("wigger", 1)
+
 
 
 def getIdByUsername(username: str):
