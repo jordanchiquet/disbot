@@ -1,10 +1,34 @@
 import tweepy #tweepy
 
+import modules.randomhelpers as rh
+
+
 import os
 
 bearerKey = os.environ.get('TWITTERBEARER')
 
 client = tweepy.Client(bearerKey)
+
+
+
+def getUserTweets(username:str, tweetcount: int):
+    twitterurl = f"https://twitter.com/{username}"
+    twitterpage = rh.getWebObject(twitterurl)
+    soup = rh.getWebSourceHTML(twitterurl)
+    tweets = soup.findAll("div", attrs={"class": "content"})
+    tweetlist = []
+    while len(tweetlist) < tweetcount:
+        for tweet in tweets:
+            print(tweet)
+            tweetlist.append(tweet)
+        else:
+            print("no tweets found")
+            break
+    print(tweetlist)
+    
+
+getUserTweets("wigger", 1)
+
 
 def getIdByUsername(username: str):
     try:
@@ -15,7 +39,7 @@ def getIdByUsername(username: str):
         userid = None
     return(userid)
 
-def getUserTweets(username:str, tweetcount: int):
+def getUserTweets2(username:str, tweetcount: int):
     userid = getIdByUsername(username)
     if userid is None:
         getUserTweetsOutput = ("getUserTweets: error in getting userid from getIdByUsername. see exception detail above.")
@@ -30,6 +54,9 @@ def getUserTweets(username:str, tweetcount: int):
 
 
     return(getUserTweetsOutput)
+
+
+
 
 
 print(getUserTweets("wigger", 1))

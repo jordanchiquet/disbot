@@ -11,14 +11,13 @@ class sqlCounterMain:
         self.queryField = (self.serverid + "|" + self.userid)
         self.msgContent = msgContent
         self.username = username
-        self.filterarray = [940975831910604811]
+        self.filterarray = [940975831910604811, 1185999723958653098]
     
 
     def sqlCounterMain(self):
         print("sqlCounterMain starting")
         for server in self.filterarray:
             if self.serverid == server:
-                print("serverid is " + str(server) + ", not counting")
                 return
         self.msgCounter()
         self.wordCounter()
@@ -29,11 +28,9 @@ class sqlCounterMain:
         # iMeanCounter, dudeCounter, shitCounter
 
     def msgCounter(self):
-        print("msgCounter started")
         self.sqlCounterIntAdder("msg", 1)
     
     def wordCounter(self):
-        print("wordCounter started")
         addInt = len(getSpaceList(self.msgContent))
         self.sqlCounterIntAdder("word", addInt)
     
@@ -46,7 +43,6 @@ class sqlCounterMain:
                 self.sqlCounterIntAdder(itemColumn, intAdd)
     
     def countDictInit(self):
-        print("starting CountDictInit")
         self.countDict = {
             "dude": "dude",
             "i mean": "imean",
@@ -64,13 +60,11 @@ class sqlCounterMain:
 
 
     def sqlCounterIntAdder(self, countColumn: str, countAddend: int):
-        print("sqlCounterIntAdder started")
         mek(purpose="increment", table="userstats", resultColumn=countColumn+"count",
         queryColumn="serveriduserid", queryField=self.queryField, insertData=countAddend,
         intOp="+")
     
     def sqlCounterNameUpdater(self):
-        print("sqlCounterNameUpdater started")
         mek(purpose="update", table="userstats", queryColumn="serveriduserid",
         resultColumn="username", queryField=self.queryField, insertData=f'"{self.username}"')
 

@@ -25,7 +25,7 @@ from discord.ext import commands, tasks
 import numexpr as ne
 from urlextract import URLExtract #urlextract
 
-# import modules.feedreader as fr
+import modules.feedreader as fr
 import modules.serverset as serv
 from modules.commandHandler import cmdHandlerWebQueries as queryCmd
 from modules.dice import dice as diceroller
@@ -76,9 +76,11 @@ class Bot(commands.Bot):
 
 bot = Bot()
 
+skipCogs = ["listen"]
+
 async def load():
     for filename in os.listdir('./cogs'):
-        if filename.endswith('.py'):
+        if (filename.endswith('.py')) and (filename not in skipCogs):
             await bot.load_extension(f'cogs.{filename[:-3]}')
 
 
@@ -323,18 +325,16 @@ async def version(ctx):
 
 ## Tasks ##
 
-# @tasks.loop(minutes=0.5)
+# @tasks.loop(minutes=1)
 # async def feedcheck():
 #     try:
 #         print("feedcheck started")
 #         resultArray = fr.feedCheckAll()
-#         newLine = "\n"
+#         newLine = "\n" 
 #         if len(resultArray) > 0:
-#             print(f"results in feedcheck:[{newLine.join(resultArray)}]")
 #             for result in resultArray:
 #                 resultSplit = result.split('|')
 #                 link, serverid, chanid, override = resultSplit[0], resultSplit[1], int(resultSplit[2]), resultSplit[3]
-#                 print(f"link:[{link}] serverid:[{serverid}] chanid:[{chanid}] override:[{override}]")
 #                 if override == "0":
 #                     checkForChannel = serv.getServerSetting(serverid, 'botspamchannel')
 #                     if checkForChannel:
