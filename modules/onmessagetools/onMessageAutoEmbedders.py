@@ -42,7 +42,10 @@ class OnMessageAutoEmbedder:
 
     
     def getVXTwitterEmbedUrl(self) -> str:
-        usableLinkSearch = rh.getRegexReturn(query=r"\S+"+self.twitterOrX+r"\.com/\S+", input=self.msgContent)
+        usableLinkSearch = rh.getRegexReturn(query=r"\S+[^vx]"+self.twitterOrX+r"+\.com\S+status\S+", input=self.msgContent)
+        
+        
+        
         if usableLinkSearch == None:
             print("onMessageAutoEmbedders no usable link found")
             return None
@@ -68,4 +71,6 @@ class OnMessageAutoEmbedder:
 
     def isEmbeddedMediaVideo(self) -> bool:
         pass
+
+
 
