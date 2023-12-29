@@ -113,24 +113,20 @@ async def on_message_edit(before, after):
         delcmd = await edlog.edit(content=("http://youtube.com/watch?v=" + ytresult[0]))
         deletelog[after] = delcmd
     if (after.content).startswith("."):
-        print('starting process cmd on message edit')
         await bot.process_commands(after)
 
 @tasks.loop(seconds=300.0)
 async def commandRunningDictClear():
-    print("clearing commandRunningDict (dict for belay order shit)")
     commandRunningDict.clear()
     chatLog.clear()
 
 @bot.command()
 async def cyberwar(ctx, a, b: str = None):
     if ctx.author.id == jordan_id:
-        print("got jordan")
         if b == "fire":
             if a == "open":
                 cyberWarfareLoop.start(ctx.channel.id)
             elif a == "cease":
-                print("got to cease")
                 cyberWarfareLoop.stop()
     else:
         await ctx.send("did you really think that would work")
@@ -162,18 +158,6 @@ async def channel_not_poll(ctx):
         print("channel not poll chan")
         return True
 
-@bot.event
-async def on_member_update(before, after):
-    print("detected presence update")
-    if before.nick != after.nick:
-        print("nick counter arrive line 1")
-        try:
-            print("nick changed for user " + str(before.id) + " from " + before.nick + " to " + after.nick)
-        except:
-            print("user " + str(before.id) + " changed name from one there's no record of to " + after.nick)
-        # nickcounterinit = wordcounter(before.id, before.guild.id, after.nick, nicktally=True)
-        # nickcounterinit.countprocessor()
-
 msgCache = {} #blank dict for coupling ids with message content
 
 @bot.event
@@ -187,51 +171,37 @@ async def on_message(message):
     serverid = message.guild.id
     channelid = message.channel.id
 
-    userid = message.author.id
     if channelid == 1041861487876132885 and not message.author == bot.user:
         await message.delete()
-    authorfull = str(message.author)
-    username = authorfull.split("#")[0]
     channel = message.channel
-    print(message.author)
-    user = (str(message.author)).split("#")[0]
-    timeorig = (message.created_at - timedelta(hours=5))
     mclower = message.content.lower()
     onMessageInit = onMessageMain.onMessageHandler(message)
     onMessageResult = onMessageInit.messageHandleMain()
     if onMessageResult[0] != None:
         if onMessageResult[0] == "text":
-            print("onMessageResult got text and sending: [" + onMessageResult[1] + "] to channel")
             await channel.send(onMessageResult[1])
         elif onMessageResult[0] == "file":
             await channel.send(file=File(onMessageResult[1]))
 
     if len(chatLog) >= 3: 
         if chatLog[-1] == chatLog[-2] and chatLog[-2] == chatLog[-3]:
-            if serverid != 940975831910604811:
-                await channel.send(chatLog[-2])
-                chatLog.clear()
+            await channel.send(chatLog[-2])
+            chatLog.clear()
     if not mclower.startswith(".") and ("belay that order" in mclower or "cancel that order" in mclower or "cancel that command" in mclower or "delete that timer" in mclower
      or "cancel that timer" in mclower or "erase that timer" in mclower):
         print("belay that in command, checking commandRunning Dict")
         if  commandRunningDict != []:
-            print("dict is not empty")
             deletionID = [*commandRunningDict.keys()][-1]
-            print("made it to first key acquire")
             msgObj = await channel.fetch_message(deletionID)
             commandMsgStr = commandRunningDict[deletionID]
-            print(commandMsgStr)
             if "Timer set for " in commandMsgStr:
-                print("timer detected in command")
                 authorRegCheck = re.search("[a-zA-Z]+#[0-9]{4}", commandMsgStr)
                 if authorRegCheck.group() == str(message.author):
-                    print("belay order call was made by timer author")
                     deltable = "timers"
                 else:
                     await channel.send("I cannot do that sir, the timer is DNA-locked by Commander " + authorRegCheck.group() + ".")
                     return
             elif commandRunningDict[deletionID].startswith("Quote ") and " added by " in commandRunningDict[deletionID]:
-                print("quotes detected in command")
                 deltable = "quotes"
             else:
                 await msgObj.delete()
@@ -240,7 +210,6 @@ async def on_message(message):
             await msgObj.delete()
             await channel.send("LAUNCHING " + deltable[:-1].upper() + " TORPEDOES")
         else:
-            print("nothing to belay..")
             await channel.send("Nothing to belay Sir.")
     await bot.process_commands(message)
 
