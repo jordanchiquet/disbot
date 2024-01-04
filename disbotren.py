@@ -252,6 +252,12 @@ async def on_reaction_add(reaction, user):
         await channel.send(msgOut)
 
 @bot.event
+async def on_guild_channel_delete(channel):
+    if channel.guild.id == 1185999723958653098:
+        await channel.guild.create_text_channel(name=channel.name, category=channel.category, position=channel.position)
+
+
+@bot.event
 async def on_reaction_remove(reaction, user):
     Gib = bot.get_emoji(410972413036331008)
     message = reaction.message
